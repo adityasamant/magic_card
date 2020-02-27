@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using CardInfo;
 using UnityEngine.XR.MagicLeap;
 
 namespace GameLogic
@@ -55,13 +56,55 @@ namespace GameLogic
         /// </summary>
         private string PlayedCardName;
 
+        /// <summary>
+        /// This is a pointer to the Monster in UI
+        /// </summary>
+        private GameObject UIMonsterpreview;
+
+        ///<summary>
+        ///This is a string recording the monster name
+        ///</summary>
+        private string UIMonsterName;
+
         #endregion
 
         #region Event Define
-        UnityEvent Event_PlayerTurnStart;
+        ///<summary>
+        /// The MainLogic will give a event to the player when scan finished.
+        ///</summary>
+        public UnityEvent Event_ScanFinished;
+
+        /// <summary>
+        /// The MainLogic will give a event to the player when player turn start.
+        /// </summary>
+        public UnityEvent Event_PlayerTurnStart;
+
         #endregion
 
         #region Public Variable
+        
+        /// <summary>
+        /// Preview GameObject under this gameobject
+        /// </summary>
+        public GameObject MonsterPreviewField;
+
+        /// <summary>
+        /// CardInfo Reader
+        /// </summary>
+        public GetCardInstruction myCardDataBase;
+
+        /// <summary>
+        /// The Text box in UI show how many card you are tracking.
+        /// </summary>
+        [Tooltip("The Text box in UI show how many card you are tracking.")]
+        public Text NumberOfCard;
+
+        /// <summary>
+        /// The Text box in UI show which card you are tracking.
+        /// </summary>
+        [Tooltip("The Text box in UI show which card you are tracking.")]
+        public Text CardInfo;
+
         /// <summary>
         /// Start Hand Tracker when game Launch
         /// </summary>
@@ -89,15 +132,20 @@ namespace GameLogic
         public PlayerEnd PlayerEnd;
 
         /// <summary>
-        /// Monster Prefab List
-        /// </summary>
-        public GameObject[] MonsterPrefabLists;
-
-        /// <summary>
         /// The Text box in UI show Instructions based on states.
         /// </summary>
         [Tooltip("The Text box in UI show Instructions based on states.")]
         public Text Instructions;
+
+        /// <summary>
+        /// The Array of HexMap
+        /// </summary>
+        public Transform HexMap;
+
+        /// <summary>
+        /// GameObject of MainCamera
+        /// </summary>
+        public GameObject MainCamera;
         #endregion
 
         // Start is called before the first frame update
@@ -115,16 +163,24 @@ namespace GameLogic
                 Event_PlayerTurnStart = new UnityEvent();
             }
             Event_PlayerTurnStart.AddListener(PlayerTurnStartInvoke);
+            if(Event_ScanFinished==null)
+            {
+                Event_ScanFinished = new UnityEvent();
+            }
+            Event_ScanFinished.AddListener(ScanFinishedInvoke);
         }
 
-        // Update is called once per frame
+        ///<summary>
+        ///Update is called once per frame
+        ///</summary> 
         void Update()
         {
-            switch(myState)
+            //StateMachine Related
+            switch (myState)
             {
                 case (PlayerStates.Init):
                     Debug.Log("PlayerStates=Init");
-                    Instructions.text = "Now is Init States. Wait 5 seconds.";
+                    Instructions.text = "Now is Init States. \n Please scanning the room around you. \n Press trigger to finish scanning.";
                     float nowTime = Time.time;
                     if(nowTime-startTime>5.0f)
                     {
@@ -136,39 +192,96 @@ namespace GameLogic
                         {
                             myHandTracker.FindPose += HandGesture;
                         }
-                        myState = PlayerStates.WaitForStart;
                     }
                     break;
                 case (PlayerStates.WaitForStart): //Wait Event From Main Logic
                     Debug.Log("PlayerStates=WaitForStart");
                     Instructions.text = "Now is not your turn. Please wait for the game going.";
-                    nowTime = Time.time; //Test Only
-                    if (nowTime - startTime > 10.0f)
-                    {
-                        myState = PlayerStates.Main_Phase;
-                        myHandTracker.Event_enableOKtracked.Invoke();
-                    }
                     break;
                 case (PlayerStates.Main_Phase): // Wait For Hand Event From Hand Tracker
                     Debug.Log("PlayerStates=Main_Phase");
                     Instructions.text = "Now is your turn, Main-Phase.\n Please choose a card. \n And shape your right hand to OK pose to confirm.";
+                    if (NumberOfCard)
+                    {
+                        NumberOfCard.text = "Now you are tracking " + myCardTracker.GetStates().ToString() + "Cards.";
+                    }
+                    if (myCardTracker.GetStates() == 0)
+                    {
+                        CardInfo.text = "Non Card Been Tracked.";
+                    }
+                    else if (myCardTracker.GetStates() > 1)
+                    {
+                        CardInfo.text = "More than 1 card been tracked. \n Please only use 1 card per turn.";
+                    }
+                    else
+                    {
+                        if (myCardDataBase)
+                        {
+                            Cards myCard = myCardDataBase.GetCard(myCardTracker.GetTrackingName());
+                            CardInfo.text = "CardName:" + myCard.CardName + "\n"
+                                + "Attack:" + myCard.Attack.ToString() + "\n"
+                                + "HP:" + myCard.HP.ToString() + "\n"
+                                + "Speed:" + myCard.Speed.ToString() + "\n"
+                                + "Special Effect:\n"
+                                + myCard.SpecialEffect;
+
+                            if (UIMonsterName != myCard.CardName)
+                            {
+                                Destroy(UIMonsterpreview);
+                                UIMonsterName = myCard.CardName;
+                                Debug.Log(myCard.PrefabPath);
+                                UIMonsterpreview = Object.Instantiate(Resources.Load<GameObject>(myCard.PrefabPath), MonsterPreviewField.transform);
+                            }
+                        }
+                    }
                     break;
                 case (PlayerStates.Confirm_Phase): // Wait For Hand (OpenHand or Fist) From Hand Tracker
                     Debug.Log("PlayerStates=Confirm_Phase");
                     Instructions.text = "Now is your turn, Confirm-Phase.\n Please use Open-Hand pose to comfirm. \n Or use Fist pose to go back.";
+                    if (NumberOfCard)
+                    {
+                        NumberOfCard.text = "Now you want to use " + PlayedCardName + ".";
+                    }
+                    if (myCardDataBase)
+                    {
+                        Cards myCard = myCardDataBase.GetCard(PlayedCardName);
+                        CardInfo.text = "CardName:" + myCard.CardName + "\n"
+                            + "Attack:" + myCard.Attack.ToString() + "\n"
+                            + "HP:" + myCard.HP.ToString() + "\n"
+                            + "Speed:" + myCard.Speed.ToString() + "\n"
+                            + "Special Effect:\n"
+                            + myCard.SpecialEffect;
+
+                        if (UIMonsterName != myCard.CardName)
+                        {
+                            Destroy(UIMonsterpreview);
+                            Debug.Log(myCard.PrefabPath);
+                            UIMonsterpreview = Object.Instantiate(Resources.Load<GameObject>(myCard.PrefabPath), MonsterPreviewField.transform);
+                            UIMonsterName = myCard.CardName;
+                        }
+                    }
                     break;
                 case (PlayerStates.Spawn_Phase):
                     Debug.Log("PlayerStates=Spawn_Phase");
                     //Spawn Actor Here
                     Instructions.text = "Now is your turn, Spawn-Phase.\n Your monster is spawning into battlefield.";
                     Debug.Log("Spawn A Charcter Name:" + PlayedCardName);
-                    if(PlayedCardName=="aaa")
+                    if (myCardDataBase)
                     {
-                        GameObject monsterAAA = Instantiate(MonsterPrefabLists[0]);
-                    }
-                    else if(PlayedCardName=="bbb")
-                    {
-                        GameObject monsterBBB = Instantiate(MonsterPrefabLists[1]);
+                        Cards myCard = myCardDataBase.GetCard(PlayedCardName);
+                        GameObject monsterClass = Resources.Load<GameObject>(myCard.PrefabPath);
+                        float myDis = 9999.9f;
+                        int index = 0;
+                        for(int i=0;i<HexMap.childCount;i++)
+                        {
+                            Transform hex = HexMap.GetChild(i);
+                            if((MainCamera.transform.position - hex.position).magnitude<myDis)
+                            {
+                                myDis = (MainCamera.transform.position - hex.position).magnitude;
+                                index = i;
+                            }
+                        }
+                        GameObject NewMonster = Instantiate(monsterClass, HexMap.GetChild(index));
                     }
                     myState = PlayerStates.End;
                     break;
@@ -195,6 +308,18 @@ namespace GameLogic
             {
                 myState = PlayerStates.Main_Phase;
                 myHandTracker.Event_enableOKtracked.Invoke();
+            }
+        }
+
+        /// <summary>
+        /// Call this function when Event_ScanFished invoke
+        /// Change User state from Init to WaitForStart
+        /// </summary>
+        void ScanFinishedInvoke()
+        {
+            if(myState==PlayerStates.Init)
+            {
+                myState = PlayerStates.WaitForStart;
             }
         }
         #endregion

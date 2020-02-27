@@ -40,18 +40,6 @@ namespace UnityEngine.XR.MagicLeap
         public float LongerDimensionInSceneUnits;
 
         /// <summary>
-        /// The Text box in UI show how many card you are tracking.
-        /// </summary>
-        [Tooltip("The Text box in UI show how many card you are tracking.")]
-        public Text NumberOfCard;
-
-        /// <summary>
-        /// The Text box in UI show which card you are tracking.
-        /// </summary>
-        [Tooltip("The Text box in UI show which card you are tracking.")]
-        public Text CardInfo;
-
-        /// <summary>
         /// CardInfo Reader
         /// </summary>
         public GetCardInstruction myCardDataBase;
@@ -101,31 +89,7 @@ namespace UnityEngine.XR.MagicLeap
         // Update is called once per frame
         void Update()
         {
-            if(NumberOfCard)
-            {
-                NumberOfCard.text = "Now you are tracking " + GetStates().ToString() + "Cards.";
-            }
-            if(GetStates()==0)
-            {
-                CardInfo.text = "Non Card Been Tracked.";
-            }
-            else if(GetStates()>1)
-            {
-                CardInfo.text = "More than 1 card been tracked. \n Please only use 1 card per turn.";
-            }
-            else
-            {
-                if(myCardDataBase)
-                {
-                    Cards myCard = myCardDataBase.GetCard(GetTrackingName());
-                    CardInfo.text = "CardName:" + myCard.CardName + "\n"
-                        + "Attack:" + myCard.Attack.ToString() + "\n"
-                        + "HP:" + myCard.HP.ToString() + "\n"
-                        + "Speed:" + myCard.Speed.ToString() + "\n"
-                        + "Special Effect:\n"
-                        + myCard.SpecialEffect;
-                }
-            }
+            
         }
 
         private void OnDestroy()

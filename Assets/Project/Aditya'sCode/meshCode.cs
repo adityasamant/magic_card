@@ -3,12 +3,30 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.MagicLeap;
 
+public delegate void ScanFinished();
+
 public class meshCode : MonoBehaviour
 {
     public HexTileMapGenerator hx;
     public Material BlackMaterial;
     public MLSpatialMapper Mapper;
+    public GameObject PlaneGenerator;
+    public GameObject TileGenerator;
+    public GameObject MLSpatialMapper;
+
+    /// <summary>
+    /// Define the object for delegate
+    /// </summary>
+    public ScanFinished ScanFinished;
+
+    #region Private Variable
     private MLInputController _controller;
+
+    /// <summary>
+    /// A bool variable to control the system only generate once
+    /// </summary>
+    private bool AlreadyGenerate=false;
+    #endregion
 
     void Start () {
       //Start receiving input by the Control
@@ -25,19 +43,16 @@ public class meshCode : MonoBehaviour
 
     void OnButtonDown(byte controller_id, MLInputControllerButton button) {
       if (button == MLInputControllerButton.Bumper) {
-        Debug.Log("yacha yacha");
-        for (int i = 0; i < transform.childCount; i++) {
-        // Get the child gameObject
-        GameObject gameObject = transform.GetChild(i).gameObject;
-        // Get the meshRenderer component
-        MeshRenderer meshRenderer = gameObject.GetComponent<MeshRenderer>();
-        // Get the assigned material
-        Material material = meshRenderer.sharedMaterial;
-        if (material != BlackMaterial) {
-           meshRenderer.material = BlackMaterial;
-        }
-     }
-        hx.createHex();
+            if (AlreadyGenerate) return;
+            hx.createHex();
+            AlreadyGenerate = true;
+            ScanFinished();
+            Mapper.DestroyAllMeshes();
+            Destroy(Mapper);
+            Destroy(PlaneGenerator);
+            Destroy(TileGenerator);
+            Destroy(MLSpatialMapper);
+            Destroy(gameObject);
       }
     }
 }

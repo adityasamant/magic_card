@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using CardInfo;
 using UnityEngine.UI;
 
 namespace UnityEngine.XR.MagicLeap
@@ -48,7 +49,12 @@ namespace UnityEngine.XR.MagicLeap
         /// The Text box in UI show which card you are tracking.
         /// </summary>
         [Tooltip("The Text box in UI show which card you are tracking.")]
-        public Text NameOfCard;
+        public Text CardInfo;
+
+        /// <summary>
+        /// CardInfo Reader
+        /// </summary>
+        public GetCardInstruction myCardDataBase;
         #endregion
 
         #region Private Variable
@@ -99,9 +105,26 @@ namespace UnityEngine.XR.MagicLeap
             {
                 NumberOfCard.text = "Now you are tracking " + GetStates().ToString() + "Cards.";
             }
-            if(NameOfCard)
+            if(GetStates()==0)
             {
-                NameOfCard.text = "The Card You Tracking is: " + GetTrackingName();
+                CardInfo.text = "Non Card Been Tracked.";
+            }
+            else if(GetStates()>1)
+            {
+                CardInfo.text = "More than 1 card been tracked. \n Please only use 1 card per turn.";
+            }
+            else
+            {
+                if(myCardDataBase)
+                {
+                    Cards myCard = myCardDataBase.GetCard(GetTrackingName());
+                    CardInfo.text = "CardName:" + myCard.CardName + "\n"
+                        + "Attack:" + myCard.Attack.ToString() + "\n"
+                        + "HP:" + myCard.HP.ToString() + "\n"
+                        + "Speed:" + myCard.Speed.ToString() + "\n"
+                        + "Special Effect:\n"
+                        + myCard.SpecialEffect;
+                }
             }
         }
 

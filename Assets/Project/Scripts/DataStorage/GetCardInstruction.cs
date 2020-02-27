@@ -17,6 +17,7 @@ namespace CardInfo
         public int HP;
         public int Speed;
         public string SpecialEffect;
+        public string PrefabPath;
     }
 
     /// <summary>
@@ -79,6 +80,7 @@ namespace CardInfo
                     newCard.HP = int.Parse(CardInfo[i][3]);
                     newCard.Speed = int.Parse(CardInfo[i][4]);
                     newCard.SpecialEffect = CardInfo[i][5];
+                    newCard.PrefabPath = CardInfo[i][6];
                 }
             }
             return newCard;

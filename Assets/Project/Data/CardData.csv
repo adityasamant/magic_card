@@ -1,6 +1,6 @@
-Cardid,Cardname,Attack,HP,Speed,Specialeffect
-1,CaptivatingUnicorn,4,4,4,No special effect
-2,HeroOfTheGame,3,2,2,No special effect
-3,LoathsomeChimera,4,1,1,No special effect
-4,DiscordantPiper,2,1,1,No special effect
-5,RiptideTurtle,0,5,5,No special effect
+Cardid,Cardname,Attack,HP,Speed,Specialeffect,PrefabPath
+1,CaptivatingUnicorn,4,4,4,No special effect,Prefabs/Monster/CaptivatingUnicornPrefab
+2,HeroOfTheGames,3,2,2,No special effect,Prefabs/Monster/HeroOfTheGamesPrefab
+3,LoathsomeChimera,4,1,1,No special effect,Prefabs/Monster/LoathsomeChimeraPrefab
+4,DiscordantPiper,2,1,1,No special effect,Prefabs/Monster/DiscordantPiperPrefab
+5,RiptideTurtle,0,5,5,No special effect,Prefabs/Monster/RiptideTurtlePrefab

@@ -1217,7 +1217,7 @@ MonoBehaviour:
   - HeroOfTheGames
   - LoathsomeChimera
   - RiptideTurtle
-  LongerDimensionInSceneUnits: 0.35
+  LongerDimensionInSceneUnits: 0.2
   myCardDataBase: {fileID: 1323394004}
 --- !u!4 &1931485550
 Transform:

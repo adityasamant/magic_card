@@ -39,15 +39,15 @@ public class MergeFeb27main : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Player1Start==false)
+        if (Player1Start == false)
         {
             float nowTime = Time.time;
-            if(nowTime-Player1WaitTime>5)
+            if (nowTime - Player1WaitTime > 5)
             {
                 Debug.Log("Event Finished");
                 Player1.Event_PlayerTurnStart.Invoke();
                 Player1Start = true;
-            }           
+            }
         }
     }
 
@@ -62,7 +62,7 @@ public class MergeFeb27main : MonoBehaviour
 
     void PlayerEndUpdate(int PlayerId)
     {
-        if(PlayerId==1)
+        if (PlayerId == 1)
         {
             Player1WaitTime = Time.time;
             Player1Start = false;

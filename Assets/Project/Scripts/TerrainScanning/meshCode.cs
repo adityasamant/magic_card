@@ -44,15 +44,29 @@ public class meshCode : MonoBehaviour
     void OnButtonDown(byte controller_id, MLInputControllerButton button) {
       if (button == MLInputControllerButton.Bumper) {
             if (AlreadyGenerate) return;
+            Debug.Log("yacha yacha");
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                // Get the child gameObject
+                GameObject gameObject = transform.GetChild(i).gameObject;
+                // Get the meshRenderer component
+                MeshRenderer meshRenderer = gameObject.GetComponent<MeshRenderer>();
+                // Get the assigned material
+                Material material = meshRenderer.sharedMaterial;
+                if (material != BlackMaterial)
+                {
+                    meshRenderer.material = BlackMaterial;
+                }
+            }
             hx.createHex();
             AlreadyGenerate = true;
             ScanFinished();
-            Mapper.DestroyAllMeshes();
-            Destroy(Mapper);
+            //Mapper.DestroyAllMeshes();
+            //Destroy(Mapper);
             Destroy(PlaneGenerator);
             Destroy(TileGenerator);
             Destroy(MLSpatialMapper);
-            Destroy(gameObject);
+           // Destroy(gameObject);
       }
     }
 }

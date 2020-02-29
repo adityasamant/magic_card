@@ -132,7 +132,7 @@ namespace GameLogic
                 trackedHand = MLHands.Left;
             }
 
-            Debug.Log(trackedHand.KeyPose.ToString());
+            //Debug.Log(trackedHand.KeyPose.ToString());
 
             if(bOKtracked)
             {

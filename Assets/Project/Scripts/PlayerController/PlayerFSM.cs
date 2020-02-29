@@ -179,7 +179,7 @@ namespace GameLogic
             switch (myState)
             {
                 case (PlayerStates.Init):
-                    Debug.Log("PlayerStates=Init");
+                    //Debug.Log("PlayerStates=Init");
                     Instructions.text = "Now is Init States. \n Please scanning the room around you. \n Press trigger to finish scanning.";
                     float nowTime = Time.time;
                     if(nowTime-startTime>5.0f)
@@ -195,11 +195,11 @@ namespace GameLogic
                     }
                     break;
                 case (PlayerStates.WaitForStart): //Wait Event From Main Logic
-                    Debug.Log("PlayerStates=WaitForStart");
+                    //Debug.Log("PlayerStates=WaitForStart");
                     Instructions.text = "Now is not your turn. Please wait for the game going.";
                     break;
                 case (PlayerStates.Main_Phase): // Wait For Hand Event From Hand Tracker
-                    Debug.Log("PlayerStates=Main_Phase");
+                    //Debug.Log("PlayerStates=Main_Phase");
                     Instructions.text = "Now is your turn, Main-Phase.\n Please choose a card. \n And shape your right hand to OK pose to confirm.";
                     if (NumberOfCard)
                     {
@@ -236,7 +236,7 @@ namespace GameLogic
                     }
                     break;
                 case (PlayerStates.Confirm_Phase): // Wait For Hand (OpenHand or Fist) From Hand Tracker
-                    Debug.Log("PlayerStates=Confirm_Phase");
+                    //Debug.Log("PlayerStates=Confirm_Phase");
                     Instructions.text = "Now is your turn, Confirm-Phase.\n Please use Open-Hand pose to comfirm. \n Or use Fist pose to go back.";
                     if (NumberOfCard)
                     {
@@ -262,10 +262,10 @@ namespace GameLogic
                     }
                     break;
                 case (PlayerStates.Spawn_Phase):
-                    Debug.Log("PlayerStates=Spawn_Phase");
+                    //Debug.Log("PlayerStates=Spawn_Phase");
                     //Spawn Actor Here
                     Instructions.text = "Now is your turn, Spawn-Phase.\n Your monster is spawning into battlefield.";
-                    Debug.Log("Spawn A Charcter Name:" + PlayedCardName);
+                    //Debug.Log("Spawn A Charcter Name:" + PlayedCardName);
                     if (myCardDataBase)
                     {
                         Cards myCard = myCardDataBase.GetCard(PlayedCardName);
@@ -287,7 +287,7 @@ namespace GameLogic
                     break;
                 case (PlayerStates.End):
                     //Return the game control loop to main logic
-                    Debug.Log("PlayerStates=End");
+                    //Debug.Log("PlayerStates=End");
                     Instructions.text = "Now is your turn, End-Phase. Switch to next turn.";
                     PlayerEnd(PlayerId);
                     myState = PlayerStates.WaitForStart;

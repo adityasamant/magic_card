@@ -61,8 +61,8 @@ namespace GameLogic
         /// <summary>
         /// Store a Pointer to Player0 to send playerstart event and scanfinished event
         /// </summary>
-        public PlayerFSM Player0;
-        public PlayerFSM Player1;
+        public Player Player0;
+        public Player Player1;
 
         /// <summary>
         /// The Game World
@@ -74,6 +74,12 @@ namespace GameLogic
         /// </summary>
         public GameGlobalState gameGlobalState;
 
+        /// <summary>
+        /// Limit Player time per turn.
+        /// </summary>
+        [Tooltip("Limit Player time per turn.")]
+        public float PlayerTurnTimeLimited = 30;
+
         #endregion
 
         #region Private Variable
@@ -82,7 +88,7 @@ namespace GameLogic
         /// </summary>
         private float stateBeginTime;
 
-        private List<PlayerFSM> playerTurnList;
+        private List<Player> playerTurnList;
         private int currentPlayerId;
 
         private GameStates currentState = GameStates.Init;
@@ -102,7 +108,7 @@ namespace GameLogic
         void Start()
         {
             gameGlobalState = new GameGlobalState();
-            playerTurnList = new List<PlayerFSM>() ;
+            playerTurnList = new List<Player>() ;
             ScanMesh.ScanFinished += ScanFinshedUpdate;
             Player0.PlayerEnd += PlayerEndUpdate;
             Player0.PlayerId = 0;
@@ -153,7 +159,7 @@ namespace GameLogic
                         ChangeState(GameStates.Battle_Begin);
                     if (nowTime - stateBeginTime > 1)
                     {
-                        PlayerFSM currentPlayer = playerTurnList[0];
+                        Player currentPlayer = playerTurnList[0];
                         playerTurnList.Remove(currentPlayer);
                         currentPlayerId = currentPlayer.PlayerId;
                         //currentPlayer.Event_PlayerTurnStart.Invoke();
@@ -161,7 +167,7 @@ namespace GameLogic
                     }
                     break ;
                 case GameStates.Wait_For_Player_Turn:
-                    if (nowTime - stateBeginTime > 1) // Setting a time limit for each player. TODO: when this is triggered, a delegent should be sent to the Player.
+                    if (nowTime - stateBeginTime > PlayerTurnTimeLimited) // Setting a time limit for each player. TODO: when this is triggered, a delegent should be sent to the Player.
                     {
                         Debug.LogWarningFormat("Player {0}'s time out. The system will consider it hasn't done anything.", currentPlayerId);
                         ChangeState(GameStates.Player_Turn_Begin);

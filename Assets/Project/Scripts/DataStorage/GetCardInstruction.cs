@@ -66,7 +66,15 @@ namespace CardInfo
         #endregion
 
         #region Public Function
-
+        /// <summary>
+        /// Input A cardName return a class that include all information about card
+        /// </summary>
+        /// <param name="CardName">
+        /// The name of requesting card
+        /// </param>
+        /// <returns>
+        /// A instance of Class Cards that include all the information about card.
+        /// </returns>
         public Cards GetCard(string CardName)
         {
             Cards newCard = new Cards();
@@ -84,6 +92,25 @@ namespace CardInfo
                 }
             }
             return newCard;
+        }
+
+        ///<summary>
+        /// Get a random Card from the database
+        ///</summary>
+        ///<returns>
+        ///A instance of Class Cards that include all the information about the random card.
+        ///</returns>
+        public Cards GetRandomCard()
+        {
+            string randomCard = "";
+            int n = CardInfo.Length;
+            int k = (int) (Random.value * n);
+            while(k==n)
+            {
+                k = (int) (Random.value * n);
+            }
+            randomCard = CardInfo[k][1];
+            return GetCard(randomCard);
         }
         #endregion
 

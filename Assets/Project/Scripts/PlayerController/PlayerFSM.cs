@@ -9,14 +9,6 @@ using UnityEngine.XR.MagicLeap;
 namespace GameLogic
 {
     /// <summary>
-    /// When this player is end its turn, it will pop a delegate to Main Logic
-    /// </summary>
-    /// <param name="id">
-    /// The playerid, should be unique for each Player
-    /// </param>
-    public delegate void PlayerEnd(int id);
-
-    /// <summary>
     /// PlayerStates are states for the Finited State Machine
     /// </summary>
     public enum PlayerStates
@@ -33,7 +25,7 @@ namespace GameLogic
     /// <summary>
     /// Using a Finited State Machine to control the game loop in Player Turn
     /// </summary>
-    public class PlayerFSM : MonoBehaviour
+    public class PlayerFSM : Player
     {
         #region Private Variable
         /// <summary>
@@ -65,19 +57,6 @@ namespace GameLogic
         ///This is a string recording the monster name
         ///</summary>
         private string UIMonsterName;
-
-        #endregion
-
-        #region Event Define
-        ///<summary>
-        /// The MainLogic will give a event to the player when scan finished.
-        ///</summary>
-        public UnityEvent Event_ScanFinished;
-
-        /// <summary>
-        /// The MainLogic will give a event to the player when player turn start.
-        /// </summary>
-        public UnityEvent Event_PlayerTurnStart;
 
         #endregion
 
@@ -122,16 +101,6 @@ namespace GameLogic
         /// </summary>
         public CardTracker myCardTracker;
         /// <summary>
-        /// Player Identity, should be unique for each player
-        /// </summary>
-        public int PlayerId;
-
-        /// <summary>
-        /// Define the object for delegate
-        /// </summary>
-        public PlayerEnd PlayerEnd;
-
-        /// <summary>
         /// The Text box in UI show Instructions based on states.
         /// </summary>
         [Tooltip("The Text box in UI show Instructions based on states.")]
@@ -149,7 +118,7 @@ namespace GameLogic
         #endregion
 
         // Start is called before the first frame update
-        void Start()
+        public virtual void Start()
         {
             if(_bInit)
             {
@@ -173,7 +142,7 @@ namespace GameLogic
         ///<summary>
         ///Update is called once per frame
         ///</summary> 
-        void Update()
+        public virtual void Update()
         {
             //StateMachine Related
             switch (myState)

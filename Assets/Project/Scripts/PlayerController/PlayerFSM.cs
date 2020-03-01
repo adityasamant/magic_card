@@ -9,20 +9,6 @@ using UnityEngine.XR.MagicLeap;
 namespace GameLogic
 {
     /// <summary>
-    /// PlayerStates are states for the Finited State Machine
-    /// </summary>
-    public enum PlayerStates
-    {
-        Init,
-        WaitForStart,
-        Main_Phase,
-        Confirm_Phase,
-        Spawn_Phase,
-        End,
-        Error
-    };
-
-    /// <summary>
     /// Using a Finited State Machine to control the game loop in Player Turn
     /// </summary>
     public class PlayerFSM : Player

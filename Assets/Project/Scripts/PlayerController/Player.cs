@@ -6,6 +6,20 @@ using UnityEngine;
 namespace GameLogic
 {
     /// <summary>
+    /// PlayerStates are states for the Finited State Machine
+    /// </summary>
+    public enum PlayerStates
+    {
+        Init,
+        WaitForStart,
+        Main_Phase,
+        Confirm_Phase,
+        Spawn_Phase,
+        End,
+        Error
+    };
+
+    /// <summary>
     /// When this player is end its turn, it will pop a delegate to Main Logic
     /// </summary>
     /// <param name="id">

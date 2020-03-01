@@ -63,10 +63,10 @@ public class meshCode : MonoBehaviour
             ScanFinished();
             //Mapper.DestroyAllMeshes();
             //Destroy(Mapper);
-            //Destroy(PlaneGenerator);
-            //Destroy(TileGenerator);
-            //Destroy(MLSpatialMapper);
-           // Destroy(gameObject);
+            Destroy(PlaneGenerator);
+            Destroy(TileGenerator);
+            Destroy(MLSpatialMapper);
+            Destroy(gameObject);
       }
     }
 }

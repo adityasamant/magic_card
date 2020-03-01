@@ -450,7 +450,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1109537050}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &708630621
 MonoBehaviour:
@@ -466,6 +466,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ScanMesh: {fileID: 1115713907}
   Player1: {fileID: 2098602622}
+  Player2: {fileID: 1114776581}
 --- !u!1 &816685345
 GameObject:
   m_ObjectHideFlags: 0
@@ -494,7 +495,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1109537050}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &841885184
 PrefabInstance:
@@ -800,11 +801,64 @@ Transform:
   - {fileID: 1931485550}
   - {fileID: 1794235854}
   - {fileID: 2098602621}
+  - {fileID: 1114776582}
   - {fileID: 1323394003}
   - {fileID: 816685346}
   - {fileID: 708630620}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1114776580
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1114776582}
+  - component: {fileID: 1114776581}
+  m_Layer: 0
+  m_Name: Player2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1114776581
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1114776580}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f110bb5769469dc47aa4f71297330b2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event_ScanFinished:
+    m_PersistentCalls:
+      m_Calls: []
+  Event_PlayerTurnStart:
+    m_PersistentCalls:
+      m_Calls: []
+  PlayerId: 2
+  myCardDataBase: {fileID: 1323394004}
+  HexMap: {fileID: 816685346}
+--- !u!4 &1114776582
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1114776580}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1109537050}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1115713905
 GameObject:
@@ -890,7 +944,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1109537050}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1323394004
 MonoBehaviour:
@@ -1282,6 +1336,7 @@ MonoBehaviour:
   Event_PlayerTurnStart:
     m_PersistentCalls:
       m_Calls: []
+  PlayerId: 1
   MonsterPreviewField: {fileID: 1422868035}
   myCardDataBase: {fileID: 1323394004}
   NumberOfCard: {fileID: 912739032}
@@ -1290,7 +1345,6 @@ MonoBehaviour:
   myHandTracker: {fileID: 1794235853}
   myCardeTrackerObject: {fileID: 1931485548}
   myCardTracker: {fileID: 1931485549}
-  PlayerId: 1
   Instructions: {fileID: 518044971}
   HexMap: {fileID: 816685346}
   MainCamera: {fileID: 1284292169}

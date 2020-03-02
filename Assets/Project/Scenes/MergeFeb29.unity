@@ -1045,11 +1045,11 @@ MonoBehaviour:
   - {fileID: 2800000, guid: 4cba23137d5e7d24b8712d3ea339c173, type: 3}
   - {fileID: 2800000, guid: 105cdb2e258108a4cb4b6769af3884cc, type: 3}
   CardNameList:
-  - CaptivatingUnicorn
-  - DiscordantPiper
-  - HeroOfTheGames
-  - LoathsomeChimera
-  - RiptideTurtle
+  - Lancer
+  - Assassin
+  - Knight
+  - Left Hand
+  - Right Hand
   LongerDimensionInSceneUnits: 0.2
   myCardDataBase: {fileID: 0}
 --- !u!1 &1493242312

@@ -13,6 +13,7 @@ namespace GameLogic
         Wait_For_Map_Scan,
         Online_Only_Wait_For_Connection,
         Game_Begin,
+        UpKeepStep,
         Turn_Begin,
         Player_Turn_Begin,
         Wait_For_Player_Turn,
@@ -115,6 +116,7 @@ namespace GameLogic
             Player1.PlayerEnd += PlayerEndUpdate;
             Player1.PlayerId = 1;
             world.BattleEnd += BattleEndUpdate;
+            world.World_ResetFinished += World_ResetFinishedUpdate;
             ChangeState(GameStates.Init);
         }
 
@@ -142,9 +144,14 @@ namespace GameLogic
                 case GameStates.Game_Begin:
                     if (nowTime - stateBeginTime > 3)
                     {
-                        world.Reset();
                         gameGlobalState.Reset();
-                        ChangeState(GameStates.Turn_Begin);
+                        ChangeState(GameStates.UpKeepStep);
+                    }
+                    break;
+                case GameStates.UpKeepStep:
+                    if(nowTime-stateBeginTime>3)
+                    {
+                        world.Event_ResetStart.Invoke();
                     }
                     break;
                 case GameStates.Turn_Begin:
@@ -193,7 +200,7 @@ namespace GameLogic
                     if ((winner >= 0 && gameGlobalState.playerWinCnt[winner] > 2) || gameGlobalState.matchCnt == 5)
                         ChangeState(GameStates.Game_End);
                     else
-                        ChangeState(GameStates.Turn_Begin);
+                        ChangeState(GameStates.UpKeepStep);
                     break;
                 case GameStates.Game_End:
                     if (gameGlobalState.playerWinCnt[0] != gameGlobalState.playerWinCnt[1])
@@ -232,6 +239,13 @@ namespace GameLogic
             return;
         }
 
+        #region Delegate Handler
+        /// <summary>
+        /// Invoke when Player Turn Ended.
+        /// </summary>
+        /// <param name="PlayerId">
+        /// Input the player id.
+        /// </param>
         void PlayerEndUpdate(int PlayerId)
         {
             if (currentState != GameStates.Wait_For_Player_Turn || currentPlayerId != PlayerId)
@@ -245,7 +259,6 @@ namespace GameLogic
                 ChangeState(GameStates.Player_Turn_Begin);
             }
         }
-
         /// <summary>
         /// post-process of a battle.
         /// </summary>
@@ -257,7 +270,14 @@ namespace GameLogic
             gameGlobalState.lastWinner = winner;
             ChangeState(GameStates.Battle_End);
         }
-
+        /// <summary>
+        /// Update game states after world is finished
+        /// </summary>
+        private void World_ResetFinishedUpdate()
+        {
+            ChangeState(GameStates.Turn_Begin);
+        }
+        #endregion
     }
 
 }

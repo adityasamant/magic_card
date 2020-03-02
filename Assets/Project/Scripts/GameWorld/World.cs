@@ -6,6 +6,8 @@ using UnityEngine;
 namespace GameWorld
 {
 
+    public delegate void World_ResetFinished();
+
     public enum WorldStates
     {
         Idle,
@@ -40,6 +42,10 @@ namespace GameWorld
         public BattleEnd BattleEnd;
         public UnityEvent Event_BattleBegin;
 
+        public World_ResetFinished World_ResetFinished;
+
+        public UnityEvent Event_ResetStart;
+        
         public bool created = false;
 
         private WorldStates currentState = WorldStates.Idle;
@@ -80,9 +86,10 @@ namespace GameWorld
             return uid;
         }
 
-        public void Reset()
+        public void init()
         {
             monsters.Clear();
+            World_ResetFinished();
         }
         public void ResetForOneBattle()
         {
@@ -112,6 +119,9 @@ namespace GameWorld
             if (Event_BattleBegin == null)
                 Event_BattleBegin = new UnityEvent();
             Event_BattleBegin.AddListener(BattleBegin);
+            if (Event_ResetStart == null)
+                Event_ResetStart = new UnityEvent();
+            Event_ResetStart.AddListener(ResetBegin);
         }
         
         void Update()
@@ -156,6 +166,17 @@ namespace GameWorld
             ResetForOneBattle();
             currentState = WorldStates.Battle;
         }
+
+        #region Event Handler
+        /// <summary>
+        /// Event_ResetStart Handler
+        /// </summary>
+        private void ResetBegin()
+        {
+            init();
+            return;
+        }
+        #endregion
 
         void MonsterMoveEnd(MonsterMovement movement)
         {

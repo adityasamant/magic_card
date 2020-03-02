@@ -1,6 +1,23 @@
 Cardid,Cardname,Attack,HP,Speed,Specialeffect,PrefabPath
-1,CaptivatingUnicorn,4,4,4,No special effect,Prefabs/Monster/CaptivatingUnicornPrefab
-2,HeroOfTheGames,3,2,2,No special effect,Prefabs/Monster/HeroOfTheGamesPrefab
-3,LoathsomeChimera,4,1,1,No special effect,Prefabs/Monster/LoathsomeChimeraPrefab
-4,DiscordantPiper,2,1,1,No special effect,Prefabs/Monster/DiscordantPiperPrefab
-5,RiptideTurtle,0,5,5,No special effect,Prefabs/Monster/RiptideTurtlePrefab
+1,Lancer,4,20,5,Attack Range is 2,Prefabs/Monster/CaptivatingUnicornPrefab
+2,Assassin,1,1,1,Kill a random enemy creature during Pre-AutoAttack step,Prefabs/Monster/HeroOfTheGamesPrefab
+3,Knight,0,50,0,Cannot Attack&Enemy lose the same amount of HP as it lost,Prefabs/Monster/LoathsomeChimeraPrefab
+4,Left Hand,2,15,1,When LeftHand RightHand LeftLeg RightLeg and BODY all on the battlefield You win the game,Prefabs/Monster/DiscordantPiperPrefab
+5,Right Hand,2,15,1,When LeftHand RightHand LeftLeg RightLeg and BODY all on the battlefield You win the game,Prefabs/Monster/RiptideTurtlePrefab
+6,Left Leg,2,15,1,When LeftHand RightHand LeftLeg RightLeg and BODY all on the battlefield You win the game,Prefabs/Monster/RiptideTurtlePrefab
+7,Right Leg,2,15,1,When LeftHand RightHand LeftLeg RightLeg and BODY all on the battlefield You win the game,Prefabs/Monster/RiptideTurtlePrefab
+8,BODY,10,25,1,When LeftHand RightHand LeftLeg RightLeg and BODY all on the battlefield You win the game,Prefabs/Monster/RiptideTurtlePrefab
+9,Dead BODY,18,1,4,Can be count as BODY & In the start of UnKeep Step increase Attack by 5,Prefabs/Monster/RiptideTurtlePrefab
+10,Archer,4,10,5,Attack Range is 3,Prefabs/Monster/CaptivatingUnicornPrefab
+11,Dragon A,3,20,5,When you have DragonA DragonB DragonC on your battlefield & Exile them all and special summon Dragon D from your hand or deck,Prefabs/Monster/CaptivatingUnicornPrefab
+12,Dragon B,3,20,5,When you have DragonA DragonB DragonC on your battlefield & Exile them all and special summon Dragon D from your hand or deck,Prefabs/Monster/CaptivatingUnicornPrefab
+13,Dragon C,3,20,5,When you have DragonA DragonB DragonC on your battlefield & Exile them all and special summon Dragon D from your hand or deck,Prefabs/Monster/CaptivatingUnicornPrefab
+14,Dragon D,30,120,10,Exile itself unless it has been special summoned by Dragon ABC,Prefabs/Monster/CaptivatingUnicornPrefab
+15,Thief,5,30,1,When Thief go to the battlefield & you gain control of a random enemy creature this turn,Prefabs/Monster/CaptivatingUnicornPrefab
+16,Ditto,0,0,0,When Ditto comes to the battlefield & Ditto becomes a copy of a random creature on the battlefield,Prefabs/Monster/CaptivatingUnicornPrefab
+17,Mice,2,15,2,The Attack HP and Speed times by the number of mices in the battlefield,Prefabs/Monster/CaptivatingUnicornPrefab
+18,Sonic,15,30,0,Sonic Cannot Attack actively & When another monster will Sonic, Sonic will deal damage to that creature before attack,Prefabs/Monster/CaptivatingUnicornPrefab
+19,Normal Creature,5,20,4,No Special Effect,Prefabs/Monster/HeroOfTheGamesPrefab
+20,Partner,3,15,5,Can play another card this turn,Prefabs/Monster/HeroOfTheGamesPrefab
+21,Big Dragon,25,80,5,The Big Dragon will take place 7 hexs(1 in center, 6 around it.) & Exile when there is not enough space. & Exile a random Dragon when summon Big Dragon,Prefabs/Monster/HeroOfTheGamesPrefab
+22,Kill them all,0,0,0,Exile all creatures in both sides on the battlefield. & You lose this turn and go to next Upkeep Step Directly.,Prefabs/Monster/HeroOfTheGamesPrefab

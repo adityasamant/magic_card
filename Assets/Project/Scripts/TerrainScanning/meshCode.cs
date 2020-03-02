@@ -61,8 +61,6 @@ public class meshCode : MonoBehaviour
             hx.createHex();
             AlreadyGenerate = true;
             ScanFinished();
-            //Mapper.DestroyAllMeshes();
-            //Destroy(Mapper);
             Destroy(PlaneGenerator);
             Destroy(TileGenerator);
             Destroy(MLSpatialMapper);

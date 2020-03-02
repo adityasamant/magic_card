@@ -59,12 +59,10 @@ namespace DicePackage
         {
             Rigidbody rb = GetComponent<Rigidbody>();
             rb.solverIterations = 250;
+            //rb.constraints = RigidbodyConstraints.FreezeAll;
             initPos = transform.position;
             Vector3 lastPos = new Vector3(Random.value, Random.value, Random.value);
-            addForce(lastPos);
             Dice_stop += regularDiceCount;
-            startRollingTime = Time.time;
-            bStartRolling = true;
         }
 
         /// <summary>
@@ -102,6 +100,18 @@ namespace DicePackage
             diceCount = 0;
             regularDiceCount();
             return diceCount;
+        }
+
+        public void ResetPosition(Vector3 newPosition)
+        {
+            transform.position = newPosition;
+            initPos = newPosition;
+            bStartRolling = true;
+            startRollingTime = Time.time;
+            Rigidbody rb = GetComponent<Rigidbody>();
+            //rb.constraints = RigidbodyConstraints.None;
+            Vector3 lastPos = new Vector3(Random.value, Random.value, Random.value);
+            addForce(lastPos);
         }
         #endregion
 

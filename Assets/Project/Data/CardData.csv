@@ -19,5 +19,5 @@ Cardid,Cardname,Attack,HP,Speed,Specialeffect,PrefabPath
 18,Sonic,15,30,0,Sonic Cannot Attack actively & When another monster will Sonic, Sonic will deal damage to that creature before attack,Prefabs/Monster/CaptivatingUnicornPrefab
 19,Normal Creature,5,20,4,No Special Effect,Prefabs/Monster/HeroOfTheGamesPrefab
 20,Partner,3,15,5,Can play another card this turn,Prefabs/Monster/HeroOfTheGamesPrefab
-21,Big Dragon,25,80,5,The Big Dragon will take place 7 hexs(1 in center, 6 around it.) & Exile when there is not enough space. & Exile a random Dragon when summon Big Dragon,Prefabs/Monster/HeroOfTheGamesPrefab
+21,Big Dragon,25,80,5,The Big Dragon will take place 7 hexs(1 in center 6 around it.) & Exile when there is not enough space. & Exile a random Dragon when summon Big Dragon,Prefabs/Monster/HeroOfTheGamesPrefab
 22,Kill them all,0,0,0,Exile all creatures in both sides on the battlefield. & You lose this turn and go to next Upkeep Step Directly.,Prefabs/Monster/HeroOfTheGamesPrefab

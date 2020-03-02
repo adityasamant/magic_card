@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using GameWorld;
+using DicePackage;
 
 namespace GameLogic
 {
@@ -13,6 +14,7 @@ namespace GameLogic
         Wait_For_Map_Scan,
         Online_Only_Wait_For_Connection,
         Game_Begin,
+        ChooseFirstPlayer,
         UpKeepStep,
         Turn_Begin,
         Player_Turn_Begin,
@@ -81,6 +83,11 @@ namespace GameLogic
         [Tooltip("Limit Player time per turn.")]
         public float PlayerTurnTimeLimited = 30;
 
+        /// <summary>
+        /// A link to set the Dice Prefab
+        /// </summary>
+        public GameObject DicePrefab;
+
         #endregion
 
         #region Private Variable
@@ -96,6 +103,25 @@ namespace GameLogic
 
         private GameMode currentMode;
 
+        /// <summary>
+        /// Store a instant of Dice
+        /// </summary>
+        private Dice DiceInstant = null;
+
+        /// <summary>
+        /// Store a gameobject that is Dice
+        /// </summary>
+        private GameObject DiceObject = null;
+
+        /// <summary>
+        /// Boolean for waiting for dice stop
+        /// </summary>
+        private bool bWaitForDice=false;
+
+        /// <summary>
+        /// Boolean true for Player0 go first, false for Player1 go first
+        /// </summary>
+        private bool bPlayer0First = true;
         #endregion
 
         private void ChangeState(GameStates dstStates)
@@ -117,6 +143,11 @@ namespace GameLogic
             Player1.PlayerId = 1;
             world.BattleEnd += BattleEndUpdate;
             world.World_ResetFinished += World_ResetFinishedUpdate;
+            DiceObject = Instantiate(DicePrefab,transform);
+            DiceObject.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
+            DiceInstant = DiceObject.GetComponent<Dice>();
+            
+            DiceObject.SetActive(false);
             ChangeState(GameStates.Init);
         }
 
@@ -145,7 +176,18 @@ namespace GameLogic
                     if (nowTime - stateBeginTime > 3)
                     {
                         gameGlobalState.Reset();
-                        ChangeState(GameStates.UpKeepStep);
+                        //ChangeState(GameStates.UpKeepStep);
+                        bWaitForDice = false;
+                        ChangeState(GameStates.ChooseFirstPlayer);
+                    }
+                    break;
+                case GameStates.ChooseFirstPlayer:
+                    if(!bWaitForDice)
+                    {
+                        bWaitForDice = true;
+                        DiceObject.SetActive(true);
+                        DiceInstant.ResetPosition(DiceObject.transform.position + new Vector3(0, 1, 0));
+                        DiceInstant.Dice_stop += DiceStopHandle;
                     }
                     break;
                 case GameStates.UpKeepStep:
@@ -157,7 +199,20 @@ namespace GameLogic
                 case GameStates.Turn_Begin:
                     if (nowTime - stateBeginTime > 2)
                     {
-                        playerTurnList.Add(Player0);
+                        if(bPlayer0First==true)
+                        {
+                            Debug.Log("Player0 Go First.");
+                            playerTurnList.Add(Player0);
+                            playerTurnList.Add(Player1);
+                            bPlayer0First = false;  //Switch Player go first next turn
+                        }
+                        else
+                        {
+                            Debug.Log("Player1 Go First.");
+                            playerTurnList.Add(Player1);
+                            playerTurnList.Add(Player0);
+                            bPlayer0First = true;   //Switch Player go first next turn
+                        }
                         ChangeState(GameStates.Player_Turn_Begin);
                     }
                     break;
@@ -169,7 +224,7 @@ namespace GameLogic
                         Player currentPlayer = playerTurnList[0];
                         playerTurnList.Remove(currentPlayer);
                         currentPlayerId = currentPlayer.PlayerId;
-                        //currentPlayer.Event_PlayerTurnStart.Invoke();
+                        currentPlayer.Event_PlayerTurnStart.Invoke();
                         ChangeState(GameStates.Wait_For_Player_Turn);
                     }
                     break ;
@@ -275,7 +330,27 @@ namespace GameLogic
         /// </summary>
         private void World_ResetFinishedUpdate()
         {
+            Debug.Log("WorldResetFinished");
             ChangeState(GameStates.Turn_Begin);
+        }
+        ///<summary>
+        /// Dice Handle
+        ///</summary>
+        void DiceStopHandle()
+        {
+            if(currentState==GameStates.ChooseFirstPlayer)
+            {
+                if(DiceInstant.GetDiceCount()<=3)
+                {
+                    bPlayer0First = true;
+                }
+                else
+                {
+                    bPlayer0First = false;
+                }
+                ChangeState(GameStates.UpKeepStep);
+            }
+            return;
         }
         #endregion
     }

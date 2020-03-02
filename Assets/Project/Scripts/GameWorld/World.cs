@@ -88,6 +88,7 @@ namespace GameWorld
 
         public void init()
         {
+            Debug.Log("World: Finished init");
             monsters.Clear();
             World_ResetFinished();
         }

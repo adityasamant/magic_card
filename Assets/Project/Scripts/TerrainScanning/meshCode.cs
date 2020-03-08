@@ -64,7 +64,7 @@ public class meshCode : MonoBehaviour
             Destroy(PlaneGenerator);
             Destroy(TileGenerator);
             Destroy(MLSpatialMapper);
-            Destroy(gameObject);
+            //Destroy(gameObject);
       }
     }
 }

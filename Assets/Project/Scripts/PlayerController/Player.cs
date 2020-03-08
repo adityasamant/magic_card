@@ -27,6 +27,14 @@ namespace GameLogic
     /// </param>
     public delegate void PlayerEnd(int id);
 
+    /// <summary>
+    /// When this player is playing a card, it will pop a delegate to Main Logic
+    /// </summary>
+    /// <param name="PlayerId">The Player Id of the card.</param>
+    /// <param name="CardIndex">The Card Index of the played card.</param>
+    /// <param name="HexIndex">The Hex Index of the player camera.</param>
+    public delegate void PlayedCard(int PlayerId, int CardIndex, int HexIndex);
+
     public class Player : MonoBehaviour
     {
 
@@ -43,9 +51,14 @@ namespace GameLogic
 
         #region Public Delegate
         /// <summary>
-        /// Define the object for delegate
+        /// Define the interface for delegate PlayerEnd
         /// </summary>
         public PlayerEnd PlayerEnd;
+
+        /// <summary>
+        /// Define the interface for delegate PlayedCard
+        /// </summary>
+        public PlayedCard PlayedCard;
         #endregion
 
         #region Public Property

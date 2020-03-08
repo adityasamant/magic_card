@@ -138,8 +138,10 @@ namespace GameLogic
             playerTurnList = new List<Player>() ;
             ScanMesh.ScanFinished += ScanFinshedUpdate;
             Player0.PlayerEnd += PlayerEndUpdate;
+            Player0.PlayedCard += PlayedCardInvoke;
             Player0.PlayerId = 0;
             Player1.PlayerEnd += PlayerEndUpdate;
+            Player1.PlayedCard += PlayedCardInvoke;
             Player1.PlayerId = 1;
             world.BattleEnd += BattleEndUpdate;
             world.World_ResetFinished += World_ResetFinishedUpdate;
@@ -352,8 +354,18 @@ namespace GameLogic
             }
             return;
         }
+
+        /// <summary>
+        /// Deal the monster spwan when player played card.
+        /// </summary>
+        /// <param name="PlayerId">The player id of the played card.</param>
+        /// <param name="CardIndex">The played card index.</param>
+        /// <param name="HexIndex">The hex index of that played card.</param>
+        private void PlayedCardInvoke(int PlayerId,int CardIndex,int HexIndex)
+        {
+
+        }
         #endregion
     }
 
 }
-

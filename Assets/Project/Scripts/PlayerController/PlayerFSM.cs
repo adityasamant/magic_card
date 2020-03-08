@@ -123,6 +123,8 @@ namespace GameLogic
                 Event_ScanFinished = new UnityEvent();
             }
             Event_ScanFinished.AddListener(ScanFinishedInvoke);
+
+            PlayedCard += PlayedCardInvoked;
         }
 
         ///<summary>
@@ -224,7 +226,6 @@ namespace GameLogic
                     if (myCardDataBase)
                     {
                         Cards myCard = myCardDataBase.GetCard(PlayedCardName);
-                        GameObject monsterClass = Resources.Load<GameObject>(myCard.PrefabPath);
                         float myDis = 9999.9f;
                         int index = 0;
                         for(int i=0;i<HexMap.childCount;i++)
@@ -236,7 +237,8 @@ namespace GameLogic
                                 index = i;
                             }
                         }
-                        GameObject NewMonster = Instantiate(monsterClass, HexMap.GetChild(index));
+
+                        PlayedCard(PlayerId, myCard.id, index);
                     }
                     myState = PlayerStates.End;
                     break;
@@ -320,6 +322,18 @@ namespace GameLogic
                     myState = PlayerStates.Main_Phase;
                 }
             }
+        }
+
+        /// <summary>
+        /// Invoked when the player is playing card
+        /// </summary>
+        /// <param name="PlayerId">The Player Id of the played card.</param>
+        /// <param name="CardIndex">The played card index</param>
+        /// <param name="HexIndex">The hex that card has been place on</param>
+        private void PlayedCardInvoked(int PlayerId, int CardIndex, int HexIndex)
+        {
+            Debug.LogFormat("Player {0} playing card {1} in hex {2}", PlayerId, CardIndex, HexIndex);
+            return;
         }
         #endregion
     }

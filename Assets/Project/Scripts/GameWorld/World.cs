@@ -86,10 +86,19 @@ namespace GameWorld
             return uid;
         }
 
-        public void init()
+        /// <summary>
+        /// For all Monster reset at the begin of each turn.
+        /// </summary>
+        public void TurnInit()
         {
+            Debug.Log("World: Reseted All Monster.");
+            foreach(KeyValuePair<int, Monster> monsterPair in monsters)
+            {
+                Monster thisMonster = monsterPair.Value;
+                if (thisMonster.isExiled) continue; //A Exiled Monster cannot be reset.
+                thisMonster.MonsterReset();
+            }
             Debug.Log("World: Finished init");
-            monsters.Clear();
             World_ResetFinished();
         }
         public void ResetForOneBattle()
@@ -97,13 +106,16 @@ namespace GameWorld
             worldAttrib.currentTurn = 0;
             ResetForOneTurn();
         }
+        /// <summary>
+        /// Reset the ActingMonsterList Sorted Array.
+        /// </summary>
         public void ResetForOneTurn()
         {
             actingMonsterList.Clear();
             foreach (KeyValuePair<int, Monster> monsterPair in monsters)
             {
                 Monster monster = monsterPair.Value;
-                if (monster.alive == true)
+                if (monster.isExiled == false)
                     actingMonsterList.Add(monster);
             }
             Debug.LogFormat("Clearing for one turn ended. Detected {0} living animals.", actingMonsterList.Count);
@@ -174,24 +186,21 @@ namespace GameWorld
         /// </summary>
         private void ResetBegin()
         {
-            init();
+            TurnInit(); //Reset all monster at the begin of the turn.
             return;
+        }
+
+        /// <summary>
+        /// Delegate MonsterMove End Handler
+        /// </summary>
+        void MonsterMoveEnd()
+        {
+            Debug.LogFormat("Monster {0} move ended.", currentActMonster.GetUId());
+            currentState = WorldStates.Battle;
         }
         #endregion
 
-        void MonsterMoveEnd(MonsterMovement movement)
-        {
-            Debug.LogFormat("Monster {0} move ended.", currentActMonster.GetUId());
-            switch (movement.action)
-            {
-                case MonsterMovement.MonsterAction.Nothing:
-                    break;
-                default:
-                    Debug.Log("A movement that this world doesn't understand.");
-                    break;
-            }
-            currentState = WorldStates.Battle;
-        }
+
     }
 
 }

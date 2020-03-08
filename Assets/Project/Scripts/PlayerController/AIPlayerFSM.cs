@@ -71,6 +71,7 @@ namespace GameLogic
                 Event_ScanFinished = new UnityEvent();
             }
             Event_ScanFinished.AddListener(ScanFinishedInvoke);
+            PlayedCard += PlayedCardInvoked;
         }
         
         /// <summary>
@@ -113,8 +114,9 @@ namespace GameLogic
                     break;
                 case (PlayerStates.Spawn_Phase):
                     if (nowTime - stateBeginTime < 2) break;
-                    GameObject monsterClass = Resources.Load<GameObject>(CardToUsed.PrefabPath);
-                    GameObject NewMonster = Instantiate(monsterClass, HexMap.GetChild(HexToPlaceIndex));
+                    //GameObject monsterClass = Resources.Load<GameObject>(CardToUsed.PrefabPath);
+                    //GameObject NewMonster = Instantiate(monsterClass, HexMap.GetChild(HexToPlaceIndex));
+                    PlayedCard(PlayerId, CardToUsed.id, HexToPlaceIndex);
                     ChangeState(PlayerStates.End);
                     break;
                 case (PlayerStates.End):
@@ -168,6 +170,18 @@ namespace GameLogic
             {
                 myState = PlayerStates.WaitForStart;
             }
+        }
+
+        /// <summary>
+        /// Invoked when the player is playing card
+        /// </summary>
+        /// <param name="PlayerId">The player id of the played card.</param>
+        /// <param name="CardIndex">The played card index</param>
+        /// <param name="HexIndex">The hex that card has been place on</param>
+        private void PlayedCardInvoked(int PlayerId, int CardIndex, int HexIndex)
+        {
+            Debug.LogFormat("AIPlayer {0} playing card {1} in hex {2}", PlayerId, CardIndex, HexIndex);
+            return;
         }
         #endregion
     }

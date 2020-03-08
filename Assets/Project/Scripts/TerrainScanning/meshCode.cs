@@ -3,68 +3,75 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.MagicLeap;
 
-public delegate void ScanFinished();
-
-public class meshCode : MonoBehaviour
+namespace TerrainScanning
 {
-    public HexTileMapGenerator hx;
-    public Material BlackMaterial;
-    public MLSpatialMapper Mapper;
-    public GameObject PlaneGenerator;
-    public GameObject TileGenerator;
-    public GameObject MLSpatialMapper;
+    public delegate void ScanFinished();
+    public class meshCode : MonoBehaviour
+    {
+        public HexTileMapGenerator hx;
+        public Material BlackMaterial;
+        public MLSpatialMapper Mapper;
+        public GameObject PlaneGenerator;
+        public GameObject TileGenerator;
+        public GameObject MLSpatialMapper;
 
-    /// <summary>
-    /// Define the object for delegate
-    /// </summary>
-    public ScanFinished ScanFinished;
+        /// <summary>
+        /// Define the object for delegate
+        /// </summary>
+        public ScanFinished ScanFinished;
 
-    #region Private Variable
-    private MLInputController _controller;
+        #region Private Variable
+        private MLInputController _controller;
 
-    /// <summary>
-    /// A bool variable to control the system only generate once
-    /// </summary>
-    private bool AlreadyGenerate=false;
-    #endregion
+        /// <summary>
+        /// A bool variable to control the system only generate once
+        /// </summary>
+        private bool AlreadyGenerate = false;
+        #endregion
 
-    void Start () {
-      //Start receiving input by the Control
-      MLInput.Start();
-      MLInput.OnControllerButtonDown += OnButtonDown;
-      _controller = MLInput.GetController(MLInput.Hand.Left);
-    }
-    void OnDestroy () {
-      //Stop receiving input by the Control
-      MLInput.Stop();
-    }
-    void Update () {
-    }
+        void Start()
+        {
+            //Start receiving input by the Control
+            MLInput.Start();
+            MLInput.OnControllerButtonDown += OnButtonDown;
+            _controller = MLInput.GetController(MLInput.Hand.Left);
+        }
+        void OnDestroy()
+        {
+            //Stop receiving input by the Control
+            MLInput.Stop();
+        }
+        void Update()
+        {
+        }
 
-    void OnButtonDown(byte controller_id, MLInputControllerButton button) {
-      if (button == MLInputControllerButton.Bumper) {
-            if (AlreadyGenerate) return;
-            Debug.Log("yacha yacha");
-            for (int i = 0; i < transform.childCount; i++)
+        void OnButtonDown(byte controller_id, MLInputControllerButton button)
+        {
+            if (button == MLInputControllerButton.Bumper)
             {
-                // Get the child gameObject
-                GameObject gameObject = transform.GetChild(i).gameObject;
-                // Get the meshRenderer component
-                MeshRenderer meshRenderer = gameObject.GetComponent<MeshRenderer>();
-                // Get the assigned material
-                Material material = meshRenderer.sharedMaterial;
-                if (material != BlackMaterial)
+                if (AlreadyGenerate) return;
+                Debug.Log("yacha yacha");
+                for (int i = 0; i < transform.childCount; i++)
                 {
-                    meshRenderer.material = BlackMaterial;
+                    // Get the child gameObject
+                    GameObject gameObject = transform.GetChild(i).gameObject;
+                    // Get the meshRenderer component
+                    MeshRenderer meshRenderer = gameObject.GetComponent<MeshRenderer>();
+                    // Get the assigned material
+                    Material material = meshRenderer.sharedMaterial;
+                    if (material != BlackMaterial)
+                    {
+                        meshRenderer.material = BlackMaterial;
+                    }
                 }
+                hx.createHex();
+                AlreadyGenerate = true;
+                ScanFinished();
+                Destroy(PlaneGenerator);
+                Destroy(TileGenerator);
+                Destroy(MLSpatialMapper);
+                Destroy(gameObject);
             }
-            hx.createHex();
-            AlreadyGenerate = true;
-            ScanFinished();
-            Destroy(PlaneGenerator);
-            Destroy(TileGenerator);
-            Destroy(MLSpatialMapper);
-            //Destroy(gameObject);
-      }
+        }
     }
 }

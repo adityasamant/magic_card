@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using GameLogic;
+using TerrainScanning;
 
 namespace GameWorld
 {
@@ -175,7 +176,8 @@ namespace GameWorld
             ATK = origin_ATK;
             SPD = origin_SPD;
             monsterOwner = origin_monsterOwner;
-            HexIndex = origin_HexIndex;
+            //HexIndex = origin_HexIndex;
+            StateUpdate("Move", origin_HexIndex);
             isAlive = true;
         }
         /// <summary>
@@ -237,9 +239,15 @@ namespace GameWorld
             if (this.isAlive == false)
                 Debug.LogFormat("Error! Monster {0} is dead", uid);
             else
-                Debug.Log("I'm a monster and I don't want to do anything!");
-            MonsterTurnEnd();
+                Debug.Log("I'm a monster and I will random Move.");
             // need inplemented
+            List<HexTile> myNexthexTiles=world.tileMap.getEdgeByVertexId(HexIndex);
+            int num = myNexthexTiles.Count;
+            int randomNum = (int) Random.value * num;
+            if (randomNum == num) randomNum--;
+            HexTile myNextHex = myNexthexTiles[randomNum];
+            this.StateUpdate("Move", myNextHex.getID());
+            MonsterTurnEnd();
         }
         
 
@@ -248,6 +256,8 @@ namespace GameWorld
         /// </summary>
         /// <param name="StateField">
         /// "Damage", HP-=newState
+        /// "Move", newState=next HexIndex Index
+        /// "Exile", All state=0 and @isExile=true, @isAlive=false
         /// </param>
         public void StateUpdate(string StateField,int newState)
         {
@@ -257,11 +267,34 @@ namespace GameWorld
                 if (HP < 0)
                     isAlive = false;
             }
-                
+            if(StateField=="Move")
+            {
+                HexTile hexTile = world.tileMap.getHexTileByIndex(newState);
+                if(hexTile==null)
+                {
+                    Debug.Log("Monster Error: Move to a null HexTile!");
+                    return;
+                }
+                gameObject.transform.SetParent(hexTile.transform);
+                //gameObject.transform.localPosition.Set(0.0f, 0.0f, -1.5f);
+                transform.localPosition = new Vector3(0.0f, 0.0f, -1.5f);
+                HexIndex = newState;
+            }
+            if(StateField=="Exile")
+            {
+                isExiled = true;
+                isAlive = false;
+                HP = 0;
+                ATK = 0;
+                SPD = 0;
+            }
         }
         #endregion
     }
 
+    /// <summary>
+    /// Implement a comparator for Monster
+    /// </summary>
     public class MonsterComparator : Comparer<Monster>
     {
         override

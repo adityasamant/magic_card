@@ -130,7 +130,7 @@ namespace GameWorld
 
         public HexTile getHexTileByCoord(int[] coord)
         {
-            HexTile result = new HexTile();
+            HexTile result = null;
             foreach (HexTile a in hexTiles)
             {
                 if (a.getX() == coord[0] && a.getY() == coord[1] && a.getZ() == coord[2])

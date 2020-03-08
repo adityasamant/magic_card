@@ -49,6 +49,8 @@ namespace GameWorld
         
         public bool created = false;
 
+        private float steptime;
+
         /// <summary>
         /// A link to the gameManager
         /// </summary>
@@ -123,6 +125,7 @@ namespace GameWorld
         /// </summary>
         void Update()
         {
+            float nowTime = Time.time;
             switch (currentState)
             {
                 case WorldStates.Idle:
@@ -144,6 +147,7 @@ namespace GameWorld
                     }
                     break;
                 case WorldStates.Summary:
+                    if (nowTime - steptime < 5) break;
                     WinningCheck();
                     break;
             }
@@ -184,10 +188,11 @@ namespace GameWorld
             foreach (KeyValuePair<int, Monster> monsterPair in monsters)
             {
                 Monster monster = monsterPair.Value;
-                if (monster.isExiled == false)
+                if (monster.isExiled == false && monster.isAlive == true) 
                     actingMonsterList.Add(monster);
             }
             Debug.LogFormat("Clearing for one turn ended. Detected {0} living animals.", actingMonsterList.Count);
+            steptime = Time.time;
         }
 
         /// <summary>

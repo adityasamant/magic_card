@@ -11,33 +11,10 @@ namespace GameWorld
         private GameObject HexMap;
         private static int[][] directions = new int[][] { new int[] { 1, -1, 0 }, new int[] { 1, 0, -1 }, new int[] { 0, 1, -1 }, new int[] { -1, 1, 0 }, new int[] { -1, 0, 1 }, new int[] { 0, -1, 1 } };
         private static List<HexTile> hexTiles = new List<HexTile>();
-        /// <summary>
-        /// return all vertexs' id it close to.
-        /// </summary>
-        /// <param name="vertexId"></param>
-        /// <returns></returns>
+
         void Start()
         {
             HexMap = GameObject.Find("HexMap");
-        }
-        public List<HexTile> getEdgeByVertexId(int vertexId)
-        {
-            List<HexTile> edges = new List<HexTile>();
-            HexTile curr = hexTiles[vertexId];
-            int[] currCoord = curr.getCoordinates();
-            foreach (int[] dirt in directions)
-            {
-                int[] targetCoord = new int[] { currCoord[0] + dirt[0], currCoord[1] + dirt[1], currCoord[2] + dirt[2] };
-                if (isValid(targetCoord))
-                {
-                    edges.Add(getHexTileByCoord(targetCoord));
-                }
-                else
-                {
-                    //Debug.Log("noValid");
-                }
-            }
-            return edges;
         }
 
         /// <summary>
@@ -107,6 +84,31 @@ namespace GameWorld
             return path;
         }
 
+        /// <summary>
+        /// return all vertexs' id it close to.
+        /// </summary>
+        /// <param name="vertexId"></param>
+        /// <returns></returns>
+        public List<HexTile> getEdgeByVertexId(int vertexId)
+        {
+            List<HexTile> edges = new List<HexTile>();
+            HexTile curr = hexTiles[vertexId];
+            int[] currCoord = curr.getCoordinates();
+            foreach (int[] dirt in directions)
+            {
+                int[] targetCoord = new int[] { currCoord[0] + dirt[0], currCoord[1] + dirt[1], currCoord[2] + dirt[2] };
+                if (isValid(targetCoord))
+                {
+                    edges.Add(getHexTileByCoord(targetCoord));
+                }
+                else
+                {
+                    //Debug.Log("noValid");
+                }
+            }
+            return edges;
+        }
+        
         public int getDistance(int startId, int endId)
         {
             HexTile s = HexMap.transform.GetChild(startId).GetComponent<HexTile>();

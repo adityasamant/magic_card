@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using GameWorld;
 using DicePackage;
+using TerrainScanning;
 
 namespace GameLogic
 {
@@ -280,6 +281,12 @@ namespace GameLogic
         void ScanFinshedUpdate()
         {
             Debug.Log("ScanFinished");
+            List<int> path = new List<int>();
+            //Test pathfinding
+            path = world.tileMap.getShortestPath(0,18);
+            foreach(int id in path){
+                Debug.Log("id in path = "+id);
+            }
             Player0.Event_ScanFinished.Invoke();
             if(currentState == GameStates.Wait_For_Map_Scan)
             {

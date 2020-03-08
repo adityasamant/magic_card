@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using GameLogic;
-
+using TerrainScanning;
 public enum MergeFeb27States
 {
     Init,

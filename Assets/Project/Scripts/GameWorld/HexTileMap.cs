@@ -10,7 +10,7 @@ namespace GameWorld
     {
         private GameObject HexMap;
         private static int[][] directions = new int[][] { new int[] { 1, -1, 0 }, new int[] { 1, 0, -1 }, new int[] { 0, 1, -1 }, new int[] { -1, 1, 0 }, new int[] { -1, 0, 1 }, new int[] { 0, -1, 1 } };
-        private List<HexTile> hexTiles = new List<HexTile>();
+        private static List<HexTile> hexTiles = new List<HexTile>();
         /// <summary>
         /// return all vertexs' id it close to.
         /// </summary>
@@ -57,35 +57,53 @@ namespace GameWorld
                     hexTiles.Add(HexMap.transform.GetChild(i).GetComponent<HexTile>());
                     i++;
                 }
-                Debug.Log("allNum" + hexTiles.Count);
+                Debug.Log("num of Tiles" + hexTiles.Count);
             }
             List<int> path = new List<int>();
-            HexTile endTile = hexTiles[endId];
-            path.Add(startId);
-            HexTile currNode = hexTiles[startId];
-            while (true)
+            Dictionary<int, int> cameFrom = new Dictionary<int, int>();
+            Dictionary<int, int> costSoFar = new Dictionary<int, int>();
+            var frontier = new PriorityQueue<int>();
+            
+            frontier.Enqueue(startId, 0);
+            cameFrom.Add(startId, startId);
+            costSoFar.Add(startId, 0);
+
+            while (frontier.Count > 0)
             {
-                List<HexTile> allNeighbors = getEdgeByVertexId(currNode.getID());
-                List<HexTile> neighbors = new List<HexTile>();
-                foreach (HexTile each in allNeighbors)
-                {
-                    if (!path.Contains(each.getID()))
-                    {
-                        neighbors.Add(each);
+                int curr = frontier.Dequeue();
+
+                if(curr == endId) break;
+
+                foreach(HexTile neighbor in getEdgeByVertexId(curr)){
+                    int neighborId = neighbor.getID();
+                    int newCost = costSoFar[curr] + getDistance(curr, neighborId);
+                    if(!costSoFar.ContainsKey(neighborId) || newCost < costSoFar[neighborId]){
+                        if(costSoFar.ContainsKey(neighborId)){
+                            costSoFar.Remove(neighborId);
+                            cameFrom.Remove(neighborId);
+                        }
+
+                        costSoFar.Add(neighborId, newCost);
+                        cameFrom.Add(neighborId, curr);
+                        int priority = newCost + getDistance(neighborId, endId);
+                        frontier.Enqueue(neighborId, priority);
                     }
                 }
-                //Debug.Log("nb#" + allNeighbors.Count);
-                if (neighbors.Count == 0) break;
-                if (neighbors.Contains(endTile))
-                {
-                    path.Add(endId);
-                    break;
-                }
-
-                HexTile nearestNode = FindNearestNode(neighbors, endTile);
-                path.Add(nearestNode.getID());
-                currNode = nearestNode;
             }
+
+            int currIdInPath = endId;
+            while(currIdInPath != startId){
+                if(!cameFrom.ContainsKey(currIdInPath)){
+                    Debug.Log("No way!");
+                    return new List<int>();
+                }
+                path.Add(currIdInPath);
+                currIdInPath = cameFrom[currIdInPath];
+            }
+            path.Add(startId);
+            path.Reverse();
+            //Show path in blue
+            ColorPath(path);
             return path;
         }
 
@@ -96,7 +114,7 @@ namespace GameWorld
             return (Math.Abs(s.getX() - e.getX()) + Math.Abs(s.getY() - e.getY()) + Math.Abs(s.getZ() - e.getZ())) / 2;
         }
 
-        //TODO
+        //TODO: Add more constrains
         public Boolean isValid(int[] coord)
         {
             int numsOfID = hexTiles.Count;
@@ -115,7 +133,7 @@ namespace GameWorld
             HexTile result = new HexTile();
             foreach (HexTile a in hexTiles)
             {
-                if (a.getX()== coord[0] && a.getY() == coord[1] && a.getZ() == coord[2])
+                if (a.getX() == coord[0] && a.getY() == coord[1] && a.getZ() == coord[2])
                 {
                     result = a;
                     return result;
@@ -143,20 +161,45 @@ namespace GameWorld
             return result;
         }
 
-        public HexTile FindNearestNode(List<HexTile> list, HexTile target)
+        public class PriorityQueue<T>
         {
-            int minDist = 999999;
-            HexTile nearestNode = new HexTile();
-            foreach (HexTile nb in list)
+            private List<KeyValuePair<T, float>> elements = new List<KeyValuePair<T, float>>();
+
+            public int Count
             {
-                int dist = getDistance(nb.getID(), target.getID());
-                if (dist < minDist)
-                {
-                    minDist = dist;
-                    nearestNode = nb;
-                }
+                get { return elements.Count; }
             }
-            return nearestNode;
+
+            public void Enqueue(T item, float priority)
+            {
+                elements.Add(new KeyValuePair<T, float>(item, priority));
+            }
+
+            // Returns the Location that has the lowest priority
+            public T Dequeue()
+            {
+                int bestIndex = 0;
+
+                for (int i = 0; i < elements.Count; i++)
+                {
+                    if (elements[i].Value < elements[bestIndex].Value)
+                    {
+                        bestIndex = i;
+                    }
+                }
+
+                T bestItem = elements[bestIndex].Key;
+                elements.RemoveAt(bestIndex);
+                return bestItem;
+            }
+        }
+
+        public void ColorPath(List<int> path)
+        {
+            for (int i = 0; i < path.Count; i++)
+            {
+                HexMap.transform.GetChild(path[i]).GetChild(0).GetComponent<Renderer>().material.color = Color.blue;
+            }
         }
     }
 }

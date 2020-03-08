@@ -40,7 +40,7 @@ namespace GameWorld
         /// <summary>
         /// the total number of all monster in the game
         /// </summary>
-        static private int monsterCount = 0;
+        static int monsterCount = 0;
         #endregion
 
         #region Private Attributes
@@ -147,6 +147,10 @@ namespace GameWorld
         /// <param name="HexIndex"></param>
         public void MonsterInit(string name,int hp,int atk,int spd,Player monsterOwner,int HexIndex)
         {
+            uid = monsterCount;
+            monsterCount++;
+            Debug.Log("A new monster with uid={0} is created." + uid);
+            isExiled = false;
             monsterName = name;
             origin_HP = hp;
             origin_ATK = atk;
@@ -207,16 +211,12 @@ namespace GameWorld
         /// </summary>
         void Start()
         {
-            Debug.Log("A new monster with uid={0} is created." + uid);
-            uid = Monster.monsterCount;
-            Monster.monsterCount++;
             if (MonsterStartTurn == null)
                 MonsterStartTurn = new UnityEvent();
             if (MonsterStateUpdate == null)
                 MonsterStateUpdate = new StateUpdateEvent();
             MonsterStartTurn.AddListener(MoveMent);
             MonsterStateUpdate.AddListener(StateUpdate);
-            isExiled = false;
         }
 
         /// <summary>
@@ -260,5 +260,17 @@ namespace GameWorld
                 
         }
         #endregion
+    }
+
+    public class MonsterComparator : Comparer<Monster>
+    {
+        override
+        public int Compare(Monster m1, Monster m2)
+        {
+            if (m1.SPD != m2.SPD)
+                return m1.SPD - m2.SPD;
+            else
+                return m1.GetUId() - m2.GetUId();
+        }
     }
 }

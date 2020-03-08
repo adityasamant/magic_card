@@ -85,10 +85,8 @@ namespace GameLogic
             {
                 case (PlayerStates.Init):
                     //Init For AI Player
-                    Debug.Log("AIPlayer: Init_State");
                     break;
                 case (PlayerStates.WaitForStart):
-                    Debug.Log("AIPlayer: Wait For Turn Start.");
                     break;
                 case (PlayerStates.Main_Phase):
                     if (nowTime - stateBeginTime < 2) break; //Wait 2 seconds.
@@ -109,7 +107,7 @@ namespace GameLogic
                         }
                         HexToPlaceIndex = k;
                     }
-                    Debug.Log(("Now AI want to place the Monster in {0} Hex, Name: {1}", HexToPlaceIndex, HexMap.GetChild(HexToPlaceIndex).name));
+                    Debug.LogFormat("Now AI want to place the Monster in {0} Hex, Name: {1}", HexToPlaceIndex, HexMap.GetChild(HexToPlaceIndex).name);
                     ChangeState(PlayerStates.Spawn_Phase);
                     break;
                 case (PlayerStates.Spawn_Phase):

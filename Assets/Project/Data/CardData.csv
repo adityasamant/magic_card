@@ -16,7 +16,7 @@ Cardid,Cardname,Attack,HP,Speed,Specialeffect,PrefabPath
 15,Thief,5,30,1,When Thief go to the battlefield & you gain control of a random enemy creature this turn,Prefabs/Monster/CaptivatingUnicornPrefab
 16,Ditto,0,0,0,When Ditto comes to the battlefield & Ditto becomes a copy of a random creature on the battlefield,Prefabs/Monster/CaptivatingUnicornPrefab
 17,Mice,2,15,2,The Attack HP and Speed times by the number of mices in the battlefield,Prefabs/Monster/CaptivatingUnicornPrefab
-18,Sonic,15,30,0,Sonic Cannot Attack actively & When another monster will Sonic, Sonic will deal damage to that creature before attack,Prefabs/Monster/CaptivatingUnicornPrefab
+18,Sonic,15,30,0,Sonic Cannot Attack actively & When another monster will Sonic Sonic will deal damage to that creature before attack,Prefabs/Monster/CaptivatingUnicornPrefab
 19,Normal Creature,5,20,4,No Special Effect,Prefabs/Monster/HeroOfTheGamesPrefab
 20,Partner,3,15,5,Can play another card this turn,Prefabs/Monster/HeroOfTheGamesPrefab
 21,Big Dragon,25,80,5,The Big Dragon will take place 7 hexs(1 in center 6 around it.) & Exile when there is not enough space. & Exile a random Dragon when summon Big Dragon,Prefabs/Monster/HeroOfTheGamesPrefab

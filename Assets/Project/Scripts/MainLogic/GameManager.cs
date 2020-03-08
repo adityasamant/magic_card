@@ -4,6 +4,7 @@ using UnityEngine;
 using GameWorld;
 using DicePackage;
 using TerrainScanning;
+using CardInfo;
 
 namespace GameLogic
 {
@@ -88,6 +89,12 @@ namespace GameLogic
         /// A link to set the Dice Prefab
         /// </summary>
         public GameObject DicePrefab;
+
+        /// <summary>
+        /// A link to the Card Database
+        /// </summary>
+        [Tooltip("A link to the Card Database")]
+        public GetCardInstruction CardDataBase;
 
         #endregion
 
@@ -364,13 +371,23 @@ namespace GameLogic
 
         /// <summary>
         /// Deal the monster spwan when player played card.
+        /// Also attach Monster class to the spawn monster
         /// </summary>
         /// <param name="PlayerId">The player id of the played card.</param>
         /// <param name="CardIndex">The played card index.</param>
         /// <param name="HexIndex">The hex index of that played card.</param>
         private void PlayedCardInvoke(int PlayerId,int CardIndex,int HexIndex)
         {
-
+            Debug.LogFormat("AIPlayer {0} playing card {1} in hex {2}", PlayerId, CardIndex, HexIndex);
+            Cards thisCard = CardDataBase.GetCardByIndex(CardIndex);
+            GameObject monsterClass = Resources.Load<GameObject>(thisCard.PrefabPath);
+            HexTile TargetHex = world.tileMap.getHexTileByIndex(HexIndex);
+            GameObject newMonster = Instantiate(monsterClass, TargetHex.transform);
+            if(newMonster.GetComponent<Monster>()==null)
+                newMonster.AddComponent<Monster>();
+            newMonster.GetComponent<Monster>().MonsterInit(thisCard.CardName, thisCard.HP, thisCard.Attack, thisCard.Speed, (PlayerId == 0 ? Player0 : Player1), HexIndex);
+            newMonster.GetComponent<Monster>().world = world;
+            world.uploadMonsterInWorld(newMonster.GetComponent<Monster>());
         }
         #endregion
     }

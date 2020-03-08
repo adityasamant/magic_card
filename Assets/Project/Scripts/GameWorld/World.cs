@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine.Events;
 using UnityEngine;
+using GameLogic;
 
 namespace GameWorld
 {
@@ -48,9 +49,36 @@ namespace GameWorld
         
         public bool created = false;
 
+        /// <summary>
+        /// A link to the gameManager
+        /// </summary>
+        [Tooltip("A link to the gameManager.")]
+        public GameManager gameManager;
+
         private WorldStates currentState = WorldStates.Idle;
         private SortedSet<Monster> actingMonsterList;
         private Monster currentActMonster;
+
+        
+
+        #region Public Fucntion
+        /// <summary>
+        /// Upload the information of the monster to the world(Monsters)
+        /// </summary>
+        /// <param name="monster">A link to the monster</param>
+        /// <returns>monster uid if success, -1 is error</returns>
+        public int uploadMonsterInWorld(Monster monster)
+        {
+            int uid = monster.GetUId();
+            if (monsters.ContainsKey(uid) == true)
+            {
+                Debug.LogErrorFormat("Error! Monster with uid {0} already exists", uid);
+                return -1;
+            }
+            monsters[uid] = monster;
+            monster.MonsterTurnEnd += MonsterMoveEnd;
+            return uid;
+        }
 
         /// <summary>
         /// get monster instance by its uid
@@ -68,64 +96,17 @@ namespace GameWorld
             else
                 return monsters[uid];
         }
+        #endregion
 
+        #region Unity Function
         /// <summary>
-        /// 
+        /// Invoke when World is enable
         /// </summary>
-        /// <param name="monster"></param>
-        /// <returns></returns>
-        public int uploadMonsterInWorld(Monster monster)
-        {
-            int uid = monster.GetUId();
-            if (monsters.ContainsKey(uid) == true)
-            {
-                Debug.LogErrorFormat("Error! Monster with uid {0} already exists", uid);
-                return -1;
-            }
-            monsters[uid] = monster;
-            return uid;
-        }
-
-        /// <summary>
-        /// For all Monster reset at the begin of each turn.
-        /// </summary>
-        public void TurnInit()
-        {
-            Debug.Log("World: Reseted All Monster.");
-            foreach(KeyValuePair<int, Monster> monsterPair in monsters)
-            {
-                Monster thisMonster = monsterPair.Value;
-                if (thisMonster.isExiled) continue; //A Exiled Monster cannot be reset.
-                thisMonster.MonsterReset();
-            }
-            Debug.Log("World: Finished init");
-            World_ResetFinished();
-        }
-        public void ResetForOneBattle()
-        {
-            worldAttrib.currentTurn = 0;
-            ResetForOneTurn();
-        }
-        /// <summary>
-        /// Reset the ActingMonsterList Sorted Array.
-        /// </summary>
-        public void ResetForOneTurn()
-        {
-            actingMonsterList.Clear();
-            foreach (KeyValuePair<int, Monster> monsterPair in monsters)
-            {
-                Monster monster = monsterPair.Value;
-                if (monster.isExiled == false)
-                    actingMonsterList.Add(monster);
-            }
-            Debug.LogFormat("Clearing for one turn ended. Detected {0} living animals.", actingMonsterList.Count);
-        }
-
         void Start()
         { 
             Debug.Log("Creating a new world");
             monsters = new Dictionary<int, Monster>();
-            actingMonsterList = new SortedSet<Monster>() ;
+            actingMonsterList = new SortedSet<Monster>(new MonsterComparator()) ;
             if(tileMap == null)
                 tileMap = new HexTileMap();
             worldAttrib = new WorldGlobalAttrib();
@@ -137,6 +118,9 @@ namespace GameWorld
             Event_ResetStart.AddListener(ResetBegin);
         }
         
+        /// <summary>
+        /// FSM for each tick
+        /// </summary>
         void Update()
         {
             switch (currentState)
@@ -154,31 +138,105 @@ namespace GameWorld
                         currentActMonster = actingMonsterList.Min;
                         actingMonsterList.Remove(currentActMonster);
                         Debug.LogFormat("Monster {0} is moving...", currentActMonster.GetUId());
-                        currentActMonster.MonsterStartTurn.Invoke();
-                        currentActMonster.MonsterTurnEnd += MonsterMoveEnd;
                         currentState = WorldStates.Wait_For_Monster;
+                        currentActMonster.MonsterStartTurn.Invoke();
+                        //currentActMonster.MonsterTurnEnd += MonsterMoveEnd;
                     }
                     break;
                 case WorldStates.Summary:
-                    ResetForOneTurn();
-                    worldAttrib.currentTurn++;
-                    Debug.LogFormat("World: turn {0} is over.", worldAttrib.currentTurn);
-                    if(worldAttrib.currentTurn == 20)
-                    {
-                        Debug.Log("Player 0 wins.");
-                        BattleEnd(0);
-                        currentState = WorldStates.Idle;
-                    }
+                    WinningCheck();
                     break;
             }
         }
+        #endregion
 
-        void BattleBegin()
+        #region Private Function
+        /// <summary>
+        /// For all Monster reset at the begin of each turn.
+        /// </summary>
+        private void TurnInit()
         {
-            Debug.Log("World: Battle begin.");
-            ResetForOneBattle();
-            currentState = WorldStates.Battle;
+            Debug.Log("World: Reseted All Monster.");
+            foreach (KeyValuePair<int, Monster> monsterPair in monsters)
+            {
+                Monster thisMonster = monsterPair.Value;
+                if (thisMonster.isExiled) continue; //A Exiled Monster cannot be reset.
+                thisMonster.MonsterReset();
+            }
+            Debug.Log("World: Finished init");
+            World_ResetFinished();
         }
+
+        /// <summary>
+        /// Reset the ActingMonsterList Sorted Array before battle
+        /// </summary>
+        private void ResetForOneBattle()
+        {
+            worldAttrib.currentTurn = 0;
+            ResetForOneTurn();
+        }
+        /// <summary>
+        /// Reset the ActingMonsterList Sorted Array.
+        /// </summary>
+        private void ResetForOneTurn()
+        {
+            actingMonsterList.Clear();
+            foreach (KeyValuePair<int, Monster> monsterPair in monsters)
+            {
+                Monster monster = monsterPair.Value;
+                if (monster.isExiled == false)
+                    actingMonsterList.Add(monster);
+            }
+            Debug.LogFormat("Clearing for one turn ended. Detected {0} living animals.", actingMonsterList.Count);
+        }
+
+        /// <summary>
+        /// Winning Check, Invoke when this turn finished.
+        /// </summary>
+        private void WinningCheck()
+        {
+            ResetForOneTurn();
+            int Player0Count = 0;
+            int Player1Count = 0;
+            foreach(Monster monster in actingMonsterList)
+            {
+                if(monster.monsterOwner==gameManager.Player0)
+                {
+                    Player0Count++;
+                }
+                else if(monster.monsterOwner==gameManager.Player1)
+                {
+                    Player1Count++;
+                }
+            }
+            if(worldAttrib.currentTurn<20 && Player0Count>0 && Player1Count>0)
+            {
+                worldAttrib.currentTurn++;
+                currentState = WorldStates.Battle;
+                return;
+            }
+
+            if(Player0Count==Player1Count)
+            {//Draw
+                Debug.Log("This turn Draw");
+                BattleEnd(-1);
+                currentState = WorldStates.Idle;
+            }
+            else if(Player0Count<Player1Count)
+            {//Player1Win
+                Debug.Log("Player 1 wins.");
+                BattleEnd(1);
+                currentState = WorldStates.Idle;
+            }
+            else
+            {//Player0Win
+                Debug.Log("Player 0 wins.");
+                BattleEnd(0);
+                currentState = WorldStates.Idle;
+            }
+            return;
+        }
+        #endregion
 
         #region Event Handler
         /// <summary>
@@ -193,14 +251,21 @@ namespace GameWorld
         /// <summary>
         /// Delegate MonsterMove End Handler
         /// </summary>
-        void MonsterMoveEnd()
+        private void MonsterMoveEnd()
         {
             Debug.LogFormat("Monster {0} move ended.", currentActMonster.GetUId());
             currentState = WorldStates.Battle;
         }
+        /// <summary>
+        /// Invoke when Battle is begin by GameManager
+        /// </summary>
+        private void BattleBegin()
+        {
+            Debug.Log("World: Battle begin.");
+            ResetForOneBattle();
+            currentState = WorldStates.Battle;
+        }
         #endregion
-
-
     }
 
 }

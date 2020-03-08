@@ -94,6 +94,31 @@ namespace CardInfo
             return newCard;
         }
 
+        /// <summary>
+        /// Input A Card Index return a class that include all information about card
+        /// </summary>
+        /// <param name="CardIndex">The Card Index</param>
+        /// <returns>A class that include all information of that card</returns>
+        public Cards GetCardByIndex(int CardIndex)
+        {
+            Cards newCard = new Cards();
+            for (int i = 0; i < CardInfo.Length; i++)
+            {
+                if (CardInfo[i][0] == CardIndex.ToString())
+                {
+                    newCard.id = int.Parse(CardInfo[i][0]);
+                    newCard.CardName = CardInfo[i][1];
+                    newCard.Attack = int.Parse(CardInfo[i][2]);
+                    newCard.HP = int.Parse(CardInfo[i][3]);
+                    newCard.Speed = int.Parse(CardInfo[i][4]);
+                    newCard.SpecialEffect = CardInfo[i][5];
+                    newCard.PrefabPath = CardInfo[i][6];
+                    break;
+                }
+            }
+            return newCard;
+        }
+
         ///<summary>
         /// Get a random Card from the database
         ///</summary>

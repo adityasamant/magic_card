@@ -405,6 +405,7 @@ MonoBehaviour:
   world: {fileID: 1673065492}
   PlayerTurnTimeLimited: 30
   DicePrefab: {fileID: 100000, guid: 8579f10578058c04f917e8d30bac7ccf, type: 3}
+  CardDataBase: {fileID: 622289431}
 --- !u!1 &622289429
 GameObject:
   m_ObjectHideFlags: 0
@@ -1309,6 +1310,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   created: 0
+  gameManager: {fileID: 618742037}
 --- !u!1 &1744097066
 GameObject:
   m_ObjectHideFlags: 0

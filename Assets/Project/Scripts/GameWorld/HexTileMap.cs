@@ -124,6 +124,25 @@ namespace GameWorld
             return result;
         }
 
+        /// <summary>
+        /// Return a HexTile by Index, return null if doesn't find
+        /// </summary>
+        /// <param name="HexIndex">The HexTile Id</param>
+        /// <returns>Return a HexTile, if it doesn't find return null</returns>
+        public HexTile getHexTileByIndex(int HexIndex)
+        {
+            HexTile result = null;
+            foreach (HexTile a in hexTiles)
+            {
+                if (a.getID()==HexIndex)
+                {
+                    result = a;
+                    return result;
+                }
+            }
+            return result;
+        }
+
         public HexTile FindNearestNode(List<HexTile> list, HexTile target)
         {
             int minDist = 999999;

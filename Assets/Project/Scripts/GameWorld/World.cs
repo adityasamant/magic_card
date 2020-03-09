@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.Events;
 using UnityEngine;
 using GameLogic;
+using Monsters;
 
 namespace GameWorld
 {

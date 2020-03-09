@@ -70,7 +70,7 @@ namespace TerrainScanning
                 Destroy(PlaneGenerator);
                 Destroy(TileGenerator);
                 Destroy(MLSpatialMapper);
-                Destroy(gameObject);
+               // Destroy(gameObject);
             }
         }
     }

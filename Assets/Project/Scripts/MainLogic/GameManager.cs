@@ -5,6 +5,7 @@ using GameWorld;
 using DicePackage;
 using TerrainScanning;
 using CardInfo;
+using Monsters;
 
 namespace GameLogic
 {

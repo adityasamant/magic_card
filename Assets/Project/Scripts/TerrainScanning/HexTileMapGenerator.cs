@@ -40,17 +40,20 @@ public class HexTileMapGenerator : MonoBehaviour
         int x0 = 0;
         int y0 = 0;
         int z0 = 0;
+        
+        quadObject.transform.position = new Vector3(quadObject.transform.position.x,0.11f,quadObject.transform.position.z);
+        Physics.SyncTransforms();
 
-        for (float i = rend.bounds.min.x+0.475f; i <= rend.bounds.max.x-0.475f; i = i + 0.97f)
+        for (float i = rend.bounds.min.x+0.5f; i <= rend.bounds.max.x-0.5f; i = i + 0.97f)
         {
             x = x0;
             y = y0;
             z = z0;
-            for (float j = rend.bounds.max.z+0.28f; j >= rend.bounds.min.z-0.28f; j = j - 0.56f)
+            for (float j = rend.bounds.max.z+0.3f; j >= rend.bounds.min.z-0.3f; j = j - 0.56f)
             {
                 Vector3 center = new Vector3(i, 0.4f, j);
                 Collider[] hitColliders = Physics.OverlapSphere(center, 0.3f);
-                if (hitColliders.Length == 0)
+                if (hitColliders.Length == 1)
                 {
                     GameObject temp = Instantiate(hexTilePrefab);
                     temp.name = "HexTile [" + x.ToString() + "," + y.ToString() + "," + z.ToString() + "]";
@@ -59,7 +62,7 @@ public class HexTileMapGenerator : MonoBehaviour
                 }
                 Vector3 center1 = new Vector3(i + 0.485f, 0.4f, j - 0.28f);
                 Collider[] hitColliders1 = Physics.OverlapSphere(center1, 0.3f);
-                if (hitColliders1.Length == 0)
+                if (hitColliders1.Length == 1)
                 {
                     GameObject temp1 = Instantiate(hexTilePrefab);
                     temp1.name = "HexTile [" + (x + 1).ToString() + "," + (y - 1).ToString() + "," + z.ToString() + "]";
@@ -73,5 +76,6 @@ public class HexTileMapGenerator : MonoBehaviour
             y0 = y0 - 1;
             z0 = z0 - 1;
         }
+        Destroy(quadObject);
     }
 }

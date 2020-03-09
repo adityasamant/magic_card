@@ -147,7 +147,7 @@ namespace GameWorld
                     }
                     break;
                 case WorldStates.Summary:
-                    if (nowTime - steptime < 5) break;
+                    if (nowTime - steptime < 1) break;
                     WinningCheck();
                     break;
             }

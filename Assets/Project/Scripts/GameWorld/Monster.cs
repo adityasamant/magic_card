@@ -237,17 +237,49 @@ namespace GameWorld
         public void MoveMent()
         {
             if (this.isAlive == false)
+            {
                 Debug.LogFormat("Error! Monster {0} is dead", uid);
+                MonsterTurnEnd();
+                return;
+            }
+                
+
+            int Dist = 99999;
+            Monster nearestMonster = null;
+            foreach(KeyValuePair<int,Monster> MonsterItr in world.monsters)
+            {
+                Monster thisMonster = MonsterItr.Value;
+                if (thisMonster.isAlive == false) continue;
+                if (thisMonster.isExiled == true) continue;
+                if (thisMonster.monsterOwner == this.monsterOwner) continue;
+                int thisDist = world.tileMap.getDistance(this.HexIndex, thisMonster.HexIndex);
+                if(thisDist<Dist)
+                {
+                    Dist = thisDist;
+                    nearestMonster = thisMonster;
+                }
+            }
+            if (nearestMonster==null)
+            {
+                Debug.Log("Cannot Find a monster.");
+                MonsterTurnEnd();
+                return;
+            }
+            if(Dist==1 || Dist==0)
+            {//Adjcent to a enemy monster, Attack
+                Debug.LogFormat("Attack Target Monster{0}, My ATK={1}", uid, this.ATK);
+                nearestMonster.MonsterStateUpdate.Invoke("Damage", this.ATK);
+                MonsterTurnEnd();
+                return;
+            }
             else
-                Debug.Log("I'm a monster and I will random Move.");
-            // need inplemented
-            List<int> myNexthexTiles=world.tileMap.getEdgeByVertexId(HexIndex);
-            int num = myNexthexTiles.Count;
-            int randomNum = (int) Random.value * num;
-            if (randomNum == num) randomNum--;
-            HexTile myNextHex = world.tileMap.getHexTileByIndex(myNexthexTiles[randomNum]);
-            this.StateUpdate("Move", myNextHex.getID());
-            MonsterTurnEnd();
+            {
+                List<int> myPath = world.tileMap.getShortestPath(this.HexIndex, nearestMonster.HexIndex);
+                world.tileMap.ColorPath(myPath);
+                this.StateUpdate("Move", myPath[1]);
+                MonsterTurnEnd();
+                return;
+            }
         }
         
 
@@ -264,6 +296,7 @@ namespace GameWorld
             if(StateField=="Damage")
             {
                 HP -= newState;
+                Debug.LogFormat("Monster {0} get hitted. Current HP is: {1}", this.uid, this.HP);
                 if (HP < 0)
                     isAlive = false;
             }

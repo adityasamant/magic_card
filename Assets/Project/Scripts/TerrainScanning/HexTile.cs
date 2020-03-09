@@ -8,13 +8,23 @@ namespace TerrainScanning
         private int y;
         private int z;
         private int id;
-        public bool isStart = false;
-        public bool isEnd = false;
+        private bool accessible;
+        public HexTile(int X, int Z, int myID){
+            this.x = X;
+            this.z = Z;
+            this.y = 0 - X - Z;
+            this.id = myID;
+            this.accessible = true;
+        }
         public void setCoordinates(int X, int Z)
         {
             this.x = X;
             this.z = Z;
             this.y = 0 - X - Z;
+        }
+        public int[] getCoordinates()
+        {
+            return new int[] { x, y, z };
         }
         public int getX()
         {
@@ -28,9 +38,6 @@ namespace TerrainScanning
         {
             return this.z;
         }
-        public int[] getCoordinates(){
-            return new int[]{x,y,z};
-        }
         public void setID(int temp)
         {
             this.id = temp;
@@ -39,7 +46,12 @@ namespace TerrainScanning
         {
             return this.id;
         }
-
+        public void setAccessible(bool b){
+            this.accessible = b;
+        }
+        public bool getAccessible(){
+            return this.accessible;
+        }
         // override object.Equals
         public override bool Equals(object obj)
         {
@@ -50,7 +62,7 @@ namespace TerrainScanning
             HexTile tile = obj as HexTile;
             return this.x == tile.getX() && this.y == tile.getY();
         }
-        
+
         // override object.GetHashCode
         public override int GetHashCode()
         {

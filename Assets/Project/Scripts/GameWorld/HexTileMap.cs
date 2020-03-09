@@ -10,34 +10,10 @@ namespace GameWorld
     {
         private GameObject HexMap;
         private static int[][] directions = new int[][] { new int[] { 1, -1, 0 }, new int[] { 1, 0, -1 }, new int[] { 0, 1, -1 }, new int[] { -1, 1, 0 }, new int[] { -1, 0, 1 }, new int[] { 0, -1, 1 } };
-        private static List<HexTile> hexTiles = new List<HexTile>();
-        /// <summary>
-        /// return all vertexs' id it close to.
-        /// </summary>
-        /// <param name="vertexId"></param>
-        /// <returns></returns>
+        private static Dictionary<Tuple<int, int>, int> coordinatesToId = new Dictionary<Tuple<int,int>, int>();
         void Start()
         {
             HexMap = GameObject.Find("HexMap");
-        }
-        public List<HexTile> getEdgeByVertexId(int vertexId)
-        {
-            List<HexTile> edges = new List<HexTile>();
-            HexTile curr = hexTiles[vertexId];
-            int[] currCoord = curr.getCoordinates();
-            foreach (int[] dirt in directions)
-            {
-                int[] targetCoord = new int[] { currCoord[0] + dirt[0], currCoord[1] + dirt[1], currCoord[2] + dirt[2] };
-                if (isValid(targetCoord))
-                {
-                    edges.Add(getHexTileByCoord(targetCoord));
-                }
-                else
-                {
-                    //Debug.Log("noValid");
-                }
-            }
-            return edges;
         }
 
         /// <summary>
@@ -48,17 +24,6 @@ namespace GameWorld
         /// <returns></returns>
         public List<int> getShortestPath(int startId, int endId)
         {
-            int i = 0;
-            int childCount = HexMap.transform.childCount;
-            if (hexTiles.Count != childCount)
-            {
-                while (i < childCount)
-                {
-                    hexTiles.Add(HexMap.transform.GetChild(i).GetComponent<HexTile>());
-                    i++;
-                }
-                Debug.Log("num of Tiles" + hexTiles.Count);
-            }
             List<int> path = new List<int>();
             Dictionary<int, int> cameFrom = new Dictionary<int, int>();
             Dictionary<int, int> costSoFar = new Dictionary<int, int>();
@@ -74,8 +39,7 @@ namespace GameWorld
 
                 if(curr == endId) break;
 
-                foreach(HexTile neighbor in getEdgeByVertexId(curr)){
-                    int neighborId = neighbor.getID();
+                foreach(int neighborId in getEdgeByVertexId(curr)){
                     int newCost = costSoFar[curr] + getDistance(curr, neighborId);
                     if(!costSoFar.ContainsKey(neighborId) || newCost < costSoFar[neighborId]){
                         if(costSoFar.ContainsKey(neighborId)){
@@ -107,39 +71,45 @@ namespace GameWorld
             return path;
         }
 
+        /// <summary>
+        /// return all vertexs' id it close to.
+        /// </summary>
+        /// <param name="vertexId"></param>
+        /// <returns></returns>
+        public List<int> getEdgeByVertexId(int vertexId)
+        {
+            //init coordinatesToId Dictionary
+            int i = 0;
+            int childCount = HexMap.transform.childCount;
+            if (coordinatesToId.Count != childCount)
+            {
+                while (i < childCount)
+                {
+                    var key = Tuple.Create(HexMap.transform.GetChild(i).GetComponent<HexTile>().getX(), HexMap.transform.GetChild(i).GetComponent<HexTile>().getZ());
+                    coordinatesToId.Add(key, i);
+                    i++;
+                }
+            }
+
+            List<int> edges = new List<int>();
+            int[] currCoord = HexMap.transform.GetChild(vertexId).GetComponent<HexTile>().getCoordinates();
+            foreach (int[] dirt in directions)
+            {
+                int[] targetCoord = new int[] { currCoord[0] + dirt[0], currCoord[1] + dirt[1], currCoord[2] + dirt[2] };
+                var targetKey = Tuple.Create(targetCoord[0], targetCoord[2]);
+                if (coordinatesToId.ContainsKey(targetKey) && isAccessible(targetCoord))
+                {
+                    edges.Add(coordinatesToId[targetKey]);
+                }
+            }
+            return edges;
+        }
+
         public int getDistance(int startId, int endId)
         {
             HexTile s = HexMap.transform.GetChild(startId).GetComponent<HexTile>();
             HexTile e = HexMap.transform.GetChild(endId).GetComponent<HexTile>();
             return (Math.Abs(s.getX() - e.getX()) + Math.Abs(s.getY() - e.getY()) + Math.Abs(s.getZ() - e.getZ())) / 2;
-        }
-
-        //TODO: Add more constrains
-        public Boolean isValid(int[] coord)
-        {
-            int numsOfID = hexTiles.Count;
-            for (int i = 0; i < numsOfID; i++)
-            {
-                if (coord[0] == hexTiles[i].getX() && coord[1] == hexTiles[i].getY() && coord[2] == hexTiles[i].getZ())
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public HexTile getHexTileByCoord(int[] coord)
-        {
-            HexTile result = null;
-            foreach (HexTile a in hexTiles)
-            {
-                if (a.getX() == coord[0] && a.getY() == coord[1] && a.getZ() == coord[2])
-                {
-                    result = a;
-                    return result;
-                }
-            }
-            return result;
         }
 
         /// <summary>
@@ -149,16 +119,22 @@ namespace GameWorld
         /// <returns>Return a HexTile, if it doesn't find return null</returns>
         public HexTile getHexTileByIndex(int HexIndex)
         {
-            HexTile result = null;
-            foreach (HexTile a in hexTiles)
-            {
-                if (a.getID()==HexIndex)
-                {
-                    result = a;
-                    return result;
-                }
-            }
+            if (HexMap.transform.childCount < HexIndex) return null;
+
+            HexTile result = HexMap.transform.GetChild(HexIndex).GetComponent<HexTile>();
             return result;
+        }
+
+        /// <summary>
+        /// return coordinates is accesible or not
+        /// </summary>
+        /// <param name="coord"></param>
+        //TODO: Add more constrains
+        public Boolean isAccessible(int[] coord)
+        {
+            var key = Tuple.Create(coord[0], coord[2]);
+            int id = coordinatesToId[key];
+            return HexMap.transform.GetChild(id).GetComponent<HexTile>().getAccessible();
         }
 
         public class PriorityQueue<T>

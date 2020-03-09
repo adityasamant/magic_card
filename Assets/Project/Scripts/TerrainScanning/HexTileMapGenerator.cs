@@ -60,11 +60,12 @@ namespace TerrainScanning
                         // temp.transform.parent = parent.transform;
 
                         GameObject tile = Instantiate(hexTilePrefab);
-                        tile.AddComponent<HexTile>();
                         tile.transform.position = new Vector3(i, quadObject.transform.position.y + 0.1f, j);
                         tile.transform.parent = parent.transform;
+                        tile.AddComponent<HexTile>();
                         tile.GetComponent<HexTile>().setCoordinates(x, z);
                         tile.GetComponent<HexTile>().setID(cellID++);
+                        tile.GetComponent<HexTile>().setAccessible(true);
                         tile.name = "HexTile" + tile.GetComponent<HexTile>().getID() + " [" + x.ToString() + "," + y.ToString() + "," + z.ToString() + "]";
                     }
                     Vector3 center1 = new Vector3(i + 0.485f, 0.4f, j - 0.28f);
@@ -77,11 +78,12 @@ namespace TerrainScanning
                         // temp1.transform.parent = parent.transform;
 
                         GameObject tile1 = Instantiate(hexTilePrefab);
-                        tile1.AddComponent<HexTile>();
                         tile1.transform.position = new Vector3(i + 0.485f, quadObject.transform.position.y + 0.1f, j - 0.28f);
                         tile1.transform.parent = parent.transform;
+                        tile1.AddComponent<HexTile>();
                         tile1.GetComponent<HexTile>().setCoordinates(x + 1, z);
                         tile1.GetComponent<HexTile>().setID(cellID++);
+                        tile1.GetComponent<HexTile>().setAccessible(true);
                         tile1.name = "HexTile" + tile1.GetComponent<HexTile>().getID() + " [" + (x + 1).ToString() + "," + (y - 1).ToString() + "," + z.ToString() + "]";
                     }
                     y = y - 1;

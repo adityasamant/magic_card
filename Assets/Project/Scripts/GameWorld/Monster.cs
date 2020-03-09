@@ -241,11 +241,11 @@ namespace GameWorld
             else
                 Debug.Log("I'm a monster and I will random Move.");
             // need inplemented
-            List<HexTile> myNexthexTiles=world.tileMap.getEdgeByVertexId(HexIndex);
+            List<int> myNexthexTiles=world.tileMap.getEdgeByVertexId(HexIndex);
             int num = myNexthexTiles.Count;
             int randomNum = (int) Random.value * num;
             if (randomNum == num) randomNum--;
-            HexTile myNextHex = myNexthexTiles[randomNum];
+            HexTile myNextHex = world.tileMap.getHexTileByIndex(myNexthexTiles[randomNum]);
             this.StateUpdate("Move", myNextHex.getID());
             MonsterTurnEnd();
         }

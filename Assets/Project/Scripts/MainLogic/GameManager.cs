@@ -291,9 +291,6 @@ namespace GameLogic
         {
             Debug.Log("ScanFinished");
             List<int> path = new List<int>();
-            //Test pathfinding
-            path = world.tileMap.getShortestPath(105,46);
-
             Player0.Event_ScanFinished.Invoke();
             if(currentState == GameStates.Wait_For_Map_Scan)
             {

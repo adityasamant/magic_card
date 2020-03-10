@@ -189,6 +189,7 @@ namespace Monsters
             StateUpdate("Move", origin_HexIndex);
             isAlive = true;
             gameObject.GetComponent<Animator>().SetTrigger("Reset");
+            //GetComponent<Renderer>().material.color = (monsterOwner.PlayerId == 0 ? Color.red : Color.blue);
         }
         /// <summary>
         /// get the monster's uid
@@ -263,6 +264,8 @@ namespace Monsters
         /// </summary>
         public virtual void MoveMent()
         {
+            GetComponent<Animator>().ResetTrigger("Reset");
+
             if (this.isAlive == false)
             {
                 Debug.LogFormat("Error! Monster {0} is dead", uid);

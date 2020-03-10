@@ -12,9 +12,11 @@ namespace GameLogic
     {
         Init,
         WaitForStart,
+        ImageTrackingStart,
         Main_Phase,
         Confirm_Phase,
         Spawn_Phase,
+        ImageTrackingStop,
         End,
         Error
     };

@@ -143,8 +143,6 @@ namespace GameLogic
                     {
                         if(myHandTrackerObject)
                             myHandTrackerObject.SetActive(true);
-                        if(myCardeTrackerObject)
-                            myCardeTrackerObject.SetActive(true);
                         if(myHandTracker)
                         {
                             myHandTracker.FindPose += HandGesture;
@@ -154,6 +152,10 @@ namespace GameLogic
                 case (PlayerStates.WaitForStart): //Wait Event From Main Logic
                     //Debug.Log("PlayerStates=WaitForStart");
                     Instructions.text = "Now is not your turn. Please wait for the game going.";
+                    break;
+                case (PlayerStates.ImageTrackingStart):
+                    myCardeTrackerObject.SetActive(true);
+                    myState = PlayerStates.Main_Phase;
                     break;
                 case (PlayerStates.Main_Phase): // Wait For Hand Event From Hand Tracker
                     //Debug.Log("PlayerStates=Main_Phase");
@@ -240,6 +242,9 @@ namespace GameLogic
 
                         PlayedCard(PlayerId, myCard.id, index);
                     }
+                    myState = PlayerStates.ImageTrackingStop;
+                    break;
+                case (PlayerStates.ImageTrackingStop):
                     myState = PlayerStates.End;
                     break;
                 case (PlayerStates.End):
@@ -263,7 +268,7 @@ namespace GameLogic
         {
              if(myState==PlayerStates.WaitForStart)
             {
-                myState = PlayerStates.Main_Phase;
+                myState = PlayerStates.ImageTrackingStart;
                 myHandTracker.Event_enableOKtracked.Invoke();
             }
         }

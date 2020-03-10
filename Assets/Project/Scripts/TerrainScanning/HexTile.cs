@@ -9,6 +9,19 @@ namespace TerrainScanning
         private int z;
         private int id;
         private bool accessible;
+
+        private void Update()
+        {
+            if(this.transform.childCount>1)
+            {
+                setAccessible(false);
+            }
+            else
+            {
+                setAccessible(true);
+            }
+        }
+
         public HexTile(int X, int Z, int myID){
             this.x = X;
             this.z = Z;

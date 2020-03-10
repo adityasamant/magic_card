@@ -39,7 +39,7 @@ namespace GameWorld
 
                 if(curr == endId) break;
 
-                foreach(int neighborId in getEdgeByVertexId(curr)){
+                foreach(int neighborId in getEdgeByVertexId(curr,endId)){
                     int newCost = costSoFar[curr] + getDistance(curr, neighborId);
                     if(!costSoFar.ContainsKey(neighborId) || newCost < costSoFar[neighborId]){
                         if(costSoFar.ContainsKey(neighborId)){
@@ -76,7 +76,7 @@ namespace GameWorld
         /// </summary>
         /// <param name="vertexId"></param>
         /// <returns></returns>
-        public List<int> getEdgeByVertexId(int vertexId)
+        public List<int> getEdgeByVertexId(int vertexId,int EndId)
         {
             //init coordinatesToId Dictionary
             int i = 0;
@@ -97,7 +97,7 @@ namespace GameWorld
             {
                 int[] targetCoord = new int[] { currCoord[0] + dirt[0], currCoord[1] + dirt[1], currCoord[2] + dirt[2] };
                 var targetKey = Tuple.Create(targetCoord[0], targetCoord[2]);
-                if (coordinatesToId.ContainsKey(targetKey) && isAccessible(targetCoord))
+                if (coordinatesToId.ContainsKey(targetKey) && isAccessible(targetCoord) || coordinatesToId.ContainsKey(targetKey) && coordinatesToId[targetKey]==EndId)
                 {
                     edges.Add(coordinatesToId[targetKey]);
                 }

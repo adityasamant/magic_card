@@ -14,6 +14,8 @@ namespace Monsters
         /// </summary>
         public override void MoveMent()
         {
+            GetComponent<Animator>().ResetTrigger("Reset");
+
             if (this.isAlive == false)
             {
                 Debug.LogFormat("Error! Archer {0} is dead", uid);

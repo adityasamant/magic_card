@@ -44,7 +44,8 @@ namespace TerrainScanning
             int z0 = 0;
             int cellID = 0;
 
-            quadObject.transform.position = new Vector3(quadObject.transform.position.x, 0.11f, quadObject.transform.position.z);
+            float height = quadObject.transform.position.y;
+            quadObject.transform.position = new Vector3(quadObject.transform.position.x, height-0.11f, quadObject.transform.position.z);
             Physics.SyncTransforms();
 
             for (float i = rend.bounds.min.x + 0.5f; i <= rend.bounds.max.x - 0.5f; i = i + 0.97f)
@@ -54,12 +55,14 @@ namespace TerrainScanning
                 z = z0;
                 for (float j = rend.bounds.max.z + 0.3f; j >= rend.bounds.min.z - 0.3f; j = j - 0.56f)
                 {
-                    Vector3 center = new Vector3(i, 0.4f, j);
+                    Vector3 center = new Vector3(i, height+0.4f, j);
                     Collider[] hitColliders = Physics.OverlapSphere(center, 0.3f);
-                    if (hitColliders.Length == 1)
+                    Vector3 centertest = new Vector3(i, height - 0.4f, j);
+                    Collider[] hitColliderstest = Physics.OverlapSphere(centertest, 0.3f);
+                    if (hitColliders.Length == 0 && hitColliderstest.Length == 1)
                     {
                         GameObject tile = Instantiate(hexTilePrefab);
-                        tile.transform.position = new Vector3(i, quadObject.transform.position.y + 0.1f, j);
+                        tile.transform.position = new Vector3(i, height+0.01f, j);
                         tile.transform.parent = parent.transform;
                         tile.AddComponent<HexTile>();
                         tile.GetComponent<HexTile>().setCoordinates(x, z);
@@ -67,12 +70,14 @@ namespace TerrainScanning
                         tile.GetComponent<HexTile>().setAccessible(true);
                         tile.name = "HexTile" + tile.GetComponent<HexTile>().getID() + " [" + x.ToString() + "," + y.ToString() + "," + z.ToString() + "]";
                     }
-                    Vector3 center1 = new Vector3(i + 0.485f, 0.4f, j - 0.28f);
+                    Vector3 center1 = new Vector3(i + 0.485f, height+0.4f, j - 0.28f);
                     Collider[] hitColliders1 = Physics.OverlapSphere(center1, 0.3f);
-                    if (hitColliders1.Length == 1)
+                    Vector3 centertest1 = new Vector3(i, height - 0.4f, j);
+                    Collider[] hitColliderstest1 = Physics.OverlapSphere(centertest1, 0.3f);
+                    if (hitColliders1.Length == 0 && hitColliderstest1.Length == 1)
                     {
                         GameObject tile1 = Instantiate(hexTilePrefab);
-                        tile1.transform.position = new Vector3(i + 0.485f, quadObject.transform.position.y + 0.1f, j - 0.28f);
+                        tile1.transform.position = new Vector3(i + 0.485f, height+0.01f, j - 0.28f);
                         tile1.transform.parent = parent.transform;
                         tile1.AddComponent<HexTile>();
                         tile1.GetComponent<HexTile>().setCoordinates(x + 1, z);
@@ -87,7 +92,7 @@ namespace TerrainScanning
                 y0 = y0 - 1;
                 z0 = z0 - 1;
             }
-            Destroy(quadObject);
+            //Destroy(quadObject);
         }
     }
 }

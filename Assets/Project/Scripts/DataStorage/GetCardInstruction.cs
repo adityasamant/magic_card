@@ -36,7 +36,7 @@ namespace CardInfo
         /// <summary>
         /// File Path for data 
         /// </summary>
-        private string filePath ="Assets/Project/Data/CardData.csv";
+        public string filePath ="Assets/Project/Data/CardData.csv";
 
 
         #endregion

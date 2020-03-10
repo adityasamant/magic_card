@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using CardInfo;
+using TerrainScanning;
 
 namespace GameLogic
 {
@@ -106,6 +107,11 @@ namespace GameLogic
                             k = (int) (Random.value * n);
                         }
                         HexToPlaceIndex = k;
+                        if (HexMap.GetChild(k).GetComponent<HexTile>() == null) break;
+                        else
+                        {
+                            if (HexMap.GetChild(k).GetComponent<HexTile>().getAccessible() == false) break;
+                        }
                     }
                     Debug.LogFormat("Now AI want to place the Monster in {0} Hex, Name: {1}", HexToPlaceIndex, HexMap.GetChild(HexToPlaceIndex).name);
                     ChangeState(PlayerStates.Spawn_Phase);

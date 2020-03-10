@@ -66,7 +66,7 @@ namespace UnityEngine.XR.MagicLeap
                 myCardTarget = new MLImageTarget[CardImageList.Length];
                 myCardResult = new MLImageTargetResult[CardImageList.Length];
             }
-
+            if(MLImageTracker.IsStarted) MLImageTracker.Stop();
             MLResult result = MLImageTracker.Start();
             if (!result.IsOk)
             {
@@ -94,7 +94,20 @@ namespace UnityEngine.XR.MagicLeap
 
         private void OnDestroy()
         {
-            for(int i=0;i<CardNameList.Length;i++)
+            if (!MLImageTracker.IsStarted)
+                return;
+            for (int i=0;i<CardNameList.Length;i++)
+            {
+                MLImageTracker.RemoveTarget(CardNameList[i]);
+            }
+            MLImageTracker.Stop();
+        }
+
+        private void OnDisable()
+        {
+            if (!MLImageTracker.IsStarted)
+                return;
+            for (int i = 0; i < CardNameList.Length; i++)
             {
                 MLImageTracker.RemoveTarget(CardNameList[i]);
             }

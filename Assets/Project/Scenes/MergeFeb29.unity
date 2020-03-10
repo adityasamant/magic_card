@@ -403,7 +403,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ScanMesh: {fileID: 756306162}
   ScanMeshObject: {fileID: 756306160}
-  Player0: {fileID: 1842386181}
+  Player0: {fileID: 1188869857}
   Player1: {fileID: 1177854199}
   world: {fileID: 1673065492}
   PlayerTurnTimeLimited: 30

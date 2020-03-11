@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Arrow_MAT
-  m_Shader: {fileID: 4800000, guid: fb80828b9d73b7b478ac8a826feadd38, type: 3}
+  m_Shader: {fileID: 4800000, guid: c179452c1d4bf8e42a507cba4617f76c, type: 3}
   m_ShaderKeywords: _ALPHAPREMULTIPLY_ON _NORMALMAP
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0

@@ -8,6 +8,9 @@ namespace GameWorld
 {
     public class HexTileMap : MonoBehaviour
     {
+        public Material OriginalMat;
+        public Material NewMat;
+
         private GameObject HexMap;
         private static int[][] directions = new int[][] { new int[] { 1, -1, 0 }, new int[] { 1, 0, -1 }, new int[] { 0, 1, -1 }, new int[] { -1, 1, 0 }, new int[] { -1, 0, 1 }, new int[] { 0, -1, 1 } };
         private static Dictionary<Tuple<int, int>, int> coordinatesToId = new Dictionary<Tuple<int,int>, int>();
@@ -67,7 +70,7 @@ namespace GameWorld
             path.Add(startId);
             path.Reverse();
             //Show path in blue
-            ColorPath(path);
+            //ColorPath(path);
             return path;
         }
 
@@ -174,7 +177,7 @@ namespace GameWorld
         {
             for (int i = 0; i < path.Count; i++)
             {
-                HexMap.transform.GetChild(path[i]).GetChild(0).GetComponent<Renderer>().material.color = Color.blue;
+                HexMap.transform.GetChild(path[i]).GetChild(0).GetComponent<Renderer>().material = NewMat;
             }
         }
     }

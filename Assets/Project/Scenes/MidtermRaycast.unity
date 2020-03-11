@@ -641,6 +641,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c9047310fe6bd94986b595fcae0a858, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OriginalMat: {fileID: 7299490680678563896, guid: 64fdea210119772468c099babb23e4dc,
+    type: 3}
+  NewMat: {fileID: 2100000, guid: be80f2adcc0614b499fcf8429a9b2a36, type: 2}
 --- !u!4 &1013766375
 Transform:
   m_ObjectHideFlags: 0

@@ -44,6 +44,10 @@ namespace GameLogic
         ///</summary>
         private string UIMonsterName;
 
+        ///<summary>
+        ///This is Raycast hit point position
+        ///</summary>
+        private Vector3 RayHitPosition;
         #endregion
 
         #region Public Variable
@@ -93,6 +97,11 @@ namespace GameLogic
         /// GameObject of MainCamera
         /// </summary>
         public GameObject MainCamera;
+
+        /// <summary>
+        /// GameObject of Raycast Component
+        /// </summary>
+        public GameObject RaycastHead;
         #endregion
 
         // Start is called before the first frame update
@@ -124,6 +133,9 @@ namespace GameLogic
         ///</summary> 
         public virtual void Update()
         {
+            //Raycast hit point position
+            RayHitPosition = RaycastHead.transform.GetChild(0).transform.position;
+
             //StateMachine Related
             switch (myState)
             {
@@ -216,9 +228,9 @@ namespace GameLogic
                         for(int i=0;i<HexMap.childCount;i++)
                         {
                             Transform hex = HexMap.GetChild(i);
-                            if((MainCamera.transform.position - hex.position).magnitude<myDis)
+                            if((RayHitPosition - hex.position).magnitude<myDis)
                             {
-                                myDis = (MainCamera.transform.position - hex.position).magnitude;
+                                myDis = (RayHitPosition - hex.position).magnitude;
                                 index = i;
                             }
                         }

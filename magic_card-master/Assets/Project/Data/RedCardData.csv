@@ -1,3 +1,0 @@
-Cardid,Cardname,Attack,HP,Speed,Specialeffect,PrefabPath
-1,Lancer(Red),4,25,5,No Special Effect,Prefabs/Monster/Lancer/RedLancerPrefab
-4,Archer(Red),5,10,10,Attack Range is 4 & Attack Double if the range is more than 1,Prefabs/Monster/Archer/RedArcherPrefab

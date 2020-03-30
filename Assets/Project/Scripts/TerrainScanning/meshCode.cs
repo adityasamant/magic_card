@@ -8,7 +8,7 @@ namespace TerrainScanning
     public delegate void ScanFinished();
     public class meshCode : MonoBehaviour
     {
-        public HexTileMapGenerator hx;
+        public AutoHexTileMapGenerator hx;
         public Material BlackMaterial;
         public MLSpatialMapper Mapper;
         public GameObject PlaneGenerator;

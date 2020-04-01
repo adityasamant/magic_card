@@ -2,13 +2,32 @@ using UnityEngine;
 
 namespace TerrainScanning
 {
+    public enum HexStatus
+    {
+        Normal,
+        File,
+        BlackHole,
+    }
+    public enum HexType
+    {
+        Empty,
+        Ground,
+        Grass,
+        Mud
+    }
+
     public class HexTile : MonoBehaviour
     {
+        public GameObject mesh;
+        public Material[] HexMats;
+
         private int x;
         private int y;
         private int z;
         private int id;
         private bool accessible;
+        private HexStatus hexStatus = HexStatus.Normal;
+        private HexType hexType = HexType.Empty;
 
         private void Update()
         {
@@ -65,6 +84,35 @@ namespace TerrainScanning
         public bool getAccessible(){
             return this.accessible;
         }
+        public void setStatus(HexStatus status)
+        {
+            hexStatus = status;
+            // TODO: operations when status is changed
+        }
+        public void setType(HexType type)
+        {
+            hexType = type;
+            if(mesh != null)
+            {
+                Renderer rend = mesh.GetComponent<Renderer>();
+                switch (type)
+                {
+                    case HexType.Ground:
+                        rend.sharedMaterial = HexMats[1];
+                        break;
+                    case HexType.Grass:
+                        rend.sharedMaterial = HexMats[2];
+                        break;
+                    case HexType.Mud:
+                        rend.sharedMaterial = HexMats[3];
+                        break;
+                    default:
+                        rend.sharedMaterial = HexMats[0];
+                        break;
+                }
+            }
+        }
+
         // override object.Equals
         public override bool Equals(object obj)
         {

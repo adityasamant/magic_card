@@ -92,21 +92,24 @@ namespace TerrainScanning
         public void setType(HexType type)
         {
             hexType = type;
-            Renderer rend = mesh.GetComponent<Renderer>();
-            switch (type)
+            if(mesh != null)
             {
-                case HexType.Ground:
-                    rend.sharedMaterial = HexMats[1];
-                    break;
-                case HexType.Grass:
-                    rend.sharedMaterial = HexMats[2];
-                    break;
-                case HexType.Mud:
-                    rend.sharedMaterial = HexMats[3];
-                    break;
-                default:
-                    rend.sharedMaterial = HexMats[0];
-                    break;
+                Renderer rend = mesh.GetComponent<Renderer>();
+                switch (type)
+                {
+                    case HexType.Ground:
+                        rend.sharedMaterial = HexMats[1];
+                        break;
+                    case HexType.Grass:
+                        rend.sharedMaterial = HexMats[2];
+                        break;
+                    case HexType.Mud:
+                        rend.sharedMaterial = HexMats[3];
+                        break;
+                    default:
+                        rend.sharedMaterial = HexMats[0];
+                        break;
+                }
             }
         }
 

@@ -23,6 +23,7 @@ namespace TerrainScanning
         public float hexScale;
         public float hexRange;
         public GameObject RaycastHead;
+        public GameObject BattleGround;
 
         #region Private Variable
         /// <summary>
@@ -50,6 +51,7 @@ namespace TerrainScanning
         public void createHex()
         {
             Vector3 RayHitPosition = RaycastHead.transform.GetChild(0).transform.position;
+            BattleGround.transform.position = RayHitPosition;
             quadObject = GameObject.Find("Quad(Clone)");
             Debug.Log("I am a " + quadObject.name);
             Renderer rend = quadObject.GetComponent<Renderer>();
@@ -80,7 +82,7 @@ namespace TerrainScanning
                     if (coordy < -3 || coordy > 3) continue;
                     float x = hexScale * 1.5f * coordz;
                     float z = hexScale * 1.732f * (coordx + coordz / 2f);
-                    addHex(RayHitPosition.x+x, RayHitPosition.y+ 0.1f, RayHitPosition.z+z, coordx, coordy, coordz, cellID++, HexStatus.Normal, (HexType)Random.Range(1, 4));
+                    addHex(x, 0.1f, z, coordx, coordy, coordz, cellID++, HexStatus.Normal, (HexType)Random.Range(1, 4));
                 }
 
             //for (float i = rend.bounds.min.x + 0.5f; i <= rend.bounds.max.x - 0.5f; i = i + 0.9f)

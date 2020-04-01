@@ -427,6 +427,8 @@ public class Grid : MonoBehaviour {
 	private Tile CreateHexGO(Vector3 postion, string name) {
 		GameObject go = new GameObject(name, typeof(MeshFilter), typeof(MeshRenderer), typeof(Tile));
         
+        //go.AddComponent<ClickableHex>();
+
 		if(addColliders)
 			go.AddComponent<MeshCollider>();
 

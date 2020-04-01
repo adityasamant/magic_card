@@ -123,7 +123,6 @@ namespace GameWorld
         public HexTile getHexTileByIndex(int HexIndex)
         {
             if (HexMap.transform.childCount < HexIndex) return null;
-
             HexTile result = HexMap.transform.GetChild(HexIndex).GetComponent<HexTile>();
             return result;
         }

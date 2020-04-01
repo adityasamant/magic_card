@@ -13,7 +13,7 @@ namespace TerrainScanning
         /// </summary>
         [Tooltip("The parent transform you want to create a hex map")]
         public GameObject parent;
-        #endregion
+
 
         public float hexScale;
         public int hexRange = 8;
@@ -21,6 +21,9 @@ namespace TerrainScanning
         public GameObject FancyGridObject;
         public GameObject hexTileTemplate;
         public GameObject BattleGround;
+        public GameObject FantasyHexGameGrid;
+
+        #endregion
 
         #region Private Variable
         /// <summary>
@@ -41,7 +44,6 @@ namespace TerrainScanning
             tile.GetComponent<HexTile>().setType(type);
             tile.GetComponent<HexTile>().setCoordinates(coordx, coordy);
             tile.GetComponent<HexTile>().setID(cellID);
-            tile.GetComponent<HexTile>().setAccessible(true);
             tile.name = "HexTile" + tile.GetComponent<HexTile>().getID() + " [" + coordx.ToString() + "," + coordy.ToString() + "," + coordz.ToString() + "]"; ;
         }
 
@@ -79,33 +81,9 @@ namespace TerrainScanning
                     if (coordy < -hexRange || coordy > hexRange) continue;
                     float z = 0.075f * coordy;
                     float x = 0.0866f * (coordx + coordy / 2f);
-                    addHex(x, 0.0f, z, coordx, coordy, coordz, cellID++, HexStatus.Normal, (HexType)0);
+                    HexStatus status = (FantasyHexGameGrid.transform.GetChild(cellID).GetComponent<Tile>().GetOccupied() ? HexStatus.Blocked : HexStatus.Normal);
+                    addHex(x, 0.0f, z, coordx, coordy, coordz, cellID++, status, (HexType)0);
                 }
-
-            //for (float i = rend.bounds.min.x + 0.5f; i <= rend.bounds.max.x - 0.5f; i = i + 0.9f)
-            //{
-            //    for (float j = rend.bounds.max.z + 0.3f; j >= rend.bounds.min.z - 0.3f; j = j - 0.52f)
-            //    {
-            //        Vector3 center = new Vector3(i, height + 0.4f, j);
-            //        Collider[] hitColliders = Physics.OverlapSphere(center, 0.3f);
-            //        Vector3 centertest = new Vector3(i, height - 0.4f, j);
-            //        Collider[] hitColliderstest = Physics.OverlapSphere(centertest, 0.3f);
-            //        //if (hitColliders.Length == 0 && hitColliderstest.Length == 1)
-            //        addHex(i, height + 0.1f, j, x, y, z, cellID++, HexStatus.Normal, (HexType)Random.Range(1, 4));
-            //        Vector3 center1 = new Vector3(i + 0.45f, height + 0.4f, j - 0.26f);
-            //        Collider[] hitColliders1 = Physics.OverlapSphere(center1, 0.3f);
-            //        Vector3 centertest1 = new Vector3(i, height - 0.4f, j);
-            //        Collider[] hitColliderstest1 = Physics.OverlapSphere(centertest1, 0.3f);
-            //        //if (hitColliders1.Length == 0 && hitColliderstest1.Length == 1)
-            //        addHex(i + 0.45f, height + 0.1f, j - 0.26f, x + 1, y - 1, z, cellID++, HexStatus.Normal, (HexType)Random.Range(1, 4));
-            //        y = y - 1;
-            //        z = z + 1;
-            //    }
-            //    x0 = x0 + 2;
-            //    y0 = y0 - 1;
-            //    z0 = z0 - 1;
-            //}
-            //Destroy(quadObject);
         }
     }
 }

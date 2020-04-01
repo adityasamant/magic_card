@@ -136,7 +136,8 @@ namespace GameWorld
         {
             var key = Tuple.Create(coord[0], coord[2]);
             int id = coordinatesToId[key];
-            return HexMap.transform.GetChild(id).GetComponent<HexTile>().getAccessible();
+            return HexMap.transform.GetChild(id).GetComponent<HexTile>().getStatus() != HexStatus.Blocked;
+            //return HexMap.transform.GetChild(id).GetComponent<HexTile>().getAccessible();
         }
 
         public class PriorityQueue<T>

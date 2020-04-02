@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine.Events;
 using UnityEngine;
+using GameWorld;
 
 namespace GameLogic
 {
@@ -37,6 +38,12 @@ namespace GameLogic
     /// <param name="HexIndex">The Hex Index of the player camera.</param>
     public delegate void PlayedCard(int PlayerId, int CardIndex, int HexIndex);
 
+    /// <summary>
+    /// When the play ended its battle turn, this delegate should be activated.
+    /// </summary>
+    /// 
+    public delegate void Battle_PlayerEnd();
+
     public class Player : MonoBehaviour
     {
 
@@ -49,6 +56,7 @@ namespace GameLogic
         /// The MainLogic will give a event to the player when player turn start.
         /// </summary>
         public UnityEvent Event_PlayerTurnStart;
+        public UnityEvent Event_Battle_PlayerTurnStart;
         #endregion
 
         #region Public Delegate
@@ -61,6 +69,8 @@ namespace GameLogic
         /// Define the interface for delegate PlayedCard
         /// </summary>
         public PlayedCard PlayedCard;
+
+        public Battle_PlayerEnd Battle_PlayerEnd;
         #endregion
 
         #region Public Property
@@ -68,7 +78,11 @@ namespace GameLogic
         /// Player Identity, should be unique for each player
         /// </summary>
         public int PlayerId;
+
+        public World world;
         #endregion
+
+        public int GetPlayerId() { return PlayerId; }
 
         // Start is called before the first frame update
         void Start()
@@ -81,5 +95,6 @@ namespace GameLogic
         {
 
         }
+
     }
 }

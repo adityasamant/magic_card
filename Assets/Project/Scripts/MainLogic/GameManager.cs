@@ -145,15 +145,22 @@ namespace GameLogic
         {
             gameGlobalState = new GameGlobalState();
             playerTurnList = new List<Player>() ;
+
             ScanMesh.ScanFinished += ScanFinshedUpdate;
+
             Player0.PlayerEnd += PlayerEndUpdate;
             Player0.PlayedCard += PlayedCardInvoke;
             Player0.PlayerId = 0;
+            world.uploadPlayerInWorld(Player0);
+
             Player1.PlayerEnd += PlayerEndUpdate;
             Player1.PlayedCard += PlayedCardInvoke;
             Player1.PlayerId = 1;
+            world.uploadPlayerInWorld(Player1);
+
             world.BattleEnd += BattleEndUpdate;
             world.World_ResetFinished += World_ResetFinishedUpdate;
+
             DiceObject = Instantiate(DicePrefab,transform);
             DiceObject.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
             DiceInstant = DiceObject.GetComponent<Dice>();

@@ -121,7 +121,8 @@ PlayerSettings:
     16:9: 1
     Others: 1
   bundleVersion: v0.23.0.1
-  preloadedAssets: []
+  preloadedAssets:
+  - {fileID: -6602195166426926598, guid: 2ba4dbd235ed941bb8fdb5a40ab00f22, type: 2}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -584,7 +585,7 @@ PlayerSettings:
     25: UNITY_POST_PROCESSING_STACK_V2
     26: UNITY_POST_PROCESSING_STACK_V2
     27: UNITY_POST_PROCESSING_STACK_V2
-    28: UNITY_POST_PROCESSING_STACK_V2
+    28: UNITY_POST_PROCESSING_STACK_V2;BOLT_CLOUD
     29: UNITY_POST_PROCESSING_STACK_V2
   platformArchitecture: {}
   scriptingBackend: {}
@@ -663,7 +664,7 @@ PlayerSettings:
     m_ModelFolderPath: 
     m_PortalFolderPath: 
   luminCert:
-    m_CertPath: E:/USC/CSCI538 magic_leap/privatekey/csci538.cert
+    m_CertPath: D:/magicleapcard.cert
     m_SignPackage: 1
   luminIsChannelApp: 0
   luminVersion:

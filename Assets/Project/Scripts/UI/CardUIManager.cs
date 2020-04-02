@@ -34,6 +34,7 @@ namespace UI
         private void Start()
         {
             DisplayCard();
+            GameObject.Find("HeadposeCanvas").SetActive(false);
             //HideCardUI();
         }
         #endregion

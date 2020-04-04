@@ -17,7 +17,7 @@ namespace TerrainScanning
 
         public float hexScale;
         public int hexRange = 8;
-        public GameObject RaycastHead;
+        public GameObject Raycast;
         public GameObject FancyGridObject;
         public GameObject hexTileTemplate;
         public GameObject BattleGround;
@@ -42,13 +42,12 @@ namespace TerrainScanning
             tile.GetComponent<HexTile>().setCoordinates(coordx, coordy);
             tile.GetComponent<HexTile>().setID(cellID);
             tile.GetComponent<HexTile>().setAccessible(true);
-            tile.name = "HexTile" + tile.GetComponent<HexTile>().getID() + " [" + coordx.ToString() + "," + coordy.ToString() + "," + coordz.ToString() + "]"; ;
+            tile.name = "HexTile" + tile.GetComponent<HexTile>().getID() + " [" + coordx.ToString() + "," + coordy.ToString() + "," + coordz.ToString() + "]";
         }
 
-        public void createHex()
+        public void createHex(Vector3 hitPosition)
         {
-            Vector3 RayHitPosition = RaycastHead.transform.GetChild(0).transform.position;
-            BattleGround.transform.position = RayHitPosition+new Vector3(0.0f, 0.1f, 0.0f);
+            BattleGround.transform.position = hitPosition+new Vector3(0.0f, 0.1f, 0.0f);
             BattleGround.transform.localScale = new Vector3(hexScale, hexScale, hexScale);
             BattleGround.SetActive(true);
             quadObject = GameObject.Find("Quad(Clone)");
@@ -79,9 +78,10 @@ namespace TerrainScanning
                     if (coordy < -hexRange || coordy > hexRange) continue;
                     float z = 0.075f * coordy;
                     float x = 0.0866f * (coordx + coordy / 2f);
-                    addHex(x, 0.0f, z, coordx, coordy, coordz, cellID++, HexStatus.Normal, (HexType)0);
+                    addHex(x, 0.0f, z, coordx, coordy, coordz, cellID++, HexStatus.Normal, (HexType)Random.Range(1, 5));
                 }
 
+            GameObject.Find("FancyGrid").SetActive(false);
             //for (float i = rend.bounds.min.x + 0.5f; i <= rend.bounds.max.x - 0.5f; i = i + 0.9f)
             //{
             //    for (float j = rend.bounds.max.z + 0.3f; j >= rend.bounds.min.z - 0.3f; j = j - 0.52f)

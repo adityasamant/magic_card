@@ -5,7 +5,8 @@ namespace TerrainScanning
     public enum HexStatus
     {
         Normal,
-        File,
+        Blocked,
+        Fire,
         BlackHole,
     }
     public enum HexType
@@ -27,7 +28,7 @@ namespace TerrainScanning
         private int z;
         private int id;
         private bool accessible;
-        private HexStatus hexStatus = HexStatus.Normal;
+        public HexStatus hexStatus = HexStatus.Normal;
         private HexType hexType = HexType.Empty;
 
         private void Update()
@@ -79,6 +80,7 @@ namespace TerrainScanning
         {
             return this.id;
         }
+        
         public void setAccessible(bool b){
             this.accessible = b;
         }
@@ -89,6 +91,10 @@ namespace TerrainScanning
         {
             hexStatus = status;
             // TODO: operations when status is changed
+        }
+        public HexStatus getStatus()
+        {
+            return hexStatus;
         }
         public void setType(HexType type)
         {

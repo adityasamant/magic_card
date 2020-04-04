@@ -15,6 +15,7 @@ namespace GameWorld
         Idle,
         Battle,
         Wait_For_Monster,
+        Wait_For_Player,
         Summary
     }
 
@@ -32,6 +33,7 @@ namespace GameWorld
         /// data structure of all monsters
         /// </summary>
         public Dictionary<int, Monster> monsters;
+        public Dictionary<int, Player> players;
         /// <summary>
         /// the game map
         /// </summary>
@@ -51,6 +53,7 @@ namespace GameWorld
         public bool created = false;
 
         private float steptime;
+        private float stateBeginTime;
 
         /// <summary>
         /// A link to the gameManager
@@ -61,10 +64,10 @@ namespace GameWorld
         private WorldStates currentState = WorldStates.Idle;
         private SortedSet<Monster> actingMonsterList;
         private Monster currentActMonster;
+        private List<Player> actingPlayerList;
+        private Player currentActPlayer;
 
-        
-
-        #region Public Fucntion
+        #region Public Function
         /// <summary>
         /// Upload the information of the monster to the world(Monsters)
         /// </summary>
@@ -84,6 +87,24 @@ namespace GameWorld
         }
 
         /// <summary>
+        /// Upload the information of the monster to the world(Monsters)
+        /// </summary>
+        /// <param name="monster">A link to the monster</param>
+        /// <returns>monster uid if success, -1 is error</returns>
+        public int uploadPlayerInWorld(Player player)
+        {
+            int playerId = player.GetPlayerId();
+            if (players.ContainsKey(playerId) == true)
+            {
+                Debug.LogErrorFormat("Error! Monster with uid {0} already exists", playerId);
+                return -1;
+            }
+            players[playerId] = player;
+            player.Battle_PlayerEnd += PlayerTurnEnd;
+            return playerId;
+        }
+
+        /// <summary>
         /// get monster instance by its uid
         /// </summary>
         /// <param name="uid"></param>
@@ -99,6 +120,33 @@ namespace GameWorld
             else
                 return monsters[uid];
         }
+
+        /// <summary>
+        /// get player instance by its uid
+        /// </summary>
+        /// <param name="uid"></param>
+        /// <returns></returns>
+        /// return the player if it exists, otherwise return null 
+        public Player getPlayerById(int playerId)
+        {
+            if (players.ContainsKey(playerId) == false)
+            {
+                Debug.LogErrorFormat("Error! No player has uid {0}", playerId);
+                return null;
+            }
+            else
+                return players[playerId];
+        }
+        ///
+
+
+        private void ChangeState(WorldStates dstStates)
+        {
+            Debug.LogFormat("Game Manager: Now Change to " + dstStates);
+            currentState = dstStates;
+            stateBeginTime = Time.time;
+        }
+
         #endregion
 
         #region Unity Function
@@ -109,8 +157,10 @@ namespace GameWorld
         { 
             Debug.Log("Creating a new world");
             monsters = new Dictionary<int, Monster>();
-            actingMonsterList = new SortedSet<Monster>(new MonsterComparator()) ;
-            if(tileMap == null)
+            players = new Dictionary<int, Player>();
+            actingMonsterList = new SortedSet<Monster>(new MonsterComparator());
+            actingPlayerList = new List<Player>();
+            if (tileMap == null)
                 tileMap = new HexTileMap();
             worldAttrib = new WorldGlobalAttrib();
             if (Event_BattleBegin == null)
@@ -133,16 +183,34 @@ namespace GameWorld
                 case WorldStates.Wait_For_Monster:
                     // do nothing
                     break;
+                case WorldStates.Wait_For_Player:
+                    if (nowTime - stateBeginTime > 1)
+                    {
+                        Debug.LogFormat("Player {0} Time out.", currentActPlayer.GetPlayerId());
+                        ChangeState(WorldStates.Battle);
+                    }
+                    break;
                 case WorldStates.Battle:
                     if (actingMonsterList.Count == 0)
-                        currentState = WorldStates.Summary;
+                    {
+                        if(actingPlayerList.Count == 0)
+                            ChangeState(WorldStates.Summary);
+                        else
+                        {
+                            currentActPlayer = actingPlayerList[0];
+                            actingPlayerList.Remove(currentActPlayer);
+                            Debug.LogFormat("Player {0} is taking control...", currentActPlayer.GetPlayerId());
+                            ChangeState(WorldStates.Wait_For_Player);
+                            currentActPlayer.Event_Battle_PlayerTurnStart.Invoke();
+                        }
+                    }
                     else
                     {
                         // choose the next monster and 
                         currentActMonster = actingMonsterList.Min;
                         actingMonsterList.Remove(currentActMonster);
                         Debug.LogFormat("Monster {0} is moving...", currentActMonster.GetUId());
-                        currentState = WorldStates.Wait_For_Monster;
+                        ChangeState(WorldStates.Wait_For_Monster);
                         currentActMonster.MonsterStartTurn.Invoke();
                         //currentActMonster.MonsterTurnEnd += MonsterMoveEnd;
                     }
@@ -186,11 +254,17 @@ namespace GameWorld
         private void ResetForOneTurn()
         {
             actingMonsterList.Clear();
+            actingPlayerList.Clear();
             foreach (KeyValuePair<int, Monster> monsterPair in monsters)
             {
                 Monster monster = monsterPair.Value;
                 if (monster.isExiled == false && monster.isAlive == true) 
                     actingMonsterList.Add(monster);
+            }
+            foreach (KeyValuePair<int, Player> playerPair in players)
+            {
+                Player player = playerPair.Value;
+                actingPlayerList.Add(player);
             }
             Debug.LogFormat("Clearing for one turn ended. Detected {0} living animals.", actingMonsterList.Count);
             steptime = Time.time;
@@ -218,7 +292,7 @@ namespace GameWorld
             if(worldAttrib.currentTurn<20 && Player0Count>0 && Player1Count>0)
             {
                 worldAttrib.currentTurn++;
-                currentState = WorldStates.Battle;
+                ChangeState(WorldStates.Battle);
                 return;
             }
 
@@ -226,20 +300,18 @@ namespace GameWorld
             {//Draw
                 Debug.Log("This turn Draw");
                 BattleEnd(-1);
-                currentState = WorldStates.Idle;
             }
             else if(Player0Count<Player1Count)
             {//Player1Win
                 Debug.Log("Player 1 wins.");
                 BattleEnd(1);
-                currentState = WorldStates.Idle;
             }
             else
             {//Player0Win
                 Debug.Log("Player 0 wins.");
                 BattleEnd(0);
-                currentState = WorldStates.Idle;
             }
+            ChangeState(WorldStates.Idle);
             return;
         }
         #endregion
@@ -260,7 +332,17 @@ namespace GameWorld
         private void MonsterMoveEnd()
         {
             Debug.LogFormat("Monster {0} move ended.", currentActMonster.GetUId());
-            currentState = WorldStates.Battle;
+
+            ChangeState(WorldStates.Battle);
+        }        
+        /// <summary>
+        /// Delegate PlayerTurn End Handler
+        /// </summary>
+        private void PlayerTurnEnd()
+        {
+            Debug.LogFormat("Player {0}'s turn ended.", currentActPlayer.GetPlayerId());
+
+            ChangeState(WorldStates.Battle);
         }
         /// <summary>
         /// Invoke when Battle is begin by GameManager
@@ -269,7 +351,7 @@ namespace GameWorld
         {
             Debug.Log("World: Battle begin.");
             ResetForOneBattle();
-            currentState = WorldStates.Battle;
+            ChangeState(WorldStates.Battle);
         }
         #endregion
     }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.MagicLeap;
+using InputController;
 
 namespace TerrainScanning
 {
@@ -14,7 +15,7 @@ namespace TerrainScanning
         public GameObject PlaneGenerator;
         public GameObject TileGenerator;
         public GameObject MLSpatialMapper;
-
+        public GameObject ray;
         /// <summary>
         /// Define the object for delegate
         /// </summary>
@@ -22,7 +23,6 @@ namespace TerrainScanning
 
         #region Private Variable
         private MLInputController _controller;
-
         /// <summary>
         /// A bool variable to control the system only generate once
         /// </summary>
@@ -64,13 +64,16 @@ namespace TerrainScanning
                         meshRenderer.material = BlackMaterial;
                     }
                 }
-                hx.createHex();
+
+                hx.createHex(ray.GetComponent<DynamicBeam>().hitPoint);
                 AlreadyGenerate = true;
                 ScanFinished();
                 Destroy(PlaneGenerator);
                 Destroy(TileGenerator);
                 Destroy(MLSpatialMapper);
-               // Destroy(gameObject);
+
+
+                // Destroy(gameObject);
             }
         }
     }

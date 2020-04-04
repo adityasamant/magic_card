@@ -5,6 +5,8 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 using CardInfo;
 using UnityEngine.XR.MagicLeap;
+using InputController;
+using UI;
 
 namespace GameLogic
 {
@@ -48,6 +50,7 @@ namespace GameLogic
         ///This is Raycast hit point position
         ///</summary>
         private Vector3 RayHitPosition;
+
         #endregion
 
         #region Public Variable
@@ -99,9 +102,15 @@ namespace GameLogic
         public GameObject MainCamera;
 
         /// <summary>
-        /// GameObject of Raycast Component
+        /// GameObject of Controller Manager
         /// </summary>
-        public GameObject RaycastHead;
+        public ControllerManager ControllerManager;
+
+        /// <summary>
+        /// GameObject of the CardUIManager
+        /// </summary>
+        [Tooltip("GameObject of the CardUIManager")]
+        public CardUIManager CardUIManager;
         #endregion
 
         // Start is called before the first frame update
@@ -126,6 +135,10 @@ namespace GameLogic
             Event_ScanFinished.AddListener(ScanFinishedInvoke);
 
             PlayedCard += PlayedCardInvoked;
+
+            ControllerManager.ClickOnCard += ClickOnCardInvoked;
+            ControllerManager.ClickOnHex += ClickOnHexInvoked;
+
         }
 
         ///<summary>
@@ -134,7 +147,7 @@ namespace GameLogic
         public virtual void Update()
         {
             //Raycast hit point position
-            RayHitPosition = RaycastHead.transform.GetChild(0).transform.position;
+            RayHitPosition = ControllerManager.hitPoint;
 
             //StateMachine Related
             switch (myState)
@@ -228,9 +241,9 @@ namespace GameLogic
                         for(int i=0;i<HexMap.childCount;i++)
                         {
                             Transform hex = HexMap.GetChild(i);
-                            if((RayHitPosition - hex.position).magnitude<myDis)
+                            if((MainCamera.transform.position - hex.position).magnitude<myDis)
                             {
-                                myDis = (RayHitPosition - hex.position).magnitude;
+                                myDis = (MainCamera.transform.position - hex.position).magnitude;
                                 index = i;
                             }
                         }
@@ -278,6 +291,37 @@ namespace GameLogic
             {
                 myState = PlayerStates.WaitForStart;
             }
+        }
+
+        /// <summary>
+        /// This function will call when click on a Hex
+        /// </summary>
+        /// <param name="HexIndex">The Chosen Hex Index</param>
+        private void ClickOnHexInvoked(int HexIndex)
+        {
+            // if(myState==PlayerStates.Confirm_Phase)
+            // {
+            //     HexToPlaceIndex = HexIndex;
+            // }
+            // ChangeState(PlayerStates.Spawn_Phase);
+            return;
+        }
+
+        /// <summary>
+        /// This function will call when click on a Card
+        /// </summary>
+        /// <param name="CardName">The Chosen Card Name</param>
+        private void ClickOnCardInvoked(string CardName)
+        {
+            CardUIManager.HideCardUI();
+            // if(myState==PlayerStates.Main_Phase)
+            // {
+            //     CardToUsed = myDecks.GetCard(CardName);
+            //     CardUIManager.HideCardUI();
+            //     Debug.LogFormat("Now Player want to use {0}, ATK: {1}, HP: {2}, SPEED: {3}, SPECIAL EFFECT: {4}", CardToUsed.CardName, CardToUsed.Attack, CardToUsed.HP, CardToUsed.Speed, CardToUsed.SpecialEffect);
+            // }
+            // ChangeState(PlayerStates.Confirm_Phase);
+            return;
         }
         #endregion
 

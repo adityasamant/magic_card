@@ -175,10 +175,10 @@ namespace GameWorld
 
         public void ColorPath(List<int> path)
         {
-            for (int i = 0; i < path.Count; i++)
-            {
-                HexMap.transform.GetChild(path[i]).GetChild(0).GetComponent<Renderer>().material = NewMat;
-            }
+            // for (int i = 0; i < path.Count; i++)
+            // {
+            //     HexMap.transform.GetChild(path[i]).GetChild(0).GetComponent<Renderer>().material = NewMat;
+            // }
         }
     }
 }

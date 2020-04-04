@@ -14,7 +14,8 @@ namespace TerrainScanning
         Empty,
         Ground,
         Grass,
-        Mud
+        Mud,
+        Flower
     }
 
     public class HexTile : MonoBehaviour
@@ -111,6 +112,9 @@ namespace TerrainScanning
                         break;
                     case HexType.Mud:
                         rend.sharedMaterial = HexMats[3];
+                        break;
+                    case HexType.Flower:
+                        rend.sharedMaterial = HexMats[4];
                         break;
                     default:
                         rend.sharedMaterial = HexMats[0];

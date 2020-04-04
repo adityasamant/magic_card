@@ -30,12 +30,19 @@ namespace UI
         public Transform worldCanvasTrans;
         #endregion
 
+        #region Public Variable
+        /// <summary>
+        /// Card UI Canvas
+        /// </summary>
+        private GameObject CardUICanvas;
+        #endregion
+
         #region Unity Function
         private void Start()
         {
             DisplayCard();
-            //GameObject.Find("HeadposeCanvas").SetActive(false);
-            //HideCardUI();
+            CardUICanvas = GameObject.Find("CardCanvas");
+            HideCardUI();
         }
         #endregion
 
@@ -46,10 +53,11 @@ namespace UI
         /// <param name=""></param>
         public void HideCardUI()
         {
-            CanvasGroup cg = GameObject.Find("CardCanvas").GetComponent<CanvasGroup>();
-            cg.alpha = 0f; //this makes everything transparent
-            cg.blocksRaycasts = false; //this prevents the UI element to receive input events
-            cg.interactable= false;
+            // CanvasGroup cg = GameObject.Find("CardCanvas").GetComponent<CanvasGroup>();
+            // cg.alpha = 0f; //this makes everything transparent
+            // cg.blocksRaycasts = true; //this prevents the UI element to receive input events
+            // cg.interactable= false;
+            CardUICanvas.SetActive(false);
             return;
         }
         /// <summary>
@@ -58,10 +66,11 @@ namespace UI
         /// <param name=""></param>
         public void ShowCardUI()
         {
-            CanvasGroup cg = GameObject.Find("CardCanvas").GetComponent<CanvasGroup>();
-            cg.alpha = 1f;
-            cg.blocksRaycasts = true;
-            cg.interactable= true;
+            // CanvasGroup cg = GameObject.Find("CardCanvas").GetComponent<CanvasGroup>();
+            // cg.alpha = 1f;
+            // cg.blocksRaycasts = false;
+            // cg.interactable= true;
+            CardUICanvas.SetActive(true);
             return;
         }
         #endregion

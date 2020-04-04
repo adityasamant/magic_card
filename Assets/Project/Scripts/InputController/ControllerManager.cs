@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.MagicLeap;
+using TerrainScanning;
 
 namespace InputController
 {
@@ -74,7 +75,9 @@ namespace InputController
                         case ("Card"):
                             ClickOnCard(selectedGameObject.name);
                             break;
-
+                        case ("HexTile"):
+                            ClickOnHex(selectedGameObject.transform.parent.gameObject.GetComponent<HexTile>().getID());
+                            break;
                         default:
                             break;
                     }

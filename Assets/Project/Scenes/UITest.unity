@@ -23032,6 +23032,7 @@ GameObject:
   - component: {fileID: 917912481}
   - component: {fileID: 917912486}
   - component: {fileID: 917912487}
+  - component: {fileID: 917912482}
   m_Layer: 5
   m_Name: CardCanvas
   m_TagString: Untagged
@@ -23068,6 +23069,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 917912479}
   m_CullTransparentMesh: 0
+--- !u!114 &917912482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 917912479}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 255c30a7015bb463ea358d46d2c08596, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _distance: 1.5
+  _heightOffset: 0
+  _lateralOffset: 0
+  _positionSmoothTime: 0.3
+  _rotationSmoothTime: 0.1
+  _lookDirection: 2
+  _placeOnAwake: 1
+  _placeOnUpdate: 1
 --- !u!114 &917912483
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23135,7 +23156,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 917912479}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea05a203896b48146ab21000fc478d4b, type: 3}
   m_Name: 

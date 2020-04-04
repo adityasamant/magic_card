@@ -4,40 +4,77 @@ using System.Collections.Generic;
 using UdpKit;
 using UnityEngine;
 
-public class Menu : Bolt.GlobalEventListener
+namespace Project_Network
 {
-    public void StartServer()
+    /// <summary>
+    /// Host/Join Menu
+    /// </summary>
+    public class Menu : Bolt.GlobalEventListener
     {
-        BoltLauncher.StartServer();
-    }
+        #region Public Reference
+        public HostJoinSwitcher hostJoinSwitcher;
+        #endregion
 
-    public void StartClient()
-    {
-        BoltLauncher.StartClient();
-    }
-
-    public override void BoltStartDone()
-    {
-        base.BoltStartDone();
-        if(BoltNetwork.IsServer)
+        #region Public Function
+        /// <summary>
+        /// To Start as a server
+        /// </summary>
+        public void StartServer()
         {
-            string matchName = "Test Match";
-            BoltNetwork.SetServerInfo(matchName, null);
-            BoltNetwork.LoadScene("TestMap");
+            BoltLauncher.StartServer();
         }
-    }
 
-    public override void SessionListUpdated(Map<Guid, UdpSession> sessionList)
-    {
-        base.SessionListUpdated(sessionList);
-        foreach(var itr in sessionList)
+        /// <summary>
+        /// To Start as a client
+        /// </summary>
+        public void StartClient()
         {
-            UdpSession udpSession = itr.Value as UdpSession;
+            BoltLauncher.StartClient();
+        }
 
-            if(udpSession.Source==UdpSessionSource.Photon)
+        /// <summary>
+        /// Shut Down
+        /// </summary>
+        public void ClientShutDown()
+        {
+            BoltLauncher.Shutdown();
+        }
+        #endregion
+
+        #region Override Global Event Handle
+        /// <summary>
+        /// When Bolt (client/server) start
+        /// </summary>
+        public override void BoltStartDone()
+        {
+            base.BoltStartDone();
+            if (BoltNetwork.IsServer)
             {
-                BoltNetwork.Connect(udpSession);
+                string matchName = "Test Match";
+                BoltNetwork.SetServerInfo(matchName, null);
+                BoltNetwork.LoadScene("TestMap");
             }
         }
+
+        /// <summary>
+        /// When Bolt Client receive the session List
+        /// </summary>
+        /// <param name="sessionList">The sessions it can reach</param>
+        public override void SessionListUpdated(Map<Guid, UdpSession> sessionList)
+        {
+            base.SessionListUpdated(sessionList);
+            foreach (var itr in sessionList)
+            {
+                UdpSession udpSession = itr.Value as UdpSession;
+
+                if (udpSession.Source == UdpSessionSource.Photon)
+                {
+                    hostJoinSwitcher.isJoined = true;
+                    BoltNetwork.Connect(udpSession);
+                }
+            }
+        }
+        #endregion
     }
 }
+

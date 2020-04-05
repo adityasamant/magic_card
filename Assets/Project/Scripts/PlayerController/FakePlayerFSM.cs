@@ -327,11 +327,11 @@ namespace GameLogic
         /// <param name="HexTileID">The Chosen Hex ID</param>
         private void ClickOnHexInvoked(int HexTileID)
         {
-            if(myState==PlayerStates.Confirm_Phase)
+            if(myState == PlayerStates.Confirm_Phase)
             {
                 targetHexId = HexTileID;
+                myState = PlayerStates.Spawn_Phase;
             }
-            myState = PlayerStates.Spawn_Phase;
             return;
         }
 

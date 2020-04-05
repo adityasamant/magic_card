@@ -20783,6 +20783,7 @@ MonoBehaviour:
   selected: 
   selectedGameObject: {fileID: 0}
   trigger: 0
+  world: {fileID: 946620730}
 --- !u!4 &838013899 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4660096415485334, guid: 3aae518756c7a3c46bf2b24558dc5b77,

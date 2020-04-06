@@ -55,7 +55,7 @@ namespace GameLogic
     public delegate void Player1Begin();
     public delegate void BattleBegin();
 
-    public class GameManager : MonoBehaviour
+    public class GameManager : Bolt.EntityBehaviour<IGameManagerState>
     {
         #region Public Variable
         /// <summary>
@@ -312,6 +312,21 @@ namespace GameLogic
             }
             return;
         }
+
+        ///<summary>
+        /// CZ: This method to send an event to the opponent
+        /// <paramref name="movement"/> Whenever a player does a movement,
+        /// the gamemanager gets the movement, add all necessary info into this object
+        /// and the object will be jsonified in this funciton and then sent to another player
+        ///</summary>
+        public void ManagerMove(object movement)
+        {
+            var evnt = GamaManagerMoveEvent.Create();
+            string movementJson = JsonUtility.ToJson(movement);
+            evnt.PlayerMove = movementJson;
+            evnt.Send();
+        }
+
 
         #region Delegate Handler
         /// <summary>

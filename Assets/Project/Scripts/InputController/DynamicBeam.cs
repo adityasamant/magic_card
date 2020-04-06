@@ -13,6 +13,8 @@ namespace InputController
         public Vector3 hitPoint;
         // Hover color
         public Color hoverColor = Color.red;
+
+        public Highlighter highlighter;
         #endregion
 
         #region Private Variables
@@ -47,7 +49,7 @@ namespace InputController
             Transform tr = hitInfo.collider.transform;
             if (tr == null) { return; }
 
-            var highlighter = tr.GetComponentInParent<Highlighter>();
+            highlighter = tr.GetComponentInParent<Highlighter>();
             if (highlighter == null) { return; }
 
             // Hover

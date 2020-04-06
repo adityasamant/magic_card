@@ -158,7 +158,7 @@ namespace GameLogic
             {
                 case (PlayerStates.Init):
                     Debug.Log("PlayerStates=Init");
-                    Instructions.text = "Now is Init States. \n Please scanning the room around you. \n Press trigger to finish scanning.";
+                    //Instructions.text = "Now is Init States. \n Please scanning the room around you. \n Press trigger to finish scanning.";
                     // float nowTime = Time.time;
                     // if(nowTime-startTime>5.0f)
                     // {
@@ -172,7 +172,7 @@ namespace GameLogic
                     break;
                 case (PlayerStates.WaitForStart): //Wait Event From Main Logic
                     Debug.Log("PlayerStates=WaitForStart");
-                    Instructions.text = "Now is not your turn. Please wait for the game going.";
+                    //Instructions.text = "Now is not your turn. Please wait for the game going.";
                     break;
                 case (PlayerStates.ImageTrackingStart):
                     myState = PlayerStates.Main_Phase;
@@ -180,7 +180,7 @@ namespace GameLogic
                     break;
                 case (PlayerStates.Main_Phase): // Wait For Hand Event From Hand Tracker
                     Debug.Log("PlayerStates=Main_Phase");
-                    Instructions.text = "Now is your turn, Main-Phase.\n Please choose a card. \n And shape your right hand to OK pose to confirm.";
+                    //Instructions.text = "Now is your turn, Main-Phase.\n Please choose a card. \n And shape your right hand to OK pose to confirm.";
                     Debug.Log("Now is your turn, Main-Phase.Please choose a card.");
 
                     // if (NumberOfCard)
@@ -210,7 +210,7 @@ namespace GameLogic
                     break;
                 case (PlayerStates.Confirm_Phase): // Wait For Hand (OpenHand or Fist) From Hand Tracker
                     //Debug.Log("PlayerStates=Confirm_Phase");
-                    Instructions.text = "Now is your turn, Confirm-Phase.\n Please use Open-Hand pose to comfirm. \n Or use Fist pose to go back.";
+                    //Instructions.text = "Now is your turn, Confirm-Phase.\n Please use Open-Hand pose to comfirm. \n Or use Fist pose to go back.";
                     if (NumberOfCard)
                     {
                         NumberOfCard.text = "Now you want to use " + PlayedCardName + ".";
@@ -237,7 +237,7 @@ namespace GameLogic
                 case (PlayerStates.Spawn_Phase):
                     //Debug.Log("PlayerStates=Spawn_Phase");
                     //Spawn Actor Here
-                    Instructions.text = "Now is your turn, Spawn-Phase.\n Your monster is spawning into battlefield.";
+                    //Instructions.text = "Now is your turn, Spawn-Phase.\n Your monster is spawning into battlefield.";
                     //Debug.Log("Now is your turn, Spawn-Phase.\n Your monster is spawning into battlefield.");
                     // CardInfo.text = "";
                     // NumberOfCard.text = "";
@@ -268,7 +268,7 @@ namespace GameLogic
                 case (PlayerStates.End):
                     //Return the game control loop to main logic
                     //Debug.Log("PlayerStates=End");
-                    Instructions.text = "Now is your turn, End-Phase. Switch to next turn.";
+                    //Instructions.text = "Now is your turn, End-Phase. Switch to next turn.";
                     PlayerEnd(PlayerId);
                     myState = PlayerStates.WaitForStart;
                     break;
@@ -311,13 +311,12 @@ namespace GameLogic
         {
             if(myState==PlayerStates.Main_Phase)
             {
-                
                 PlayedCardName=myCardDataBase.GetRandomCard().CardName;
                 CardUIManager.HideCardUI();
                 Debug.Log("Now Player want to use " + PlayedCardName);
+                myState = PlayerStates.Confirm_Phase;
                 //Debug.LogFormat("Now Player want to use {0}, ATK: {1}, HP: {2}, SPEED: {3}, SPECIAL EFFECT: {4}", PlayedCardName.CardName, PlayedCardName.Attack, PlayedCardName.HP, PlayedCardName.Speed, PlayedCardName.SpecialEffect);
             }
-            myState = PlayerStates.Confirm_Phase;
             return;
         }
 

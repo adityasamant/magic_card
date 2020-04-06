@@ -1,11 +1,11 @@
 fileFormatVersion: 2
-guid: fb28aaaeecdaea049b1908bdc2a869e9
+guid: 0b07b9dc74378465a915308f77e413db
 ModelImporter:
   serializedVersion: 26
   internalIDToNameTable:
   - first:
       74: -203655887218126122
-    second: StandDeath
+    second: JumpForward
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -35,11 +35,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: StandDeath
+      name: JumpForward
       takeName: mixamo.com
       internalID: 0
       firstFrame: 0
-      lastFrame: 95
+      lastFrame: 30
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

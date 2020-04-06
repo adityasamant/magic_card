@@ -29,7 +29,7 @@ public class PlayerMovement : Bolt.EntityBehaviour<ICubeState>
     {
         base.SimulateOwner();
         var speed = 4f;
-        var movement = new Vector3(Random.value - 0.5f, Random.value - 0.5f, Random.value - 0.5f);
+        var movement = new Vector3(Random.value - 0.5f, 0.0f, Random.value - 0.5f);
         if(movement!=Vector3.zero)
         {
             transform.position += movement * speed * BoltNetwork.FrameDeltaTime;

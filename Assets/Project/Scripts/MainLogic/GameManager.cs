@@ -55,7 +55,7 @@ namespace GameLogic
     public delegate void Player1Begin();
     public delegate void BattleBegin();
 
-    public class GameManager : Bolt.EntityBehaviour<IGameManagerState>
+    public class GameManager : Bolt.EntityEventListener<IGameManagerState>
     {
         #region Public Variable
         /// <summary>
@@ -112,6 +112,12 @@ namespace GameLogic
 
         private GameMode currentMode;
 
+        //OpponentMovement: all data needed to complete a movement
+        //e.g. An attack:
+        //OpponentMovement.Attacker
+        //OpponentMovement.Target
+        //OpponentMovement.Damage
+        private object OpponentMovement;
         /// <summary>
         /// Store a instant of Dice
         /// </summary>
@@ -318,16 +324,28 @@ namespace GameLogic
         /// <paramref name="movement"/> Whenever a player does a movement,
         /// the gamemanager gets the movement, add all necessary info into this object
         /// and the object will be jsonified in this funciton and then sent to another player
-        ///</summary>
+        /// The structure of 'movement' is defined by you according to the context you use it.
+        /// </summary>
         public void ManagerMove(object movement)
         {
-            var evnt = GamaManagerMoveEvent.Create();
+            var evnt = GamaManagerMoveEvent.Create(entity);//not sure of the parameter.
             string movementJson = JsonUtility.ToJson(movement);
             evnt.PlayerMove = movementJson;
             evnt.Send();
         }
 
-
+        ///<summary>
+        /// CZ: 
+        /// <paramref name="evnt"/> The movement from your opponent
+        ///</summary>
+        public override void OnEvent(GamaManagerMoveEvent evnt)
+        {
+            object movement = JsonUtility.FromJson<object>(evnt.PlayerMove);
+            OpponentMovement = movement;
+            // Then get the 'movement' object so that you can replicate 
+            // the opponent's movement on your machine.   
+        }
+   
         #region Delegate Handler
         /// <summary>
         /// Invoke when Player Turn Ended.

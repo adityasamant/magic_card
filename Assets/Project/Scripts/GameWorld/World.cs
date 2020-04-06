@@ -32,8 +32,8 @@ namespace GameWorld
         /// <summary>
         /// data structure of all monsters
         /// </summary>
-        public Dictionary<int, Monster> monsters;
-        public Dictionary<int, Player> players;
+        public Dictionary<int, Monster> monsters = new Dictionary<int, Monster>();
+        public Dictionary<int, Player> players = new Dictionary<int, Player>();
         /// <summary>
         /// the game map
         /// </summary>
@@ -156,8 +156,6 @@ namespace GameWorld
         void Start()
         { 
             Debug.Log("Creating a new world");
-            monsters = new Dictionary<int, Monster>();
-            players = new Dictionary<int, Player>();
             actingMonsterList = new SortedSet<Monster>(new MonsterComparator());
             actingPlayerList = new List<Player>();
             if (tileMap == null)

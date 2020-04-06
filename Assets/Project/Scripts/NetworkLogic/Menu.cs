@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UdpKit;
 using UnityEngine;
+using Bolt;
+using Bolt.Matchmaking;
 
 namespace Project_Network
 {
@@ -50,9 +52,12 @@ namespace Project_Network
             base.BoltStartDone();
             if (BoltNetwork.IsServer)
             {
-                string matchName = "Test Match";
-                BoltNetwork.SetServerInfo(matchName, null);
-                BoltNetwork.LoadScene("TestMap");
+                string matchName = Guid.NewGuid().ToString();
+
+                BoltMatchmaking.CreateSession(
+                    sessionID: matchName,
+                    sceneToLoad: "TestMap"
+                    );
             }
         }
 
@@ -63,6 +68,9 @@ namespace Project_Network
         public override void SessionListUpdated(Map<Guid, UdpSession> sessionList)
         {
             base.SessionListUpdated(sessionList);
+
+            Debug.LogFormat("Session List Updated: {0} total sessions", sessionList.Count);
+
             foreach (var itr in sessionList)
             {
                 UdpSession udpSession = itr.Value as UdpSession;

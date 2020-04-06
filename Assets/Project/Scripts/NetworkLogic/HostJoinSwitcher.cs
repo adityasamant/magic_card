@@ -18,6 +18,10 @@ namespace Project_Network
         /// </summary>
         public float WaitingTime = 5.0f;
         /// <summary>
+        /// The least waiting time between shutdown and start server
+        /// </summary>
+        public float SwitchTime = 2.0f;
+        /// <summary>
         /// A Public Reference to the Bolt Menu
         /// </summary>
         public Menu menu;
@@ -37,6 +41,10 @@ namespace Project_Network
         /// Init as true, when client shutdown set to true
         /// </summary>
         private bool isClient;
+        /// <summary>
+        /// A Timer to countdown the server
+        /// </summary>
+        private float serverTimer;
         #endregion
 
         #region Unity Function
@@ -47,24 +55,32 @@ namespace Project_Network
         {
             isClient = true;
             isJoined = false;
-            if(menu!=null)
-            {
-                ClientTimer = Time.time;
-                menu.StartClient();
-            }
+            menu.StartClient();
+            ClientTimer = Time.time;
         }
         /// <summary>
         /// Invoke every frame
         /// </summary>
         private void Update()
         {
-            if(isClient && !isJoined)
+            if (isClient && !isJoined)
             {
-                if(Time.time-ClientTimer>WaitingTime)
+                if (Time.time - ClientTimer > WaitingTime)
                 {
-                    menu.ClientShutDown();
                     isClient = false;
-                    menu.StartServer();
+                    menu.ClientShutDown();
+                    serverTimer = Time.time;
+                }
+            }
+            if (!isClient && !isJoined)
+            {
+                if (Time.time - serverTimer > SwitchTime)
+                {
+                    if (!BoltNetwork.IsRunning)
+                    {
+                        menu.StartServer();
+                        isJoined = true;
+                    }
                 }
             }
         }

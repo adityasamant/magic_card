@@ -27,7 +27,7 @@ namespace GameLogic
         void Start()
         {
             startTime = Time.time;
-            MLWorldRays.Start();
+            //MLWorldRays.Start();
         }
 
         void Update()

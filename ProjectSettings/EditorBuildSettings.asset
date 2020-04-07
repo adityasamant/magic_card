@@ -12,8 +12,8 @@ EditorBuildSettings:
     path: Assets/Scenes/Menu.unity
     guid: 2fe525bc149ab5d459a327f982a635d0
   - enabled: 1
-    path: Assets/Project/Scenes/UITest.unity
-    guid: 72c2201d69c1f446eb3c33b7a49dca1e
+    path: Assets/Scenes/TestMap.unity
+    guid: c2922939a42422b49a1c4a42686471d8
   m_configObjects:
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 2ba4dbd235ed941bb8fdb5a40ab00f22,
       type: 2}

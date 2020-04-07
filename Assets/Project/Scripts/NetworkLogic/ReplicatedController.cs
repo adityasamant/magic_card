@@ -40,7 +40,7 @@ public class ReplicatedController : EntityBehaviour<IMagicLeapControllerState>
         base.SimulateOwner();
         if(RealControllerObject==null)
         {
-            RealControllerObject = GameObject.Find("ControllerModel");
+            RealControllerObject = GameObject.Find("Controller");
         }
         if(RealControllerObject)
         {

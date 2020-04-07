@@ -58,6 +58,10 @@ namespace GameLogic
         #endregion
 
         #region Public Variable
+        /// <summary>
+        /// NetworkEvent Sender
+        /// </summary>
+        public NetworkPlayer networkPlayer = null;
 
         /// <summary>
         /// CardInfo Reader

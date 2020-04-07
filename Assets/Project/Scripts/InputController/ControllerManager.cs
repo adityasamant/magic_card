@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.MagicLeap;
-
+using TerrainScanning;
+using GameWorld;
 namespace InputController
 {
     #region Delegate Define
@@ -26,6 +27,11 @@ namespace InputController
         public string selected;
         public GameObject selectedGameObject;
         public bool trigger;
+
+        /// <summary>
+        /// The Game World
+        /// </summary>
+        public World world;
         #endregion
 
         #region Private Variables
@@ -47,7 +53,7 @@ namespace InputController
         // Update is called once per frame
         void Update()
         {
-
+            
         }
 
         void OnDestroy()
@@ -74,7 +80,13 @@ namespace InputController
                         case ("Card"):
                             ClickOnCard(selectedGameObject.name);
                             break;
-
+                        case ("HexTile"):
+                            ClickOnHex(selectedGameObject.transform.parent.gameObject.GetComponent<HexTile>().getID());
+                            // HexTile TargetHex = world.tileMap.getHexTileByIndex(selectedGameObject.transform.parent.gameObject.GetComponent<HexTile>().getID());
+                            // GameObject.Find("Mist").SetActive(true);
+                            // GameObject fire = GameObject.Find("Mist");
+                            // fire.transform.position = TargetHex.transform.position;
+                            break;
                         default:
                             break;
                     }

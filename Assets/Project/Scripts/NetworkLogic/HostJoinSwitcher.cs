@@ -8,7 +8,8 @@ namespace Project_Network
     /// 1. Game start, start as client automately, wait 5 seconds(timer)
     /// 2. If it can find the server, join the server and close the menu, switch to game scene
     /// 3. If the timer passed, shut down the client
-    /// 4. Start the server and switch to game scene
+    /// 4. Wait 2 seconds between client and server switch.
+    /// 5. Start the server and switch to game scene
     /// </summary>
     public class HostJoinSwitcher : MonoBehaviour
     {

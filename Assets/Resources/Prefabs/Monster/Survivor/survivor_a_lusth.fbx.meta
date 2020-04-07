@@ -8,10 +8,10 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: survivor_MAT
-    second: {fileID: 2100000, guid: cabdf82478c4543968fc7762e0e75d4a, type: 2}
+    second: {fileID: 2100000, guid: ea23e375acacf49bc824a862cbfa529e, type: 2}
   materials:
     importMaterials: 1
-    materialName: 1
+    materialName: 2
     materialSearch: 1
     materialLocation: 1
   animations:
@@ -39,7 +39,7 @@ ModelImporter:
     isReadable: 0
   meshes:
     lODScreenPercentages: []
-    globalScale: 0.2
+    globalScale: 1
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
@@ -86,7 +86,7 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-    globalScale: 0.002
+    globalScale: 1
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0

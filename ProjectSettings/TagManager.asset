@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Dice
   - Card
+  - HexTile
   layers:
   - Default
   - TransparentFX

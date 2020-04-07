@@ -51,6 +51,10 @@ namespace GameLogic
         ///</summary>
         private Vector3 RayHitPosition;
 
+        ///<summary>
+        /// The ID of one hex to place new monster
+        ///</summary>
+        private int targetHexId;
         #endregion
 
         #region Public Variable
@@ -153,104 +157,110 @@ namespace GameLogic
             switch (myState)
             {
                 case (PlayerStates.Init):
-                    //Debug.Log("PlayerStates=Init");
-                    Instructions.text = "Now is Init States. \n Please scanning the room around you. \n Press trigger to finish scanning.";
-                    float nowTime = Time.time;
-                    if(nowTime-startTime>5.0f)
-                    {
-                        if(myHandTrackerObject)
-                            myHandTrackerObject.SetActive(true);
-                        if(myHandTracker)
-                        {
-                            myHandTracker.FindPose += HandGesture;
-                        }
-                    }
+                    Debug.Log("PlayerStates=Init");
+                    //Instructions.text = "Now is Init States. \n Please scanning the room around you. \n Press trigger to finish scanning.";
+                    // float nowTime = Time.time;
+                    // if(nowTime-startTime>5.0f)
+                    // {
+                    //     if(myHandTrackerObject)
+                    //         myHandTrackerObject.SetActive(true);
+                    //     if(myHandTracker)
+                    //     {
+                    //         myHandTracker.FindPose += HandGesture;
+                    //     }
+                    // }
                     break;
                 case (PlayerStates.WaitForStart): //Wait Event From Main Logic
-                    //Debug.Log("PlayerStates=WaitForStart");
-                    Instructions.text = "Now is not your turn. Please wait for the game going.";
+                    Debug.Log("PlayerStates=WaitForStart");
+                    //Instructions.text = "Now is not your turn. Please wait for the game going.";
                     break;
                 case (PlayerStates.ImageTrackingStart):
                     myState = PlayerStates.Main_Phase;
-                    PlayedCardName=myCardDataBase.GetRandomCard().CardName;
+                    // PlayedCardName=myCardDataBase.GetRandomCard().CardName;
                     break;
                 case (PlayerStates.Main_Phase): // Wait For Hand Event From Hand Tracker
-                    //Debug.Log("PlayerStates=Main_Phase");
-                    Instructions.text = "Now is your turn, Main-Phase.\n Please choose a card. \n And shape your right hand to OK pose to confirm.";
-                    if (NumberOfCard)
-                    {
-                        NumberOfCard.text = "Now you are tracking 1 Card.";
-                    }
+                    Debug.Log("PlayerStates=Main_Phase");
+                    //Instructions.text = "Now is your turn, Main-Phase.\n Please choose a card. \n And shape your right hand to OK pose to confirm.";
+                    Debug.Log("Now is your turn, Main-Phase.Please choose a card.");
+
+                    // if (NumberOfCard)
+                    // {
+                    //     NumberOfCard.text = "Now you are tracking 1 Card.";
+                    // }
                     if (myCardDataBase)
                     {
-                        Cards myCard = myCardDataBase.GetCard(PlayedCardName);
-                        CardInfo.text = "CardName:" + myCard.CardName + "\n"
-                            + "Attack:" + myCard.Attack.ToString() + "\n"
-                            + "HP:" + myCard.HP.ToString() + "\n"
-                            + "Speed:" + myCard.Speed.ToString() + "\n"
-                            + "Special Effect:\n"
-                            + myCard.SpecialEffect;
+                        CardUIManager.ShowCardUI();
+                        
+                        //Cards myCard = myCardDataBase.GetCard(PlayedCardName);
+                        // CardInfo.text = "CardName:" + myCard.CardName + "\n"
+                        //     + "Attack:" + myCard.Attack.ToString() + "\n"
+                        //     + "HP:" + myCard.HP.ToString() + "\n"
+                        //     + "Speed:" + myCard.Speed.ToString() + "\n"
+                        //     + "Special Effect:\n"
+                        //     + myCard.SpecialEffect;
 
-                        if (UIMonsterName != myCard.CardName)
-                        {
-                            Destroy(UIMonsterpreview);
-                            UIMonsterName = myCard.CardName;
-                            Debug.Log(myCard.PrefabPath);
-                            UIMonsterpreview = Object.Instantiate(Resources.Load<GameObject>(myCard.PrefabPath), MonsterPreviewField.transform);
-                        }
+                        // if (UIMonsterName != myCard.CardName)
+                        // {
+                        //     Destroy(UIMonsterpreview);
+                        //     UIMonsterName = myCard.CardName;
+                        //     Debug.Log(myCard.PrefabPath);
+                        //     UIMonsterpreview = Object.Instantiate(Resources.Load<GameObject>(myCard.PrefabPath), MonsterPreviewField.transform);
+                        // }
                     }
                     break;
                 case (PlayerStates.Confirm_Phase): // Wait For Hand (OpenHand or Fist) From Hand Tracker
                     //Debug.Log("PlayerStates=Confirm_Phase");
-                    Instructions.text = "Now is your turn, Confirm-Phase.\n Please use Open-Hand pose to comfirm. \n Or use Fist pose to go back.";
+                    //Instructions.text = "Now is your turn, Confirm-Phase.\n Please use Open-Hand pose to comfirm. \n Or use Fist pose to go back.";
                     if (NumberOfCard)
                     {
                         NumberOfCard.text = "Now you want to use " + PlayedCardName + ".";
                     }
                     if (myCardDataBase)
                     {
-                        Cards myCard = myCardDataBase.GetCard(PlayedCardName);
-                        CardInfo.text = "CardName:" + myCard.CardName + "\n"
-                            + "Attack:" + myCard.Attack.ToString() + "\n"
-                            + "HP:" + myCard.HP.ToString() + "\n"
-                            + "Speed:" + myCard.Speed.ToString() + "\n"
-                            + "Special Effect:\n"
-                            + myCard.SpecialEffect;
 
-                        if (UIMonsterName != myCard.CardName)
-                        {
-                            Destroy(UIMonsterpreview);
-                            Debug.Log(myCard.PrefabPath);
-                            UIMonsterpreview = Object.Instantiate(Resources.Load<GameObject>(myCard.PrefabPath), MonsterPreviewField.transform);
-                            UIMonsterName = myCard.CardName;
-                        }
+                        // CardInfo.text = "CardName:" + myCard.CardName + "\n"
+                        //     + "Attack:" + myCard.Attack.ToString() + "\n"
+                        //     + "HP:" + myCard.HP.ToString() + "\n"
+                        //     + "Speed:" + myCard.Speed.ToString() + "\n"
+                        //     + "Special Effect:\n"
+                        //     + myCard.SpecialEffect;
+
+                        // if (UIMonsterName != myCard.CardName)
+                        // {
+                        //     Destroy(UIMonsterpreview);
+                        //     Debug.Log(myCard.PrefabPath);
+                        //     UIMonsterpreview = Object.Instantiate(Resources.Load<GameObject>(myCard.PrefabPath), MonsterPreviewField.transform);
+                        //     UIMonsterName = myCard.CardName;
+                        // }
                     }
                     break;
                 case (PlayerStates.Spawn_Phase):
                     //Debug.Log("PlayerStates=Spawn_Phase");
                     //Spawn Actor Here
-                    Instructions.text = "Now is your turn, Spawn-Phase.\n Your monster is spawning into battlefield.";
-                    CardInfo.text = "";
-                    NumberOfCard.text = "";
-                    //Debug.Log("Spawn A Charcter Name:" + PlayedCardName);
+                    //Instructions.text = "Now is your turn, Spawn-Phase.\n Your monster is spawning into battlefield.";
+                    //Debug.Log("Now is your turn, Spawn-Phase.\n Your monster is spawning into battlefield.");
+                    // CardInfo.text = "";
+                    // NumberOfCard.text = "";
+                    Debug.Log("Spawn A Charcter Name:" + PlayedCardName);
                     if (myCardDataBase)
                     {
                         Cards myCard = myCardDataBase.GetCard(PlayedCardName);
-                        float myDis = 9999.9f;
-                        int index = 0;
-                        for(int i=0;i<HexMap.childCount;i++)
-                        {
-                            Transform hex = HexMap.GetChild(i);
-                            if((MainCamera.transform.position - hex.position).magnitude<myDis)
-                            {
-                                myDis = (MainCamera.transform.position - hex.position).magnitude;
-                                index = i;
-                            }
-                        }
+                        // float myDis = 9999.9f;
+                        // int index = 0;
+                        // for(int i=0;i<HexMap.childCount;i++)
+                        // {
+                        //     Transform hex = HexMap.GetChild(i);
+                        //     if((MainCamera.transform.position - hex.position).magnitude<myDis)
+                        //     {
+                        //         myDis = (MainCamera.transform.position - hex.position).magnitude;
+                        //         index = i;
+                        //     }
+                        // }
 
-                        PlayedCard(PlayerId, myCard.id, index);
+                        PlayedCard(PlayerId, myCard.id, targetHexId);
                     }
-                    myState = PlayerStates.ImageTrackingStop;
+                    //myState = PlayerStates.ImageTrackingStop;
+                    myState = PlayerStates.End;
                     break;
                 case (PlayerStates.ImageTrackingStop):
                     myState = PlayerStates.End;
@@ -258,7 +268,7 @@ namespace GameLogic
                 case (PlayerStates.End):
                     //Return the game control loop to main logic
                     //Debug.Log("PlayerStates=End");
-                    Instructions.text = "Now is your turn, End-Phase. Switch to next turn.";
+                    //Instructions.text = "Now is your turn, End-Phase. Switch to next turn.";
                     PlayerEnd(PlayerId);
                     myState = PlayerStates.WaitForStart;
                     break;
@@ -277,7 +287,7 @@ namespace GameLogic
              if(myState==PlayerStates.WaitForStart)
             {
                 myState = PlayerStates.ImageTrackingStart;
-                myHandTracker.Event_enableOKtracked.Invoke();
+                //myHandTracker.Event_enableOKtracked.Invoke();
             }
         }
 
@@ -294,35 +304,36 @@ namespace GameLogic
         }
 
         /// <summary>
-        /// This function will call when click on a Hex
-        /// </summary>
-        /// <param name="HexIndex">The Chosen Hex Index</param>
-        private void ClickOnHexInvoked(int HexIndex)
-        {
-            // if(myState==PlayerStates.Confirm_Phase)
-            // {
-            //     HexToPlaceIndex = HexIndex;
-            // }
-            // ChangeState(PlayerStates.Spawn_Phase);
-            return;
-        }
-
-        /// <summary>
         /// This function will call when click on a Card
         /// </summary>
         /// <param name="CardName">The Chosen Card Name</param>
         private void ClickOnCardInvoked(string CardName)
         {
-            CardUIManager.HideCardUI();
-            // if(myState==PlayerStates.Main_Phase)
-            // {
-            //     CardToUsed = myDecks.GetCard(CardName);
-            //     CardUIManager.HideCardUI();
-            //     Debug.LogFormat("Now Player want to use {0}, ATK: {1}, HP: {2}, SPEED: {3}, SPECIAL EFFECT: {4}", CardToUsed.CardName, CardToUsed.Attack, CardToUsed.HP, CardToUsed.Speed, CardToUsed.SpecialEffect);
-            // }
-            // ChangeState(PlayerStates.Confirm_Phase);
+            if(myState==PlayerStates.Main_Phase)
+            {
+                PlayedCardName=myCardDataBase.GetRandomCard().CardName;
+                CardUIManager.HideCardUI();
+                Debug.Log("Now Player want to use " + PlayedCardName);
+                myState = PlayerStates.Confirm_Phase;
+                //Debug.LogFormat("Now Player want to use {0}, ATK: {1}, HP: {2}, SPEED: {3}, SPECIAL EFFECT: {4}", PlayedCardName.CardName, PlayedCardName.Attack, PlayedCardName.HP, PlayedCardName.Speed, PlayedCardName.SpecialEffect);
+            }
             return;
         }
+
+        /// <summary>
+        /// This function will call when click on a Hex
+        /// </summary>
+        /// <param name="HexTileID">The Chosen Hex ID</param>
+        private void ClickOnHexInvoked(int HexTileID)
+        {
+            if(myState == PlayerStates.Confirm_Phase)
+            {
+                targetHexId = HexTileID;
+                myState = PlayerStates.Spawn_Phase;
+            }
+            return;
+        }
+
         #endregion
 
         #region Delegate Handler
@@ -334,35 +345,36 @@ namespace GameLogic
         /// Id=1, OpenHand Pose
         /// id=2, Fist Pose
         /// </param>
-        private void HandGesture(int PoseId)
-        {
-            Debug.Log("HandGestrue here!");
-            if(PoseId==0)
-            {
-                if(myState==PlayerStates.Main_Phase)
-                {
-                    myHandTracker.Event_enableFistTracked.Invoke();
-                    myHandTracker.Event_enableOpenHandtracked.Invoke();
-                    myState = PlayerStates.Confirm_Phase;
-                }
-            }
-            if(PoseId==1)
-            {
-                if(myState==PlayerStates.Confirm_Phase)
-                {
-                    myHandTracker.Event_disableAllTracked.Invoke();
-                    myState = PlayerStates.Spawn_Phase;
-                }
-            }
-            if(PoseId==2)
-            {
-                if(myState==PlayerStates.Confirm_Phase)
-                {
-                    PlayedCardName = "NON";
-                    myState = PlayerStates.Main_Phase;
-                }
-            }
-        }
+
+        // private void HandGesture(int PoseId)
+        // {
+        //     Debug.Log("HandGestrue here!");
+        //     if(PoseId==0)
+        //     {
+        //         if(myState==PlayerStates.Main_Phase)
+        //         {
+        //             myHandTracker.Event_enableFistTracked.Invoke();
+        //             myHandTracker.Event_enableOpenHandtracked.Invoke();
+        //             myState = PlayerStates.Confirm_Phase;
+        //         }
+        //     }
+        //     if(PoseId==1)
+        //     {
+        //         if(myState==PlayerStates.Confirm_Phase)
+        //         {
+        //             myHandTracker.Event_disableAllTracked.Invoke();
+        //             myState = PlayerStates.Spawn_Phase;
+        //         }
+        //     }
+        //     if(PoseId==2)
+        //     {
+        //         if(myState==PlayerStates.Confirm_Phase)
+        //         {
+        //             PlayedCardName = "NON";
+        //             myState = PlayerStates.Main_Phase;
+        //         }
+        //     }
+        // }
 
         /// <summary>
         /// Invoked when the player is playing card

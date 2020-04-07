@@ -52,8 +52,9 @@ namespace Project_Network
         {
             base.SceneLoadLocalDone(scene);
             s_NetworkCallbacks = this;
-            var spawnPosition = new Vector3(Random.Range(-8, 8), 0, Random.Range(-8, 8));
-            BoltNetwork.Instantiate(BoltPrefabs.Cube, spawnPosition, Quaternion.identity);
+            //var spawnPosition = new Vector3(Random.Range(-8, 8), 0, Random.Range(-8, 8));
+            
+            BoltNetwork.Instantiate(BoltPrefabs.Controller_Replicated_, new Vector3(0,0,0), Quaternion.identity);
         }
 
         /// <summary>

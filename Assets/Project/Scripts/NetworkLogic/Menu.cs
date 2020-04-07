@@ -56,7 +56,7 @@ namespace Project_Network
 
                 BoltMatchmaking.CreateSession(
                     sessionID: matchName,
-                    sceneToLoad: "TestMap"
+                    sceneToLoad: "UITest"
                     );
             }
         }

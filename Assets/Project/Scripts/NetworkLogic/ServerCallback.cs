@@ -68,7 +68,7 @@ namespace Project_Network
                 _lastUpdateTime = nowTime;
                 TimeStampEvent timeStampEvent = TimeStampEvent.Create();
                 timeStampEvent.TimeStamp = _timeStamp;
-                timeStampEvent.Send();
+                //timeStampEvent.Send();
             }
         }
         #endregion

@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 using Bolt;
+using Project_Network;
 
 namespace GameLogic
 {
@@ -22,19 +22,44 @@ namespace GameLogic
         #endregion
         #region Unity Function
         /// <summary>
-        /// Start is called before the first frame update
+        /// Just Like Monobehavior.Start()
+        /// Invoked when Bolt is aware of this entity and all internal state has been setup
         /// </summary>
-        void Start()
+        public override void Attached()
         {
+            base.Attached();
 
+            if (entity.IsOwner)
+            {
+                if(BoltNetwork.IsServer)
+                {
+                    state.PlayerId = 0;
+                }
+                else
+                {
+                    state.PlayerId = 1;
+                }
+            }
+
+            state.AddCallback("PlayerId", PlayerIdChange);
         }
-        
+
         /// <summary>
         /// Update is called once per frame
         /// </summary>
         void Update()
         {
 
+        }
+        #endregion
+
+        #region Event Callback
+        /// <summary>
+        /// Set the Real gameobject Player Id, 0 is server, 1 is client
+        /// </summary>
+        private void PlayerIdChange()
+        {
+            PlayerGameObject.PlayerId = state.PlayerId;
         }
         #endregion
     }

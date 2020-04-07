@@ -31,7 +31,7 @@ namespace Project_Network
         /// <summary>
         /// How long it will take to increase one time step
         /// </summary>
-        private float _timeInterval;
+        private float _timeInterval = 0.5f;
         /// <summary>
         /// The time stamp, increasing every (_timeInterval) seconds
         /// </summary>
@@ -68,7 +68,7 @@ namespace Project_Network
                 _lastUpdateTime = nowTime;
                 TimeStampEvent timeStampEvent = TimeStampEvent.Create();
                 timeStampEvent.TimeStamp = _timeStamp;
-                //timeStampEvent.Send();
+                timeStampEvent.Send();
             }
         }
         #endregion

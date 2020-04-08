@@ -350,7 +350,7 @@ namespace GameLogic
         private void MultiplayerGameManager_FinishInitInvoked()
         {
             if(currentState==GameStates.Init)
-            {
+            {                
                 ChangeState(GameStates.Wait_For_Mode_Selection);
             }
             return;

@@ -31582,7 +31582,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f96dd9eafc205483f90224a4017e4b8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BBoxTransform: {fileID: 0}
+  BBoxTransform: {fileID: 502833135}
   BBoxExtents: {x: 10, y: 10, z: 10}
   QueryFlags: 128
   PlaneGameObject: {fileID: 3739111423006610296, guid: b1c25369c3d674af7b55ac85dcc7bcb7,

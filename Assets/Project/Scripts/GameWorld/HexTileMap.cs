@@ -10,13 +10,13 @@ namespace GameWorld
     {
         public Material OriginalMat;
         public Material NewMat;
+        public GameObject HexMap;
 
-        private GameObject HexMap;
         private static int[][] directions = new int[][] { new int[] { 1, -1, 0 }, new int[] { 1, 0, -1 }, new int[] { 0, 1, -1 }, new int[] { -1, 1, 0 }, new int[] { -1, 0, 1 }, new int[] { 0, -1, 1 } };
         private static Dictionary<Tuple<int, int>, int> coordinatesToId = new Dictionary<Tuple<int,int>, int>();
         void Start()
         {
-            HexMap = GameObject.Find("HexMap");
+            //HexMap = GameObject.Find("HexMap");
         }
 
         /// <summary>
@@ -122,6 +122,7 @@ namespace GameWorld
         /// <returns>Return a HexTile, if it doesn't find return null</returns>
         public HexTile getHexTileByIndex(int HexIndex)
         {
+            Debug.Log(HexMap);
             if (HexMap.transform.childCount < HexIndex) return null;
             HexTile result = HexMap.transform.GetChild(HexIndex).GetComponent<HexTile>();
             return result;

@@ -1656,7 +1656,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7885017068657915536}
   - component: {fileID: 281253970564586474}
-  - component: {fileID: 992212043903808128}
   m_Layer: 0
   m_Name: BlueLancerPrefab
   m_TagString: Untagged
@@ -1700,33 +1699,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &992212043903808128
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6572560448785859715}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b29b58686f251d24bb9b8a9c38f0ee1d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  HP: 0
-  ATK: 0
-  SPD: 0
-  monsterOwner: {fileID: 0}
-  monsterName: 
-  HexIndex: 0
-  isAlive: 0
-  isExiled: 0
-  world: {fileID: 0}
-  MonsterStartTurn:
-    m_PersistentCalls:
-      m_Calls: []
-  MonsterStateUpdate:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &6831834983698326333
 GameObject:
   m_ObjectHideFlags: 0

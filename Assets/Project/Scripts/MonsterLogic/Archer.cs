@@ -51,17 +51,14 @@ namespace Monsters
                 {
                     Debug.LogFormat("Archer {0} Attack Target Monster{1}, My ATK={2}", uid, nearestMonster.GetUId(), this.ATK);
                     gameObject.transform.LookAt(nearestMonster.transform.position);
-                    nearestMonster.MonsterStateUpdate.Invoke("Damage", this.ATK);
+                    Attack(nearestMonster, this.ATK);
                 }
                 else
                 {
                     Debug.LogFormat("Archer {0} Attack Target Monster{1}, My ATK={2}", uid, nearestMonster.GetUId(), this.ATK*2);
                     gameObject.transform.LookAt(nearestMonster.transform.position);
-                    nearestMonster.MonsterStateUpdate.Invoke("Damage", this.ATK*2);
+                    Attack(nearestMonster, this.ATK*2);
                 }
-                GetComponent<Animator>().SetTrigger("Attack");
-                AnimationFinishedTime = Time.time + 3.0f;
-                WaitForAnimation = true;
                 return;
             }
             else
@@ -74,10 +71,7 @@ namespace Monsters
                     return;
                 }
                 world.tileMap.ColorPath(myPath);
-                this.StateUpdate("Move", myPath[1]);
-                GetComponent<Animator>().SetTrigger("Walk");
-                AnimationFinishedTime = Time.time + 1.0f;
-                WaitForAnimation = true;
+                Move(myPath[1]);
                 return;
             }
         }

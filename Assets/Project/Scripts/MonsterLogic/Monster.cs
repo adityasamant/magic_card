@@ -8,28 +8,22 @@ using GameWorld;
 
 namespace Monsters
 {
-    public class MonsterMovement
+    public enum MonsterAction
     {
-        public enum MonsterAction
-        {
-            Move,
-            Attack,
-            Spell,
-            Nothing
-        }
-        /// <summary>
-        /// type of this movement
-        /// </summary>
-        public MonsterAction action = MonsterAction.Nothing;
-        /// <summary>
-        /// the source of this movement.
-        /// </summary>
-        public int uid;
-        /// <summary>
-        /// params of this movement
-        /// </summary>
-        public int param0, param1, param2;
+        Move,
+        Attack,
+        Spell,
+        Defense,
+        Nothing
     }
+
+    public class MonsterActionParam
+    {
+        public int MoveDestination;
+        public int AttackDamage;
+        public Monster AttackSubject;
+    }
+
 
     public delegate void MonsterTurnEnd();
 
@@ -74,10 +68,19 @@ namespace Monsters
         /// The hex this monster is casted on. Should not be change during game. Monster will return to this hex when turn begin.
         /// </summary>
         protected int origin_HexIndex;
+
+        protected float moving_animation_time = 1.0f;
+        protected float attack_animation_time = 1.0f;
+
         /// <summary>
-        /// For Animation Played
+        /// Animation of the monster
         /// </summary>
-        protected bool WaitForAnimation = false;
+        protected MonsterAction WaitForAnimation = MonsterAction.Nothing;
+        /// <summary>
+        /// Parameter of an action of monster
+        /// </summary>
+        protected MonsterActionParam ActionParam = new MonsterActionParam();
+
         /// <summary>
         /// The time Animation Stop
         /// </summary>
@@ -222,8 +225,10 @@ namespace Monsters
         /// <summary>
         /// This Function will invoke when game start and monster is created
         /// </summary>
-        void Start()
+        protected void Start()
         {
+            moving_animation_time = 1.0f;
+            attack_animation_time = 1.0f;
             if (MonsterStartTurn == null)
                 MonsterStartTurn = new UnityEvent();
             if (MonsterStateUpdate == null)
@@ -246,19 +251,30 @@ namespace Monsters
         void Update()
         {
             float nowTime = Time.time;
-            if (WaitForAnimation)
+            if (WaitForAnimation != MonsterAction.Nothing)
             {
                 if (nowTime > AnimationFinishedTime)
                 {
-                    WaitForAnimation = false;
-                    MonsterTurnEnd();
+                    switch (WaitForAnimation)
+                    {
+                        case MonsterAction.Move:
+                            StateUpdate("Move", ActionParam.MoveDestination);
+                            break;
+                        case MonsterAction.Attack:
+                            ActionParam.AttackSubject.MonsterStateUpdate.Invoke("Damage", ActionParam.AttackDamage);
+                            break;
+                    }
+                    //MonsterTurnEnd();
+                    WaitForAnimation = MonsterAction.Nothing;
                 }
             }
         }
         #endregion
 
+
         #region Event Function
         /// <summary>
+        /// (Deprecated)
         /// Monster's movement in one turn.
         /// Maybe Override in Child Class
         /// </summary>
@@ -311,7 +327,35 @@ namespace Monsters
                 return;
             }
         }
-        
+
+        /// <summary>
+        /// Monster's move to another Hex
+        /// </summary>
+        /// <param name="destination"> the destination Hex</param>
+        /// <param name="animationTime"> Animation time. </param>
+        public virtual void Move(int destination)
+        {
+            GetComponent<Animator>().SetTrigger("Walk");
+            AnimationFinishedTime = Time.time + moving_animation_time;
+            ActionParam.MoveDestination = destination;
+            WaitForAnimation = MonsterAction.Move;
+        }
+
+        /// <summary>
+        /// Attack another monster
+        /// </summary>
+        /// <param name="subjectMonster"> the attack subject </param>
+        /// <param name="atk"> attack value. Default value is -1 (The original ATK value will be used in this case).  </param>
+        /// <param name="animationTime"> Animation time. </param>
+        public virtual void Attack(Monster subjectMonster, int atk = -1)
+        {
+            if (atk < 0) atk = this.ATK;
+            GetComponent<Animator>().SetTrigger("Attack");
+            AnimationFinishedTime = Time.time + attack_animation_time;
+            ActionParam.AttackDamage = atk;
+            ActionParam.AttackSubject = subjectMonster;
+            WaitForAnimation = MonsterAction.Attack;
+        }
 
         /// <summary>
         /// this function will transmit all states of the monster to its respective GameObject (with visualization)

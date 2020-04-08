@@ -66,7 +66,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: f27c689b2b4b84a30894fa203dbfc206, type: 3}
-    m_FontSize: 36
+    m_FontSize: 25
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0
@@ -77,7 +77,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 2
+  m_Text: 25
 --- !u!114 &8230332152914692882
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -120,7 +120,7 @@ RectTransform:
   m_GameObject: {fileID: 884300804738453740}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.7, y: 0.7, z: 1}
+  m_LocalScale: {x: 0.9, y: 0.9, z: 1}
   m_Children:
   - {fileID: 8870196866914411710}
   m_Father: {fileID: 4175649081920728508}
@@ -350,7 +350,7 @@ GameObject:
   - component: {fileID: 1992487999090842684}
   - component: {fileID: 1207695387311324150}
   m_Layer: 5
-  m_Name: Brute_card
+  m_Name: BruteCard
   m_TagString: Card
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -620,8 +620,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.00018310547, y: -0.3297}
-  m_SizeDelta: {x: 144.7616, y: 22.0425}
+  m_AnchoredPosition: {x: 0.00018310547, y: -0.3604746}
+  m_SizeDelta: {x: 144.7616, y: 21.98095}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8204495650292501562
 CanvasRenderer:
@@ -876,7 +876,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: f27c689b2b4b84a30894fa203dbfc206, type: 3}
-    m_FontSize: 36
+    m_FontSize: 26
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0
@@ -930,7 +930,7 @@ RectTransform:
   m_GameObject: {fileID: 7555287952324459941}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.7, y: 0.7, z: 1}
+  m_LocalScale: {x: 0.9, y: 0.9, z: 1}
   m_Children:
   - {fileID: 2172916383774856636}
   m_Father: {fileID: 4175649081920728508}

@@ -78,17 +78,15 @@ namespace UI
         #region Private Function
         private void DisplayCard()
         {
-            // space number is cards.length - 1
+            // space number is cards num on deck - 1
             // the while length of the display board is the lastPosition.x - firstPositon.x
-            float space = (lastTrans.position.x - firstTrans.position.x) / (cards.Length - 1);
+            int numOfCardsOnDeck = 2;
+            float space = (lastTrans.position.x - firstTrans.position.x) / (numOfCardsOnDeck - 1);
 
-            for (int i = 0; i < cards.Length; i++)
+            for (int i = 0; i < numOfCardsOnDeck; i++)
             {
                 // Display "Card UI Object" with the same distance
-                GameObject newCard = Instantiate(cards[i], new Vector2(firstTrans.position.x + space * i, firstTrans.position.y), Quaternion.identity);
-                //newCard.transform.rotation = Quaternion.Euler(90, 0, 0);
-                // Card newCard1 = new Card();
-                // newCard1 = myDecks.GetCard(cards[i].name);
+                GameObject newCard = Instantiate(cards[Random.Range(0,6)], new Vector2(firstTrans.position.x + space * i, firstTrans.position.y), Quaternion.identity);
 
                 //attch to worldCanvas as the parent each GameObject [card]
                 newCard.transform.SetParent(worldCanvasTrans);

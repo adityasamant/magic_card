@@ -45359,7 +45359,11 @@ MonoBehaviour:
   lastTrans: {fileID: 1055120093}
   cards:
   - {fileID: 3431968541644986710, guid: 74262e1bc672841b7b02ca68c9c21fb8, type: 3}
-  - {fileID: 1099341756364708101, guid: f8f8bdabee2484b74be9abaf6bfbd392, type: 3}
+  - {fileID: 2249589414626454932, guid: c273f87b8a5f84b9abf4749d46a8df4d, type: 3}
+  - {fileID: 431996248537899713, guid: fde3ea5ca2b57471f9e8dc18ebdb4a66, type: 3}
+  - {fileID: 7232592173817450384, guid: eed9ce0ebd9a940e1823fb6f3f728ca1, type: 3}
+  - {fileID: 3946518951357038833, guid: 55cbf4af7ab9b490eaee434e324b21fd, type: 3}
+  - {fileID: 8183784029698114025, guid: e24054a16e97d4dc797dcf126c6be210, type: 3}
   worldCanvasTrans: {fileID: 917912480}
 --- !u!1 &1833388920
 GameObject:

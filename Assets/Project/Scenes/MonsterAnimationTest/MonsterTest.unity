@@ -2572,6 +2572,7 @@ MonoBehaviour:
   OriginalMat: {fileID: 7299490680678563896, guid: 64fdea210119772468c099babb23e4dc,
     type: 3}
   NewMat: {fileID: 2100000, guid: be80f2adcc0614b499fcf8429a9b2a36, type: 2}
+  HexMap: {fileID: 69550639}
 --- !u!4 &69550641
 Transform:
   m_ObjectHideFlags: 0
@@ -9434,6 +9435,7 @@ MonoBehaviour:
   selected: 
   selectedGameObject: {fileID: 0}
   trigger: 0
+  world: {fileID: 0}
 --- !u!120 &411930653
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -9544,6 +9546,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   controller: {fileID: 757863873}
   hitPoint: {x: 0, y: 0, z: 0}
+  hoverColor: {r: 1, g: 0, b: 0, a: 1}
+  highlighter: {fileID: 0}
   beamLine: {fileID: 411930653}
 --- !u!1 &412067011
 GameObject:
@@ -25369,7 +25373,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &976979063
 RectTransform:
   m_ObjectHideFlags: 0

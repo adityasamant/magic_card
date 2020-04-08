@@ -26507,6 +26507,7 @@ MonoBehaviour:
   OriginalMat: {fileID: 7299490680678563896, guid: 64fdea210119772468c099babb23e4dc,
     type: 3}
   NewMat: {fileID: 2100000, guid: be80f2adcc0614b499fcf8429a9b2a36, type: 2}
+  HexMap: {fileID: 1013766373}
 --- !u!4 &1013766375
 Transform:
   m_ObjectHideFlags: 0
@@ -52674,7 +52675,7 @@ Transform:
   m_GameObject: {fileID: 9065789036826987884}
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 0.01, z: 1}
   m_Children: []
   m_Father: {fileID: 3763624983895936147}
   m_RootOrder: 0

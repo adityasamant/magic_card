@@ -1,11 +1,11 @@
 fileFormatVersion: 2
-guid: 4243681d34f8c46a6a1de5448e7a74ce
+guid: 25823275b42ad4ddab93a41451339821
 ModelImporter:
   serializedVersion: 26
   internalIDToNameTable:
   - first:
       74: -203655887218126122
-    second: Idle
+    second: Standing Idle
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -35,7 +35,7 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Idle
+      name: Standing Idle
       takeName: mixamo.com
       internalID: 0
       firstFrame: 0
@@ -46,8 +46,8 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 1
-      loopBlend: 1
+      loopTime: 0
+      loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
       loopBlendPositionXZ: 0

@@ -34,15 +34,19 @@ namespace Monsters
         {
             if (button == MLInputControllerButton.Bumper)
             {
-                //monster_erica.Move(154);
-                monster_erica.DoubleShot(monster_brute, 4);
+                
+                monster_erica.Move(181);
+                //monster_erica.Move(180);
+               //monster_erica.Move(179);
+                //monster_erica.DoubleShot(monster_brute, 4);
             }
             if (button == MLInputControllerButton.HomeTap)
             {
                 //monster_jolleen.Attack(monster0, 4);
-                monster_jolleen.Attack(monster_erica, 4);
+                //monster_jolleen.Attack(monster_erica, 4);
                 //monster0.Attack(monster_jolleen, 4);
                 //monster_erica.Attack(monster_brute, 4);
+                monster_brute.Move(180);
             }
         }
     }

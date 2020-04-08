@@ -112,6 +112,7 @@ namespace GameLogic
             Event_ScanFinished.AddListener(ScanFinishedInvoke);
 
             PlayedCard += PlayedCardInvoked;
+            PlayerEnd += PlayerEndInvoked;
 
             ControllerManager.ClickOnCard += ClickOnCardInvoked;
             ControllerManager.ClickOnHex += ClickOnHexInvoked;
@@ -211,6 +212,10 @@ namespace GameLogic
                 PlayedCardName=myCardDataBase.GetRandomCard().CardName;
                 CardUIManager.HideCardUI();
                 Debug.Log("Now Player want to use " + PlayedCardName);
+                if(networkPlayer)
+                {
+                    networkPlayer.Send_ClickOnCard(CardName);
+                }
                 myState = PlayerStates.Confirm_Phase;
                 //Debug.LogFormat("Now Player want to use {0}, ATK: {1}, HP: {2}, SPEED: {3}, SPECIAL EFFECT: {4}", PlayedCardName.CardName, PlayedCardName.Attack, PlayedCardName.HP, PlayedCardName.Speed, PlayedCardName.SpecialEffect);
             }
@@ -226,7 +231,23 @@ namespace GameLogic
             if(myState == PlayerStates.Confirm_Phase)
             {
                 targetHexId = HexTileID;
+                if(networkPlayer)
+                {
+                    networkPlayer.Send_ClickOnHex(HexTileID);
+                }
                 myState = PlayerStates.Spawn_Phase;
+            }
+            return;
+        }
+        /// <summary>
+        /// Invoke when Player turn End
+        /// </summary>
+        /// <param name="PlayerId">The Player Index</param>
+        private void PlayerEndInvoked(int PlayerId)
+        {
+            if(networkPlayer)
+            {
+                networkPlayer.Send_PlayerTurnEnd(PlayerId);
             }
             return;
         }
@@ -243,6 +264,10 @@ namespace GameLogic
         private void PlayedCardInvoked(int PlayerId, int CardIndex, int HexIndex)
         {
             Debug.LogFormat("Player {0} playing card {1} in hex {2}", PlayerId, CardIndex, HexIndex);
+            if(networkPlayer)
+            {
+                networkPlayer.Send_PlayCard(PlayerId, CardIndex, HexIndex);
+            }
             return;
         }
         #endregion

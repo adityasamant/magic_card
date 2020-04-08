@@ -33,8 +33,7 @@ namespace GameLogic
     public enum GameMode
     {
         Offline_Mode,
-        Online_Mode_Server,
-        Online_Mode_Client
+        Online_Mode
     }
 
     public class GameGlobalState
@@ -97,6 +96,15 @@ namespace GameLogic
         [Tooltip("A link to the Card Database")]
         public GetCardInstruction CardDataBase;
 
+        /// <summary>
+        /// A Reference to Multiplayer GameManager
+        /// </summary>
+        public MultiplayerGameManager multiplayerGameManager;
+
+        /// <summary>
+        /// Public Interface to get the GameState
+        /// </summary>
+        public GameStates CurrentState { get { return currentState; } }
         #endregion
 
         #region Private Variable
@@ -182,46 +190,44 @@ namespace GameLogic
             int winner = -1;
             switch (currentState)
             {
-                case GameStates.Init:
-                    ChangeState(GameStates.Wait_For_Mode_Selection);
+                case GameStates.Init: //Wait Until 2Players Join the game
+                    //ChangeState(GameStates.Wait_For_Mode_Selection);
                     break;
                 case GameStates.Wait_For_Mode_Selection: // TODO: let user select mode.
-                    currentMode = GameMode.Offline_Mode;
+                    currentMode = GameMode.Online_Mode;
                     ScanMeshObject.SetActive(true);
                     ScanMesh.ScanFinished += ScanFinshedUpdate;
                     ChangeState(GameStates.Wait_For_Map_Scan);
-                    Debug.Log("Offline Mode.");
+                    break;
+                case GameStates.Wait_For_Map_Scan:
                     break;
                 case GameStates.Online_Only_Wait_For_Connection: // TODO: add online wait for connection
                     Debug.LogError("Error! Online mode hasn't implemented yet.");
                     ChangeState(GameStates.Error);
                     break;
                 case GameStates.Game_Begin:
-                    if (nowTime - stateBeginTime > 3)
-                    {
-                        gameGlobalState.Reset();
-                        //ChangeState(GameStates.UpKeepStep);
-                        bWaitForDice = false;
-                        ChangeState(GameStates.ChooseFirstPlayer);
-                    }
+                    gameGlobalState.Reset();
+                    ChangeState(GameStates.ChooseFirstPlayer);
                     break;
                 case GameStates.ChooseFirstPlayer:
-                    if(!bWaitForDice)
-                    {
-                        bWaitForDice = true;
-                        DiceObject.SetActive(true);
-                        DiceInstant.ResetPosition(DiceObject.transform.position + new Vector3(0, 1, 0));
-                        DiceInstant.Dice_stop += DiceStopHandle;
-                    }
+                    //if(!bWaitForDice)
+                    //{
+                    //    bWaitForDice = true;
+                    //    DiceObject.SetActive(true);
+                    //    DiceInstant.ResetPosition(DiceObject.transform.position + new Vector3(0, 1, 0));
+                    //    DiceInstant.Dice_stop += DiceStopHandle;
+                    //}
+                    bPlayer0First = multiplayerGameManager.GetLocalPlayerGoFirst();
+                    ChangeState(GameStates.UpKeepStep);
                     break;
                 case GameStates.UpKeepStep:
-                    if(nowTime-stateBeginTime>3)
+                    if(nowTime-stateBeginTime>0.5)
                     {
                         world.Event_ResetStart.Invoke();
                     }
                     break;
                 case GameStates.Turn_Begin:
-                    if (nowTime - stateBeginTime > 2)
+                    if (nowTime - stateBeginTime > 0.5)
                     {
                         if(bPlayer0First==true)
                         {
@@ -243,12 +249,13 @@ namespace GameLogic
                 case GameStates.Player_Turn_Begin:
                     if (playerTurnList.Count == 0) // all players' turn is over. 
                         ChangeState(GameStates.Battle_Begin);
-                    if (nowTime - stateBeginTime > 1)
+                    if (nowTime - stateBeginTime > 0.5)
                     {
                         Player currentPlayer = playerTurnList[0];
                         playerTurnList.Remove(currentPlayer);
                         currentPlayerId = currentPlayer.PlayerId;
                         currentPlayer.Event_PlayerTurnStart.Invoke();
+
                         ChangeState(GameStates.Wait_For_Player_Turn);
                     }
                     break ;
@@ -306,6 +313,8 @@ namespace GameLogic
             Debug.Log("ScanFinished");
             List<int> path = new List<int>();
             Player0.Event_ScanFinished.Invoke();
+            multiplayerGameManager.ScanFinishedEvent.Invoke();
+
             if(currentState == GameStates.Wait_For_Map_Scan)
             {
                 if (currentMode == GameMode.Offline_Mode)
@@ -316,10 +325,50 @@ namespace GameLogic
                 else
                     ChangeState(GameStates.Online_Only_Wait_For_Connection);
             }
+
             return;
         }
-   
+
+        #region Public Function
+        /// <summary>
+        /// Set up multiplayer game manager delegate interface
+        /// Invoke by MultiplayerGameManager
+        /// </summary>
+        public void SetUpMultiplayerInterface()
+        {
+            multiplayerGameManager.FinishInit += MultiplayerGameManager_FinishInitInvoked;
+            multiplayerGameManager.AllPlayerFinishScanning += MultiplayerGameManager_AllPlayerFinishScanning;
+
+        }
+        #endregion
+
         #region Delegate Handler
+        /// <summary>
+        /// When receive the FinishInit Delegate from MultiplayerGameManager
+        /// Game State goto Game_Begin
+        /// </summary>
+        private void MultiplayerGameManager_FinishInitInvoked()
+        {
+            if(currentState==GameStates.Init)
+            {
+                ChangeState(GameStates.Wait_For_Mode_Selection);
+            }
+            return;
+        }
+
+        /// <summary>
+        /// When receive the FinishInit Delegate from MultiplayerGameManager
+        /// Game State goto Game_Begin
+        /// </summary>
+        private void MultiplayerGameManager_AllPlayerFinishScanning()
+        {
+            if (currentState == GameStates.Online_Only_Wait_For_Connection)
+            {
+                ChangeState(GameStates.Game_Begin);
+            }
+            return;
+        }
+
         /// <summary>
         /// Invoke when Player Turn Ended.
         /// </summary>
@@ -358,25 +407,25 @@ namespace GameLogic
             Debug.Log("WorldResetFinished");
             ChangeState(GameStates.Turn_Begin);
         }
-        ///<summary>
-        /// Dice Handle
-        ///</summary>
-        void DiceStopHandle()
-        {
-            if(currentState==GameStates.ChooseFirstPlayer)
-            {
-                if(DiceInstant.GetDiceCount()<=3)
-                {
-                    bPlayer0First = true;
-                }
-                else
-                {
-                    bPlayer0First = false;
-                }
-                ChangeState(GameStates.UpKeepStep);
-            }
-            return;
-        }
+        /////<summary>
+        ///// Dice Handle
+        /////</summary>
+        //void DiceStopHandle()
+        //{
+        //    if(currentState==GameStates.ChooseFirstPlayer)
+        //    {
+        //        if(DiceInstant.GetDiceCount()<=3)
+        //        {
+        //            bPlayer0First = true;
+        //        }
+        //        else
+        //        {
+        //            bPlayer0First = false;
+        //        }
+        //        ChangeState(GameStates.UpKeepStep);
+        //    }
+        //    return;
+        //}
 
         /// <summary>
         /// Deal the monster spwan when player played card.

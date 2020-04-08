@@ -11,7 +11,7 @@ namespace Project_Network
     /// This class lives together with Bolt and is destroyed when Bolt is shut down.
     /// </summary>
     [BoltGlobalBehaviour(BoltNetworkModes.Server)]
-    public class ServerCallback : MonoBehaviour
+    public class ServerCallback : GlobalEventListener
     {
         #region Static Variable
         /// <summary>
@@ -70,6 +70,14 @@ namespace Project_Network
                 timeStampEvent.TimeStamp = _timeStamp;
                 timeStampEvent.Send();
             }
+        }
+        #endregion
+
+        #region Bolt Function
+        public override void SceneLoadLocalDone(string scene)
+        {
+            base.SceneLoadLocalDone(scene);
+            BoltNetwork.Instantiate(BoltPrefabs.NetworkGameManager);
         }
         #endregion
     }

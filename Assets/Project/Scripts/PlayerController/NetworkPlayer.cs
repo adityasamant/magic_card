@@ -24,11 +24,6 @@ namespace GameLogic
     /// <param name="HexIndex">HexTile Id</param>
     public delegate void Network_PlayCard(int PlayerId, int CardIndex, int HexIndex);
     /// <summary>
-    /// Global Event, Send only from server
-    /// </summary>
-    /// <param name="PlayerId">The Active Player Id</param>
-    public delegate void Network_PlayerTurnStart(int PlayerId);
-    /// <summary>
     /// Invoke when receive a Network PlayerTurnEnd Event
     /// </summary>
     /// <param name="PlayerId">The Index of the comming player</param>
@@ -178,6 +173,39 @@ namespace GameLogic
             {
                 var newEvent = ClickOnHex.Create(entity);
                 newEvent.HexTileID = HexTileID;
+                newEvent.Send();
+            }
+        }
+
+        /// <summary>
+        /// Send PlayCard Event to other player
+        /// Only Owner allow to send this event
+        /// </summary>
+        /// <param name="PlayerId">Player Index, Integer</param>
+        /// <param name="CardIndex">Card Index, Interger</param>
+        /// <param name="HexIndex">Hex Index, Interger</param>
+        public void Send_PlayCard(int PlayerId, int CardIndex, int HexIndex)
+        {
+            if(entity.IsOwner)
+            {
+                var newEvent = PlayCard.Create(entity);
+                newEvent.PlayerId = PlayerId;
+                newEvent.CardIndex = CardIndex;
+                newEvent.HexIndex = HexIndex;
+            }
+        }
+
+        /// <summary>
+        /// Send PlayerTurnEnd Event to other player
+        /// Only Owner allow to send event
+        /// </summary>
+        /// <param name="PlayerId"></param>
+        public void Send_PlayerTurnEnd(int PlayerId)
+        {
+            if(entity.IsOwner)
+            {
+                var newEvent = PlayerTurnEnd.Create(entity);
+                newEvent.PlayerId = PlayerId;
                 newEvent.Send();
             }
         }

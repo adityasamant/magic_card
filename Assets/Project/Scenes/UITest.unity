@@ -3141,7 +3141,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &118174140
 Transform:
   m_ObjectHideFlags: 0
@@ -3154,7 +3154,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1476486619}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &118174141
 MonoBehaviour:
@@ -12779,7 +12779,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1476486619}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &546041113
 MonoBehaviour:
@@ -12804,6 +12804,7 @@ MonoBehaviour:
       m_Calls: []
   PlayerId: 0
   world: {fileID: 946620730}
+  networkPlayer: {fileID: 0}
   myCardDataBase: {fileID: 1434865760}
   HexMap: {fileID: 1013766375}
   MainCamera: {fileID: 836333947}
@@ -12999,7 +13000,7 @@ Transform:
   - {fileID: 468235952}
   - {fileID: 1051741246}
   m_Father: {fileID: 1476486619}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &558412827
 GameObject:
@@ -17509,62 +17510,6 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
---- !u!1 &702833974
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 702833976}
-  - component: {fileID: 702833975}
-  m_Layer: 0
-  m_Name: Player1
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &702833975
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 702833974}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f110bb5769469dc47aa4f71297330b2d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Event_ScanFinished:
-    m_PersistentCalls:
-      m_Calls: []
-  Event_PlayerTurnStart:
-    m_PersistentCalls:
-      m_Calls: []
-  Event_Battle_PlayerTurnStart:
-    m_PersistentCalls:
-      m_Calls: []
-  PlayerId: 1
-  world: {fileID: 0}
-  myCardDataBase: {fileID: 1925191620}
-  HexMap: {fileID: 1013766375}
---- !u!4 &702833976
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 702833974}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1476486619}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &703630445
 GameObject:
   m_ObjectHideFlags: 0
@@ -17594,7 +17539,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1476486619}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &703630447
 MonoBehaviour:
@@ -24256,7 +24201,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1476486619}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &946620730
 MonoBehaviour:
@@ -26056,7 +26001,7 @@ Transform:
   m_Children:
   - {fileID: 1572913795}
   m_Father: {fileID: 1476486619}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1002117716
 MonoBehaviour:
@@ -29152,7 +29097,7 @@ MonoBehaviour:
   ScanMesh: {fileID: 1392881134}
   ScanMeshObject: {fileID: 1392881133}
   Player0: {fileID: 546041113}
-  Player1: {fileID: 702833975}
+  Player1: {fileID: 0}
   world: {fileID: 946620730}
   PlayerTurnTimeLimited: 30
   DicePrefab: {fileID: 100000, guid: 8579f10578058c04f917e8d30bac7ccf, type: 3}
@@ -31075,7 +31020,7 @@ Transform:
   - {fileID: 1107803198}
   - {fileID: 836711799}
   m_Father: {fileID: 1476486619}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1236594255
 GameObject:
@@ -35789,7 +35734,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1476486619}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1434865760
 MonoBehaviour:
@@ -37400,7 +37345,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1128183241}
-  - {fileID: 702833976}
   - {fileID: 946620729}
   - {fileID: 703630446}
   - {fileID: 553181996}
@@ -47619,7 +47563,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1476486619}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1925191620
 MonoBehaviour:

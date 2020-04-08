@@ -879,6 +879,24 @@
       "Groups": [
         "PlayerEvent"
       ]
+    },
+    {
+      "$type": "Bolt.Compiler.EventDefinition, bolt.compiler",
+      "Properties": [],
+      "Name": "LoginEvent",
+      "Guid": "28d2e1df-71a4-42ee-8847-1ca1e3ad7c29",
+      "Groups": [
+        "MagicLeapCard"
+      ]
+    },
+    {
+      "$type": "Bolt.Compiler.EventDefinition, bolt.compiler",
+      "Properties": [],
+      "Name": "FinishScan",
+      "Guid": "50238cf5-72ca-4d56-a027-9b6f35ceced1",
+      "Groups": [
+        "MagicLeapCard"
+      ]
     }
   ],
   "ActiveGroup": "MagicLeapCard"

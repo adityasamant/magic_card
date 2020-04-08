@@ -5755,7 +5755,6 @@ Transform:
   - {fileID: 800370474}
   - {fileID: 1947997125}
   - {fileID: 1783986429}
-  - {fileID: 303184676}
   - {fileID: 487058247}
   - {fileID: 1105085332}
   - {fileID: 293844373}
@@ -7275,7 +7274,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 224873124}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &293844374
 MonoBehaviour:
@@ -7601,72 +7600,6 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
---- !u!1 &303184675
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 303184676}
-  - component: {fileID: 303184677}
-  m_Layer: 0
-  m_Name: FakePlayer0
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &303184676
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 303184675}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 1540231712}
-  m_Father: {fileID: 224873124}
-  m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &303184677
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 303184675}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e44912531b27beb4290a928b94ed43ec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Event_ScanFinished:
-    m_PersistentCalls:
-      m_Calls: []
-  Event_PlayerTurnStart:
-    m_PersistentCalls:
-      m_Calls: []
-  Event_Battle_PlayerTurnStart:
-    m_PersistentCalls:
-      m_Calls: []
-  PlayerId: 0
-  world: {fileID: 1257198278}
-  MonsterPreviewField: {fileID: 0}
-  myCardDataBase: {fileID: 1947997124}
-  NumberOfCard: {fileID: 0}
-  CardInfo: {fileID: 0}
-  myHandTrackerObject: {fileID: 1540231711}
-  myHandTracker: {fileID: 1540231713}
-  Instructions: {fileID: 0}
-  HexMap: {fileID: 465594583}
-  MainCamera: {fileID: 0}
-  ControllerManager: {fileID: 1176881216}
-  CardUIManager: {fileID: 734898087}
 --- !u!1 &310146715
 GameObject:
   m_ObjectHideFlags: 0
@@ -10264,7 +10197,7 @@ Transform:
   - {fileID: 1426720743}
   - {fileID: 1176881217}
   m_Father: {fileID: 224873124}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &502833131
 PrefabInstance:
@@ -25692,7 +25625,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 224873124}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1106615254
 GameObject:
@@ -35788,64 +35721,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1540231711
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1540231712}
-  - component: {fileID: 1540231713}
-  m_Layer: 0
-  m_Name: PlayerHandTracker
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &1540231712
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1540231711}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 303184676}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1540231713
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1540231711}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97fc6ffc85d4a2d409955c30edb7640e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Event_enableOKtracked:
-    m_PersistentCalls:
-      m_Calls: []
-  Event_enableOpenHandtracked:
-    m_PersistentCalls:
-      m_Calls: []
-  Event_enableFistTracked:
-    m_PersistentCalls:
-      m_Calls: []
-  Event_disableAllTracked:
-    m_PersistentCalls:
-      m_Calls: []
-  _keyPointFilterLevel: 0
-  _PoseFilterLevel: 2
-  bRightHand: 1
 --- !u!1 &1544013026
 GameObject:
   m_ObjectHideFlags: 0

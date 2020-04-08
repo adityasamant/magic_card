@@ -131,16 +131,16 @@ namespace GameLogic
             switch (myState)
             {
                 case (PlayerStates.Init):
-                    Debug.Log("PlayerStates=Init");
+                    //Debug.Log("PlayerStates=Init");
                     break;
                 case (PlayerStates.WaitForStart): //Wait Event From Main Logic
-                    Debug.Log("PlayerStates=WaitForStart");
+                    //Debug.Log("PlayerStates=WaitForStart");
                     break;
                 case (PlayerStates.ImageTrackingStart):
                     myState = PlayerStates.Main_Phase;
                     break;
                 case (PlayerStates.Main_Phase): // Wait For Hand Event From Hand Tracker
-                    Debug.Log("PlayerStates=Main_Phase");
+                    //Debug.Log("PlayerStates=Main_Phase");
                     Debug.Log("Now is your turn, Main-Phase.Please choose a card.");
                     if (myCardDataBase)
                     {

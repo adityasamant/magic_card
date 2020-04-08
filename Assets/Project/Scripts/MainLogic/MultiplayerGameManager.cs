@@ -92,7 +92,7 @@ namespace GameLogic
             }
             else
             {
-                state.NumberOfPlayer += 1;
+                Send_LoginEvent();
             }
         }
         #endregion
@@ -146,6 +146,24 @@ namespace GameLogic
             }
             return false;
         }
+
+        /// <summary>
+        /// Send Login event to server
+        /// </summary>
+        public void Send_LoginEvent()
+        {
+            var newEvnt = LoginEvent.Create(entity);
+            newEvnt.Send();
+        }
+
+        /// <summary>
+        /// Send FinishScan to Server
+        /// </summary>
+        public void Send_FinishScan()
+        {
+            var newEvnt = FinishScan.Create(entity);
+            newEvnt.Send();
+        }
         #endregion
 
         #region Event Handle
@@ -154,7 +172,25 @@ namespace GameLogic
         /// </summary>
         private void ScanFinishedEvent_Invoked()
         {
-            state.NumberOfPlayerFinishedScan++;
+            Send_FinishScan();
+        }
+
+        public override void OnEvent(LoginEvent evnt)
+        {
+            base.OnEvent(evnt);
+            if(entity.IsOwner)
+            {
+                state.NumberOfPlayer++;
+            }
+        }
+
+        public override void OnEvent(FinishScan evnt)
+        {
+            base.OnEvent(evnt);
+            if(entity.IsOwner)
+            {
+                state.NumberOfPlayerFinishedScan++;
+            }
         }
         #endregion
     }

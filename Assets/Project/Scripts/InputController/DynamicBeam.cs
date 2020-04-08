@@ -30,15 +30,13 @@ namespace InputController
             transform.rotation = controller.transform.rotation;
             RaycastHit hit;
 
-            if (true || Physics.Raycast(transform.position, transform.forward, out hit))
+            if (Physics.Raycast(transform.position, transform.forward, out hit))
             {
                 beamLine.useWorldSpace = true;
                 beamLine.SetPosition(0, controller.transform.position);
-                beamLine.SetPosition(1, transform.position + transform.forward * 5);
-                if(Physics.Raycast(transform.position, transform.forward, out hit)){
-                    hitPoint = hit.point;
-                    OnHover(hit);
-                }
+                beamLine.SetPosition(1, hit.point);
+                hitPoint = hit.point;
+                OnHover(hit);
             }
 
         }

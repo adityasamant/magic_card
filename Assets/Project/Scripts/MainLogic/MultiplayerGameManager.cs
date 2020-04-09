@@ -161,8 +161,11 @@ namespace GameLogic
         /// </summary>
         public void Send_FinishScan()
         {
-            var newEvnt = FinishScan.Create(entity);
-            newEvnt.Send();
+            if(entity.IsOwner)
+            {
+                var newEvnt = FinishScan.Create(entity);
+                newEvnt.Send();
+            }
         }
         #endregion
 

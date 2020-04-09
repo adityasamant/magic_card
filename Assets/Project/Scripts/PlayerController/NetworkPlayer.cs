@@ -96,6 +96,19 @@ namespace GameLogic
 
             state.AddCallback("PlayerId", PlayerIdChange);
         }
+
+        /// <summary>
+        /// Unity Start Function
+        /// Init the Delegate callback
+        /// </summary>
+        private void Start()
+        {
+            Network_ClickOnCard += Network_ClickonCardInvoked;
+            Network_ClickOnHex += Network_ClickonHexInvoked;
+            Network_PlayCard += Network_PlayCardInvoked;
+            Network_PlayerTurnEnd += Network_PlayerTurnEndInvoked;
+
+        }
         #endregion
 
         #region Event Callback
@@ -208,6 +221,40 @@ namespace GameLogic
                 newEvent.PlayerId = PlayerId;
                 newEvent.Send();
             }
+        }
+        #endregion
+
+        #region Event Handle
+        /// <summary>
+        /// Private Handle the ClickOnCard Event
+        /// </summary>
+        private void Network_ClickonCardInvoked(string CardName)
+        {
+            Debug.LogFormat("NetworkPlayer: Click On Card Invoked, CardName={0}", CardName);
+        }
+
+        /// <summary>
+        /// Private Handle the ClickOnHex Event
+        /// </summary>
+        private void Network_ClickonHexInvoked(int HexIndex)
+        {
+            Debug.LogFormat("NetworkPlayer: Click On Card Invoked, HexIndex={0}", HexIndex);
+        }
+
+        /// <summary>
+        /// Private Handle the PlayCard Event
+        /// </summary>
+        private void Network_PlayCardInvoked(int PlayerId, int CardIndex, int HexIndex)
+        {
+            Debug.LogFormat("NetworkPlayer: Play Card Invoked, PlayerId={0}, CardIndex={1}, HexIndex={2}", PlayerId, CardIndex, HexIndex);
+        }
+
+        /// <summary>
+        /// Private Handle the PlayerTurnEnd Event
+        /// </summary>
+        private void Network_PlayerTurnEndInvoked(int PlayerId)
+        {
+            Debug.LogFormat("NetworkPlayer: Player Turn End Invoked, PlayerId={0}", PlayerId);
         }
         #endregion
     }

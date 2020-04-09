@@ -113,7 +113,7 @@ namespace GameLogic
         public override void OnEvent(ClickOnCard evnt)
         {
             base.OnEvent(evnt);
-            this.Network_ClickOnCard.Invoke(evnt.CardName);
+            this.Network_ClickOnCard(evnt.CardName);
         }
         /// <summary>
         /// Receive Network event from remote player and sent to local player
@@ -122,7 +122,7 @@ namespace GameLogic
         public override void OnEvent(ClickOnHex evnt)
         {
             base.OnEvent(evnt);
-            this.Network_ClickOnHex.Invoke(evnt.HexTileID);
+            this.Network_ClickOnHex(evnt.HexTileID);
         }
         /// <summary>
         /// Receive Network event from remote player and sent to local player
@@ -132,7 +132,7 @@ namespace GameLogic
         {
             base.OnEvent(evnt);
             if (evnt.PlayerId != state.PlayerId) return;
-            this.Network_PlayCard.Invoke(evnt.PlayerId, evnt.CardIndex, evnt.HexIndex);
+            this.Network_PlayCard(evnt.PlayerId, evnt.CardIndex, evnt.HexIndex);
         }
         /// <summary>
         /// Receive Network event from remote player and sent to local player
@@ -142,7 +142,7 @@ namespace GameLogic
         {
             base.OnEvent(evnt);
             if (evnt.PlayerId != state.PlayerId) return;
-            this.Network_PlayerTurnEnd.Invoke(evnt.PlayerId);
+            this.Network_PlayerTurnEnd(evnt.PlayerId);
         }
         #endregion
 

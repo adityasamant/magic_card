@@ -202,8 +202,8 @@ namespace GameLogic
                 case GameStates.Wait_For_Map_Scan:
                     break;
                 case GameStates.Online_Only_Wait_For_Connection: // TODO: add online wait for connection
-                    Debug.LogError("Error! Online mode hasn't implemented yet.");
-                    ChangeState(GameStates.Error);
+                    //Debug.LogError("Error! Online mode hasn't implemented yet.");
+                    //ChangeState(GameStates.Error);
                     break;
                 case GameStates.Game_Begin:
                     gameGlobalState.Reset();
@@ -362,6 +362,7 @@ namespace GameLogic
         /// </summary>
         private void MultiplayerGameManager_AllPlayerFinishScanning()
         {
+            Debug.Log("Receive all PlayerFinished");
             if (currentState == GameStates.Online_Only_Wait_For_Connection)
             {
                 ChangeState(GameStates.Game_Begin);

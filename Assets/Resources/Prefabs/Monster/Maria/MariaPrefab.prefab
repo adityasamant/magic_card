@@ -1,5 +1,33 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &5123583652847285127
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7931606826205471912}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e4d2fc41ab9d1a4ebce545cdaad4cde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HP: 10
+  ATK: 10
+  SPD: 10
+  monsterOwner: {fileID: 0}
+  monsterName: Maria
+  HexIndex: 13
+  isAlive: 1
+  isExiled: 0
+  world: {fileID: 0}
+  MonsterStartTurn:
+    m_PersistentCalls:
+      m_Calls: []
+  MonsterStateUpdate:
+    m_PersistentCalls:
+      m_Calls: []
+  is_defensed: 0
 --- !u!1001 &3829421450706788395
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -80,3 +108,9 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 992212043903808128, guid: e87186b6d42014441bfade14bd600aa7, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: e87186b6d42014441bfade14bd600aa7, type: 3}
+--- !u!1 &7931606826205471912 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6572560448785859715, guid: e87186b6d42014441bfade14bd600aa7,
+    type: 3}
+  m_PrefabInstance: {fileID: 3829421450706788395}
+  m_PrefabAsset: {fileID: 0}

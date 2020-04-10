@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI
 {
@@ -8,18 +9,13 @@ namespace UI
     {
         #region Public Property
         /// <summary>
-        /// Reference of CardInfo Reader
-        /// </summary>
-        [Tooltip("Reference of CardInfo Reader")]
-        //public CardDB myDecks;
-        /// <summary>
         /// First Card Position
         /// </summary>
-        public Transform firstTrans;
+        public Vector3 firstTrans;
         /// <summary>
         /// Last Card Position
         /// </summary>
-        public Transform lastTrans;
+        public Vector3 lastTrans;
         /// <summary>
         /// All Card prefabs (Deck)
         /// </summary>
@@ -28,70 +24,129 @@ namespace UI
         /// Container Canvas
         /// </summary>
         public Transform worldCanvasTrans;
+        /// <summary>
+        /// Is card displayed on UICanvas or not
+        /// </summary>
+        public bool CardIsDisplayed;
+        /// <summary>
+        /// UI Canvas
+        /// </summary>
+        public GameObject UICanvas;
+        /// <summary>
+        /// Instruction UI
+        /// </summary>
+        public Text InstructionUI;
+        /// <summary>
+        /// Card UI
+        /// </summary>
+        public GameObject CardUI;
         #endregion
 
-        #region Public Variable
-        /// <summary>
-        /// Card UI Canvas
-        /// </summary>
-        private GameObject CardUICanvas;
+        #region Private Variable
         #endregion
 
         #region Unity Function
         private void Start()
         {
-            DisplayCard();
-            CardUICanvas = GameObject.Find("CardCanvas");
-            HideCardUI();
+            CardIsDisplayed = false;
+            firstTrans = new Vector3(-0.25f, 0, 0);
+            lastTrans = new Vector3(0.25f, 0, 0);
+            HideUICanvas();
         }
         #endregion
 
         #region Public Function
         /// <summary>
-        /// Hide Card UI.
+        /// Hide UI.
         /// </summary>
         /// <param name=""></param>
-        public void HideCardUI()
+        public void HideUICanvas()
         {
-            // CanvasGroup cg = GameObject.Find("CardCanvas").GetComponent<CanvasGroup>();
-            // cg.alpha = 0f; //this makes everything transparent
-            // cg.blocksRaycasts = true; //this prevents the UI element to receive input events
-            // cg.interactable= false;
-            CardUICanvas.SetActive(false);
+            if (UICanvas.activeSelf)
+            {
+                UICanvas.SetActive(false);
+            }
             return;
         }
+
         /// <summary>
-        /// Show Card UI.
+        /// Show UI.
         /// </summary>
         /// <param name=""></param>
-        public void ShowCardUI()
+        public void ShowUICanvas()
         {
-            // CanvasGroup cg = GameObject.Find("CardCanvas").GetComponent<CanvasGroup>();
-            // cg.alpha = 1f;
-            // cg.blocksRaycasts = false;
-            // cg.interactable= true;
-            CardUICanvas.SetActive(true);
+            if (!UICanvas.activeSelf)
+            {
+                UICanvas.SetActive(true);
+            }
             return;
+        }
+
+        /// <summary>
+        /// Clear everything on CardUI.
+        /// </summary>
+        /// <param name=""></param>
+        public void ClearCardUI()
+        {
+            foreach (Transform child in CardUI.transform)
+            {
+                GameObject.Destroy(child.gameObject);
+            }
+            CardIsDisplayed = false;
+        }
+
+        /// <summary>
+        /// Clear everything on InstructionUI.
+        /// </summary>
+        /// <param name=""></param>
+        public void ClearInstructionUI()
+        {
+            InstructionUI.text = "";
+        }
+
+        /// <summary>
+        /// Clear everything on UICanvas.
+        /// </summary>
+        /// <param name=""></param>
+        public void ClearUICanvas()
+        {
+            foreach (Transform child in UICanvas.transform)
+            {
+                GameObject.Destroy(child.gameObject);
+            }
+            CardIsDisplayed = false;
+        }
+
+        /// <summary>
+        /// Display Cards on UICanvas.
+        /// </summary>
+        /// <param name=""></param>
+        public void DisplayCard()
+        {
+            if (CardIsDisplayed)
+                return;
+            ClearCardUI();
+            // space number is cards num on deck - 1
+            // the length of the display board is the lastPosition.x - firstPositon.x
+            int numOfCardsOnDeck = 2;
+            float space = (lastTrans.x - firstTrans.x) / (numOfCardsOnDeck - 1);
+
+            for (int i = 0; i < numOfCardsOnDeck; i++)
+            {
+                // Get one card from card deck randomly
+                GameObject newCard = Instantiate(cards[Random.Range(0, 6)]);
+
+                //attch each card to CardUI as the parent 
+                newCard.transform.SetParent(CardUI.transform);
+                newCard.transform.localScale = new Vector3(0.16f, 0.16f, 0.16f);
+                newCard.transform.localPosition = new Vector3(firstTrans.x + space * i, firstTrans.y, 0);
+                newCard.transform.localRotation = Quaternion.Euler(0, 0, 0);
+            }
+            CardIsDisplayed = true;
         }
         #endregion
 
         #region Private Function
-        private void DisplayCard()
-        {
-            // space number is cards num on deck - 1
-            // the while length of the display board is the lastPosition.x - firstPositon.x
-            int numOfCardsOnDeck = 2;
-            float space = (lastTrans.position.x - firstTrans.position.x) / (numOfCardsOnDeck - 1);
-
-            for (int i = 0; i < numOfCardsOnDeck; i++)
-            {
-                // Display "Card UI Object" with the same distance
-                GameObject newCard = Instantiate(cards[Random.Range(0,6)], new Vector2(firstTrans.position.x + space * i, firstTrans.position.y), Quaternion.identity);
-
-                //attch to worldCanvas as the parent each GameObject [card]
-                newCard.transform.SetParent(worldCanvasTrans);
-            }
-        }
         #endregion
 
 

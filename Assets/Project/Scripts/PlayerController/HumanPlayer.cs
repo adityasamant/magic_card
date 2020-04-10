@@ -19,12 +19,12 @@ namespace GameLogic
         /// <summary>
         /// myState record the states of the player
         /// </summary>
-        private PlayerStates myState=PlayerStates.Init;
+        private PlayerStates myState = PlayerStates.Init;
 
         /// <summary>
         /// Only Init when game start
         /// </summary>
-        private bool _bInit=false;
+        private bool _bInit = false;
 
         /// <summary>
         /// Remember the startTime, wait 5 seconds for MagicLeap to StartUp
@@ -84,24 +84,29 @@ namespace GameLogic
         /// </summary>
         [Tooltip("GameObject of the CardUIManager")]
         public CardUIManager CardUIManager;
+       /// <summary>
+        /// The Text box in UI show Instructions.
+        /// </summary>
+        [Tooltip("The Text box in UI show Instructions.")]
+        public Text InstructionUI;
         #endregion
 
         // Start is called before the first frame update
         public virtual void Start()
         {
-            if(_bInit)
+            if (_bInit)
             {
                 myState = PlayerStates.Init;
                 startTime = Time.time;
                 _bInit = true;
             }
             //Event Init
-            if(Event_PlayerTurnStart == null)
+            if (Event_PlayerTurnStart == null)
             {
                 Event_PlayerTurnStart = new UnityEvent();
             }
             Event_PlayerTurnStart.AddListener(PlayerTurnStartInvoke);
-            if(Event_ScanFinished==null)
+            if (Event_ScanFinished == null)
             {
                 Event_ScanFinished = new UnityEvent();
             }
@@ -127,27 +132,26 @@ namespace GameLogic
             {
                 case (PlayerStates.Init):
                     Debug.Log("PlayerStates=Init");
+                    CardUIManager.ShowUICanvas();
+                    InstructionUI.text = "Place BattleFiled";
                     break;
                 case (PlayerStates.WaitForStart): //Wait Event From Main Logic
                     Debug.Log("PlayerStates=WaitForStart");
+                    InstructionUI.text = "Wait For Start";
                     break;
-                case (PlayerStates.ImageTrackingStart):
-                    myState = PlayerStates.Main_Phase;
-                    break;
-                case (PlayerStates.Main_Phase): // Wait For Hand Event From Hand Tracker
-                    Debug.Log("PlayerStates=Main_Phase");
-                    Debug.Log("Now is your turn, Main-Phase.Please choose a card.");
+                case (PlayerStates.Main_Phase): // Wait For Click on Card
+                    //Debug.Log("PlayerStates=Main_Phase");
+                    InstructionUI.text = "Choose A Card";
                     if (myCardDataBase)
                     {
-                        CardUIManager.ShowCardUI();
+                        CardUIManager.DisplayCard();
                     }
                     break;
-                case (PlayerStates.Confirm_Phase): // Wait For Hand (OpenHand or Fist) From Hand Tracker
+                case (PlayerStates.Confirm_Phase): // Wait For Click on Hex
                     //Debug.Log("PlayerStates=Confirm_Phase");
                     break;
                 case (PlayerStates.Spawn_Phase):
                     //Debug.Log("PlayerStates=Spawn_Phase");
-                    //Spawn Actor Here
                     //Debug.Log("Now is your turn, Spawn-Phase.\n Your monster is spawning into battlefield.");
                     Debug.Log("Spawn A Charcter Name:" + PlayedCardName);
                     if (myCardDataBase)
@@ -155,9 +159,6 @@ namespace GameLogic
                         Cards myCard = myCardDataBase.GetCard(PlayedCardName);
                         PlayedCard(PlayerId, myCard.id, targetHexId);
                     }
-                    myState = PlayerStates.End;
-                    break;
-                case (PlayerStates.ImageTrackingStop):
                     myState = PlayerStates.End;
                     break;
                 case (PlayerStates.End):
@@ -178,9 +179,9 @@ namespace GameLogic
         /// </summary>
         void PlayerTurnStartInvoke()
         {
-             if(myState==PlayerStates.WaitForStart)
+            if (myState == PlayerStates.WaitForStart)
             {
-                myState = PlayerStates.ImageTrackingStart;
+                myState = PlayerStates.Main_Phase;
             }
         }
 
@@ -190,7 +191,7 @@ namespace GameLogic
         /// </summary>
         void ScanFinishedInvoke()
         {
-            if(myState==PlayerStates.Init)
+            if (myState == PlayerStates.Init)
             {
                 myState = PlayerStates.WaitForStart;
             }
@@ -202,13 +203,12 @@ namespace GameLogic
         /// <param name="CardName">The Chosen Card Name</param>
         private void ClickOnCardInvoked(string CardName)
         {
-            if(myState==PlayerStates.Main_Phase)
+            if (myState == PlayerStates.Main_Phase)
             {
-                PlayedCardName=myCardDataBase.GetRandomCard().CardName;
-                CardUIManager.HideCardUI();
-                Debug.Log("Now Player want to use " + PlayedCardName);
+                PlayedCardName = CardName;
+                CardUIManager.ClearCardUI();
+                InstructionUI.text = "Place it!";
                 myState = PlayerStates.Confirm_Phase;
-                //Debug.LogFormat("Now Player want to use {0}, ATK: {1}, HP: {2}, SPEED: {3}, SPECIAL EFFECT: {4}", PlayedCardName.CardName, PlayedCardName.Attack, PlayedCardName.HP, PlayedCardName.Speed, PlayedCardName.SpecialEffect);
             }
             return;
         }
@@ -219,7 +219,7 @@ namespace GameLogic
         /// <param name="HexTileID">The Chosen Hex ID</param>
         private void ClickOnHexInvoked(int HexTileID)
         {
-            if(myState == PlayerStates.Confirm_Phase)
+            if (myState == PlayerStates.Confirm_Phase)
             {
                 targetHexId = HexTileID;
                 myState = PlayerStates.Spawn_Phase;

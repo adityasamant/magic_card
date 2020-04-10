@@ -350,7 +350,7 @@ GameObject:
   - component: {fileID: 1992487999090842684}
   - component: {fileID: 1207695387311324150}
   m_Layer: 5
-  m_Name: BruteCard
+  m_Name: Brute_Card
   m_TagString: Card
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

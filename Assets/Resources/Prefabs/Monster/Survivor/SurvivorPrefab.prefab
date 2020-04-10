@@ -97,7 +97,7 @@ PrefabInstance:
     - target: {fileID: -927199367670048503, guid: 78d2fa50f59d34b5697e428ccca4c4d5,
         type: 3}
       propertyPath: m_Name
-      value: survivor_a_lusth
+      value: SurvivorPrefab
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 78d2fa50f59d34b5697e428ccca4c4d5, type: 3}

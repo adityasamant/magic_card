@@ -109,6 +109,14 @@ namespace GameLogic
             Network_PlayerTurnEnd += Network_PlayerTurnEndInvoked;
 
         }
+
+        /// <summary>
+        /// Unity Update Function
+        /// </summary>
+        private void Update()
+        {
+            PlayerGameObject.PlayerId = state.PlayerId;
+        }
         #endregion
 
         #region Event Callback
@@ -205,6 +213,7 @@ namespace GameLogic
                 newEvent.PlayerId = PlayerId;
                 newEvent.CardIndex = CardIndex;
                 newEvent.HexIndex = HexIndex;
+                newEvent.Send();
             }
         }
 
@@ -238,7 +247,7 @@ namespace GameLogic
         /// </summary>
         private void Network_ClickonHexInvoked(int HexIndex)
         {
-            Debug.LogFormat("NetworkPlayer: Click On Card Invoked, HexIndex={0}", HexIndex);
+            Debug.LogFormat("NetworkPlayer: Click On Hex Invoked, HexIndex={0}", HexIndex);
         }
 
         /// <summary>

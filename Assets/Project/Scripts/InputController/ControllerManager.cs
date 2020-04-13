@@ -53,7 +53,7 @@ namespace InputController
         // Update is called once per frame
         void Update()
         {
-            
+
         }
 
         void OnDestroy()
@@ -78,7 +78,8 @@ namespace InputController
                     switch (selected)
                     {
                         case ("Card"):
-                            ClickOnCard(selectedGameObject.name);
+                            string cardName = selectedGameObject.name.Split('_')[0];
+                            ClickOnCard(cardName);
                             break;
                         case ("HexTile"):
                             ClickOnHex(selectedGameObject.transform.parent.gameObject.GetComponent<HexTile>().getID());

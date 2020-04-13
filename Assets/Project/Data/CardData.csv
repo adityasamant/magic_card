@@ -43,3 +43,9 @@ Cardid,Cardname,Attack,HP,Speed,Specialeffect,PrefabPath
 42,Partner(Blue),3,15,5,Can play another card this turn,Prefabs/Monster/Archer/BlueArcherPrefab
 43,Big Dragon(Blue),25,80,5,The Big Dragon will take place 7 hexs(1 in center 6 around it.) & Exile when there is not enough space. & Exile a random Dragon when summon Big Dragon,Prefabs/Monster/Archer/BlueArcherPrefab
 44,Kill them all(Blue),0,0,0,Exile all creatures in both sides on the battlefield. & You lose this turn and go to next Upkeep Step Directly.,Prefabs/Monster/Archer/BlueArcherPrefab
+45,Brute,4,25,4,Defense,Prefabs/Monster/Brute/BrutePrefab
+46,Jolleen,5,15,4,AOE,Prefabs/Monster/Jolleen/JolleenPrefab
+47,Survivor,3,20,4,Quick Shoot,Prefabs/Monster/Survivor/SurvivorPrefab
+48,Pelegrini,5,15,4,AOE,Prefabs/Monster/Pelegrini/PelegriniPrefab
+49,Maria,4,25,4,Defense,Prefabs/Monster/Maria/MariaPrefab
+50,Erica,3,20,4,Quick Shoot,Prefabs/Monster/Erica/EricaPrefab

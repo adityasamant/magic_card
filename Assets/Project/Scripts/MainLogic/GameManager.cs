@@ -94,7 +94,7 @@ namespace GameLogic
         /// A link to the Card Database
         /// </summary>
         [Tooltip("A link to the Card Database")]
-        public GetCardInstruction CardDataBase;
+        public NewCardDB CardDataBase;
 
         /// <summary>
         /// A Reference to Multiplayer GameManager
@@ -210,13 +210,6 @@ namespace GameLogic
                     ChangeState(GameStates.ChooseFirstPlayer);
                     break;
                 case GameStates.ChooseFirstPlayer:
-                    //if(!bWaitForDice)
-                    //{
-                    //    bWaitForDice = true;
-                    //    DiceObject.SetActive(true);
-                    //    DiceInstant.ResetPosition(DiceObject.transform.position + new Vector3(0, 1, 0));
-                    //    DiceInstant.Dice_stop += DiceStopHandle;
-                    //}
                     bPlayer0First = multiplayerGameManager.GetLocalPlayerGoFirst();
                     ChangeState(GameStates.UpKeepStep);
                     break;
@@ -408,25 +401,6 @@ namespace GameLogic
             Debug.Log("WorldResetFinished");
             ChangeState(GameStates.Turn_Begin);
         }
-        /////<summary>
-        ///// Dice Handle
-        /////</summary>
-        //void DiceStopHandle()
-        //{
-        //    if(currentState==GameStates.ChooseFirstPlayer)
-        //    {
-        //        if(DiceInstant.GetDiceCount()<=3)
-        //        {
-        //            bPlayer0First = true;
-        //        }
-        //        else
-        //        {
-        //            bPlayer0First = false;
-        //        }
-        //        ChangeState(GameStates.UpKeepStep);
-        //    }
-        //    return;
-        //}
 
         /// <summary>
         /// Deal the monster spwan when player played card.
@@ -438,10 +412,10 @@ namespace GameLogic
         private void PlayedCardInvoke(int PlayerId,int CardIndex,int HexIndex)
         {
             Debug.LogFormat("AIPlayer {0} playing card {1} in hex {2}", PlayerId, CardIndex, HexIndex);
-            Cards thisCard = CardDataBase.GetCardByIndex(CardIndex);
-            GameObject monsterClass = Resources.Load<GameObject>(thisCard.PrefabPath);
+            NewCard thisCard = CardDataBase.GetCardByIndex(CardIndex);
+            //GameObject monsterClass = Resources.Load<GameObject>(thisCard.PrefabPath);
             HexTile TargetHex = world.tileMap.getHexTileByIndex(HexIndex);
-            GameObject newMonster = Instantiate(monsterClass, TargetHex.transform);
+            GameObject newMonster = Instantiate(thisCard.CardPrefab, TargetHex.transform);
             if(newMonster.GetComponent<Monster>()==null)
                 newMonster.AddComponent<Monster>();
             newMonster.GetComponent<Monster>().world = world;

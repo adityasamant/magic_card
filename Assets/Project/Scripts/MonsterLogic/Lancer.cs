@@ -49,10 +49,7 @@ namespace Monsters
             {//The distance to a enemy monster is less than 1, Attack
                 Debug.LogFormat("Lancer {0} Attack Target Monster{1}, My ATK={2}", uid, nearestMonster.GetUId(), this.ATK);
                 gameObject.transform.LookAt(nearestMonster.transform.position);
-                nearestMonster.MonsterStateUpdate.Invoke("Damage", this.ATK);
-                GetComponent<Animator>().SetTrigger("Attack");
-                AnimationFinishedTime = Time.time + 3.0f;
-                WaitForAnimation = true;
+                Attack(nearestMonster);
                 return;
             }
             else
@@ -65,14 +62,10 @@ namespace Monsters
                     return;
                 }
                 world.tileMap.ColorPath(myPath);
-                this.StateUpdate("Move", myPath[1]);
-                GetComponent<Animator>().SetTrigger("Walk");
-                AnimationFinishedTime = Time.time + 1.0f;
-                WaitForAnimation = true;
+                Move(myPath[1]);
                 return;
             }
         }
         #endregion
     }
 }
-

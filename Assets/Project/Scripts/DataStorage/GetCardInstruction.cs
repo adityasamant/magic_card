@@ -16,6 +16,8 @@ namespace CardInfo
         public int Attack;
         public int HP;
         public int Speed;
+        public int Attack_range;
+        public int Move_range;
         public string SpecialEffect;
         public string PrefabPath;
     }

@@ -189,7 +189,7 @@ namespace GameLogic
                     // }
                     if (myCardDataBase)
                     {
-                        CardUIManager.ShowCardUI();
+                        CardUIManager.ShowUICanvas();
                         
                         //Cards myCard = myCardDataBase.GetCard(PlayedCardName);
                         // CardInfo.text = "CardName:" + myCard.CardName + "\n"
@@ -312,7 +312,7 @@ namespace GameLogic
             if(myState==PlayerStates.Main_Phase)
             {
                 PlayedCardName=myCardDataBase.GetRandomCard().CardName;
-                CardUIManager.HideCardUI();
+                CardUIManager.HideUICanvas();
                 Debug.Log("Now Player want to use " + PlayedCardName);
                 myState = PlayerStates.Confirm_Phase;
                 //Debug.LogFormat("Now Player want to use {0}, ATK: {1}, HP: {2}, SPEED: {3}, SPECIAL EFFECT: {4}", PlayedCardName.CardName, PlayedCardName.Attack, PlayedCardName.HP, PlayedCardName.Speed, PlayedCardName.SpecialEffect);

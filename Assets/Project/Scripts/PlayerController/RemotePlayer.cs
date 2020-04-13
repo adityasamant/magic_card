@@ -15,7 +15,7 @@ namespace GameLogic
         /// CardInfo Database
         /// </summary>
         [SerializeField, Tooltip("CardInfo Database")]
-        private GetCardInstruction myCardDataBase;
+        private NewCardDB myCardDataBase;
         #endregion
 
         #region Private Variable

@@ -57,7 +57,8 @@ namespace CardInfo
         {
             for (int i = 0; i < cards.Length; i++)
             {
-                return cards[i];
+                if(cards[i].id==CardIndex)
+                    return cards[i];
             }
             return null;
         }

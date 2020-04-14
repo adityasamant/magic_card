@@ -134,7 +134,7 @@ namespace UI
             for (int i = 0; i < numOfCardsOnDeck; i++)
             {
                 // Get one card from card deck randomly
-                GameObject newCard = Instantiate(cards[Random.Range(0, 2)]);
+                GameObject newCard = Instantiate(cards[Random.Range(0, 10)]);
 
                 //attch each card to CardUI as the parent 
                 newCard.transform.SetParent(CardUI.transform);

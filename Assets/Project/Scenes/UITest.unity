@@ -45644,6 +45644,10 @@ MonoBehaviour:
   - {fileID: 7232592173817450384, guid: eed9ce0ebd9a940e1823fb6f3f728ca1, type: 3}
   - {fileID: 3946518951357038833, guid: 55cbf4af7ab9b490eaee434e324b21fd, type: 3}
   - {fileID: 8183784029698114025, guid: e24054a16e97d4dc797dcf126c6be210, type: 3}
+  - {fileID: 5573992311750431973, guid: ac2ac8fb7aef749aaa4a1baa0e83926e, type: 3}
+  - {fileID: 2482456879753961305, guid: 75f191287ffc640799da876dbefc398a, type: 3}
+  - {fileID: 7358518573242614302, guid: b3ff7ccfdc82a4add870b391483b90d3, type: 3}
+  - {fileID: 7159624327295244524, guid: 1313e4f10c85e47a9a7f7f7362db883e, type: 3}
   worldCanvasTrans: {fileID: 917912480}
   CardIsDisplayed: 0
   UICanvas: {fileID: 917912479}

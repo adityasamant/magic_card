@@ -2335,7 +2335,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parent: {fileID: 1013766373}
-  hexScale: 2
+  hexScale: 1
   hexRange: 8
   Raycast: {fileID: 836711798}
   FancyGridObject: {fileID: 233604281}

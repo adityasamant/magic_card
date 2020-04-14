@@ -1376,9 +1376,10 @@ GameObject:
   - component: {fileID: 9059313762813599301}
   - component: {fileID: 1383491428798919487}
   - component: {fileID: 4090272388595742040}
+  - component: {fileID: 5211759313591808750}
   m_Layer: 0
   m_Name: JolleenPrefab
-  m_TagString: Untagged
+  m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1445,6 +1446,19 @@ MonoBehaviour:
   MonsterStateUpdate:
     m_PersistentCalls:
       m_Calls: []
+--- !u!65 &5211759313591808750
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5468069265390775382}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2, y: 3, z: 2}
+  m_Center: {x: 0, y: 1.5, z: 0}
 --- !u!1 &5504036944230738238
 GameObject:
   m_ObjectHideFlags: 0

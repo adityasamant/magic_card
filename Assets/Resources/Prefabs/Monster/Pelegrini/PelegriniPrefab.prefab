@@ -617,9 +617,10 @@ GameObject:
   - component: {fileID: 3215642841151791602}
   - component: {fileID: 4767695593796914312}
   - component: {fileID: 7627680424068265265}
+  - component: {fileID: 6394480420992036212}
   m_Layer: 0
   m_Name: PelegriniPrefab
-  m_TagString: Untagged
+  m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -688,6 +689,19 @@ MonoBehaviour:
   MonsterStateUpdate:
     m_PersistentCalls:
       m_Calls: []
+--- !u!65 &6394480420992036212
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1944178418672702433}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2, y: 3, z: 2}
+  m_Center: {x: 0, y: 1.5, z: 0}
 --- !u!1 &2234623963268559967
 GameObject:
   m_ObjectHideFlags: 0

@@ -12821,7 +12821,8 @@ MonoBehaviour:
       m_Calls: []
   PlayerId: 0
   world: {fileID: 946620730}
-  myCardDataBase: {fileID: 1434865760}
+  networkPlayer: {fileID: 0}
+  myCardDataBase: {fileID: 0}
   HexMap: {fileID: 1013766375}
   MainCamera: {fileID: 836333947}
   ControllerManager: {fileID: 836711802}
@@ -29153,7 +29154,7 @@ Transform:
   - {fileID: 496102038}
   - {fileID: 104172754}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1124143185
 GameObject:
@@ -29349,7 +29350,8 @@ MonoBehaviour:
   world: {fileID: 946620730}
   PlayerTurnTimeLimited: 30
   DicePrefab: {fileID: 100000, guid: 8579f10578058c04f917e8d30bac7ccf, type: 3}
-  CardDataBase: {fileID: 703630447}
+  CardDataBase: {fileID: 0}
+  multiplayerGameManager: {fileID: 0}
 --- !u!4 &1128183241
 Transform:
   m_ObjectHideFlags: 0
@@ -35573,7 +35575,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4473913279387900, guid: b8c53b54524957f48a35e6b0795487bc, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4474634083496628, guid: b8c53b54524957f48a35e6b0795487bc, type: 3}
       propertyPath: m_LocalPosition.x
@@ -35605,7 +35607,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4474634083496628, guid: b8c53b54524957f48a35e6b0795487bc, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4500674378930438, guid: b8c53b54524957f48a35e6b0795487bc, type: 3}
       propertyPath: m_RootOrder
@@ -35617,7 +35619,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4581806024089112, guid: b8c53b54524957f48a35e6b0795487bc, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4769557671692792, guid: b8c53b54524957f48a35e6b0795487bc, type: 3}
       propertyPath: m_RootOrder

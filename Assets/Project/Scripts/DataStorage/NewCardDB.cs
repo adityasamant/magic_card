@@ -12,12 +12,11 @@ namespace CardInfo
     public class NewCard
     {
         public int id;
+        public bool isMonster; //True is monster, False is terrain
         public string CardName;
         public int Attack;
         public int HP;
         public int Speed;
-        public int Attack_range;
-        public int Move_range;
         public string SpecialEffect;
         public GameObject CardPrefab;
     }

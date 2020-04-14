@@ -27286,6 +27286,9 @@ MonoBehaviour:
   hitPoint: {x: 0, y: 0, z: 0}
   hoverColor: {r: 1, g: 1, b: 1, a: 1}
   highlighter: {fileID: 0}
+  selectedTag: 
+  selectedGameObject: {fileID: 0}
+  prevSelected: {fileID: 0}
   beamLine: {fileID: 1176881218}
 --- !u!1 &1183814743
 GameObject:

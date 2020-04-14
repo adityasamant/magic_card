@@ -29,6 +29,10 @@ namespace UI
         /// </summary>
         public bool CardIsDisplayed;
         /// <summary>
+        /// Is action displayed on UICanvas or not
+        /// </summary>
+        public bool ActionIsDisplayed;
+        /// <summary>
         /// UI Canvas
         /// </summary>
         public GameObject UICanvas;
@@ -40,6 +44,11 @@ namespace UI
         /// Content UI
         /// </summary>
         public GameObject ContentUI;
+
+        public GameObject ActionBtnGroup;
+        public GameObject AttackBtnPrefab;
+        public GameObject SkillBtnPrefab;
+        public GameObject IdleBtnPrefab;
         #endregion
 
         #region Private Variable
@@ -49,9 +58,11 @@ namespace UI
         private void Start()
         {
             CardIsDisplayed = false;
+            ActionIsDisplayed = false;
             firstTrans = new Vector3(-0.25f, 0, 0);
             lastTrans = new Vector3(0.25f, 0, 0);
             HideUICanvas();
+            HideActionBtn();
         }
         #endregion
 
@@ -81,6 +92,33 @@ namespace UI
             }
             return;
         }
+        /// <summary>
+        /// Show Action btn.
+        /// </summary>
+        /// <param name=""></param>
+        public void ShowActionBtn()
+        {
+            if (!ActionBtnGroup.activeSelf)
+            {
+                ActionBtnGroup.SetActive(true);
+            }
+            ActionIsDisplayed = true;
+            return;
+        }
+
+        /// <summary>
+        /// Hide Action btn.
+        /// </summary>
+        /// <param name=""></param>
+        public void HideActionBtn()
+        {
+            if (ActionBtnGroup.activeSelf)
+            {
+                ActionBtnGroup.SetActive(false);
+            }
+            ActionIsDisplayed = false;
+            return;
+        }
 
         /// <summary>
         /// Clear everything on ContentUI.
@@ -88,11 +126,17 @@ namespace UI
         /// <param name=""></param>
         public void ClearContentUI()
         {
-            foreach (Transform child in ContentUI.transform)
-            {
-                GameObject.Destroy(child.gameObject);
+            for(int i = 0; i < ContentUI.transform.childCount; i++){
+                if(i == 0) continue;
+                GameObject.Destroy(ContentUI.transform.GetChild(i).gameObject);
             }
+            // foreach (Transform child in ContentUI.transform)
+            // {
+            //     GameObject.Destroy(child.gameObject);
+            // }
+            HideActionBtn();
             CardIsDisplayed = false;
+            ActionIsDisplayed = false;
         }
 
         /// <summary>
@@ -115,6 +159,7 @@ namespace UI
                 GameObject.Destroy(child.gameObject);
             }
             CardIsDisplayed = false;
+            ActionIsDisplayed = false;
         }
 
         /// <summary>
@@ -143,6 +188,18 @@ namespace UI
                 newCard.transform.localRotation = Quaternion.Euler(0, 0, 0);
             }
             CardIsDisplayed = true;
+        }
+
+        /// <summary>
+        /// Display Action Button.
+        /// </summary>
+        /// <param name=""></param>
+        public void DisplayAction()
+        {
+            if (ActionIsDisplayed)
+                return;
+            ActionBtnGroup.SetActive(true);
+            ActionIsDisplayed = true;
         }
         #endregion
 

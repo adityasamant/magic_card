@@ -264,10 +264,9 @@ namespace GameLogic
                     Monster thisMonster = monsterPair.Value;
                     if (thisMonster.isAlive && thisMonster.HexIndex == HexTileID){
                         if(thisMonster.monsterOwner.GetPlayerId() == PlayerId){
-                            ContentUIManager.ClearContentUI();
-                            
+                            ContentUIManager.ShowActionBtn();
                         }else{
-                            
+                            ContentUIManager.HideActionBtn();
                         }
                     }
                 }

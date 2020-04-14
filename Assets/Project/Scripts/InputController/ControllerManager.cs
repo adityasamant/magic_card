@@ -83,10 +83,6 @@ namespace InputController
                             break;
                         case ("HexTile"):
                             ClickOnHex(selectedGameObject.transform.parent.gameObject.GetComponent<HexTile>().getID());
-                            // HexTile TargetHex = world.tileMap.getHexTileByIndex(selectedGameObject.transform.parent.gameObject.GetComponent<HexTile>().getID());
-                            // GameObject.Find("Mist").SetActive(true);
-                            // GameObject fire = GameObject.Find("Mist");
-                            // fire.transform.position = TargetHex.transform.position;
                             break;
                         default:
                             break;

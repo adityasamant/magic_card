@@ -5,3 +5,7 @@ Cardid,Cardname,Attack,HP,Speed,Specialeffect,PrefabPath
 48,Pelegrini,5,15,4,AOE,Prefabs/Monster/Pelegrini/PelegriniPrefab
 49,Maria,4,25,4,Defense,Prefabs/Monster/Maria/MariaPrefab
 50,Erica,3,20,4,Quick Shoot,Prefabs/Monster/Erica/EricaPrefab
+51,Fire,0,0,0,NULL,Prefabs/Terrain/Fire/FirePrefab
+52,Tornado,0,0,0,NULL,Prefabs/Terrain/Tornado/TornadoPrefab
+53,Mist,0,0,0,NULL,Prefabs/Terrain/Mist/MistPrefab
+54,Portal,0,0,0,NULL,Prefabs/Terrain/Portal/PortalPrefab

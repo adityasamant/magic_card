@@ -35,10 +35,10 @@ namespace Monsters
             if (button == MLInputControllerButton.Bumper)
             {
                 
-                monster_erica.Move(181);
+                //monster_erica.Move(181);
                 //monster_erica.Move(180);
                //monster_erica.Move(179);
-                //monster_erica.DoubleShot(monster_brute, 4);
+                monster_erica.DoubleShot(monster_brute, 4);
             }
             if (button == MLInputControllerButton.HomeTap)
             {

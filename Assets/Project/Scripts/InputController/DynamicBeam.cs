@@ -38,25 +38,39 @@ namespace InputController
                 beamLine.SetPosition(0, controller.transform.position);
                 beamLine.SetPosition(1, hit.point);
                 hitPoint = hit.point;
-
+                
                 //Render collider border on hover 
                 selectedTag = hit.transform.gameObject.tag;
-                selectedGameObject = hit.transform.gameObject;
-                if(prevSelected == null){
-                    prevSelected = selectedGameObject;
-                }
-                switch (selectedTag)
+
+                GameObject hitObject = hit.transform.gameObject;
+                Debug.Log(selectedTag);
+                if(selectedTag=="HexTile")
                 {
-                    case ("HexTile"):
-                        if(prevSelected != selectedGameObject){
-                            Destroy(prevSelected.GetComponent<ShowBoxCollider>());
-                            prevSelected = selectedGameObject;
-                            selectedGameObject.AddComponent<ShowBoxCollider>();
-                        }
-                        break;
-                    default:
-                        break;
+
+                    hitObject = hitObject.transform.parent.gameObject;
                 }
+
+
+                if(hitObject!=selectedGameObject)
+                {
+                    prevSelected = selectedGameObject;
+                    if(prevSelected!=null)
+                    {
+                        if(prevSelected.GetComponent<Clickable>())
+                        {
+                            prevSelected.GetComponent<Clickable>().unHighlighted();
+                        }
+                    }
+                    selectedGameObject = hitObject;
+                    if(selectedGameObject!=null)
+                    {
+                        if(selectedGameObject.GetComponent<Clickable>())
+                        {
+                            selectedGameObject.GetComponent<Clickable>().Highlighted();
+                        }
+                    }
+                }
+
             }
 
         }

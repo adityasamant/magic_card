@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.XR.MagicLeap;
 using TerrainScanning;
 using GameWorld;
+using Monsters;
+
 namespace InputController
 {
     #region Delegate Define
@@ -18,6 +20,12 @@ namespace InputController
     /// </summary>
     /// <param name="CardName">The chosen card name.</param>
     public delegate void ClickOnCard(string CardName);
+
+    /// <summary>
+    /// When bumper click on a monster, this delegate invoked
+    /// </summary>
+    /// <param name="currMonster">The selected Monster.</param>
+    public delegate void ClickOnMonster(Monster currMonster);
     #endregion
 
     public class ControllerManager : MonoBehaviour
@@ -41,6 +49,7 @@ namespace InputController
         #region Event Define
         public ClickOnHex ClickOnHex;
         public ClickOnCard ClickOnCard;
+        public ClickOnMonster ClickOnMonster;
         #endregion
 
         #region Unity Methods
@@ -84,6 +93,13 @@ namespace InputController
                         case ("HexTile"):
                             ClickOnHex(selectedGameObject.transform.parent.gameObject.GetComponent<HexTile>().getID());
                             break;
+                        case ("Monster"):
+                            ClickOnMonster(selectedGameObject.GetComponent<Monster>());
+                            break;
+                        case ("ActionBtn"):
+                            
+                            break;
+                            
                         default:
                             break;
                     }

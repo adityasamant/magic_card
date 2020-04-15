@@ -137,6 +137,7 @@ namespace GameLogic
 
             ControllerManager.ClickOnCard += ClickOnCardInvoked;
             ControllerManager.ClickOnHex += ClickOnHexInvoked;
+            ControllerManager.ClickOnMonster += ClickOnMonsterInvoked;
 
             MCardUnchosen = numOfMonsterCouldUse;
             TCardUnchosen = numOfTerrainCouldUse;
@@ -256,19 +257,38 @@ namespace GameLogic
                 targetHexId = HexTileID;
                 myState = PlayerStates.Spawn_Phase;
             }
+            // if (myState == PlayerStates.Action_Phase)
+            // {
+            //     foreach (KeyValuePair<int, Monster> monsterPair in world.monsters)
+            //     {
+            //         Monster thisMonster = monsterPair.Value;
+            //         if (thisMonster.isAlive && thisMonster.HexIndex == HexTileID){
+            //             if(thisMonster.monsterOwner.GetPlayerId() == PlayerId){
+            //                 ContentUIManager.ShowActionBtn();
+            //             }else{
+            //                 ContentUIManager.HideActionBtn();
+            //             }
+            //         }
+            //     }
+            // }
+            return;
+        }
 
+        /// <summary>
+        /// This function will call when click on a monster
+        /// </summary>
+        /// <param name="HexTileID">The Chosen Hex ID</param>
+        private void ClickOnMonsterInvoked(Monster currMonster)
+        {
             if (myState == PlayerStates.Action_Phase)
             {
-                foreach (KeyValuePair<int, Monster> monsterPair in world.monsters)
+                if (currMonster.isAlive && currMonster.monsterOwner.GetPlayerId() == PlayerId)
                 {
-                    Monster thisMonster = monsterPair.Value;
-                    if (thisMonster.isAlive && thisMonster.HexIndex == HexTileID){
-                        if(thisMonster.monsterOwner.GetPlayerId() == PlayerId){
-                            ContentUIManager.ShowActionBtn();
-                        }else{
-                            ContentUIManager.HideActionBtn();
-                        }
-                    }
+                    ContentUIManager.ShowActionBtn();
+                }
+                else
+                {
+                    ContentUIManager.HideActionBtn();
                 }
             }
             return;

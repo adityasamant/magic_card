@@ -67,6 +67,15 @@ namespace GameLogic
         /// The num of terrian card unchosen
         ///</summary>
         private int TCardUnchosen;
+
+        /// <summary>
+        /// For Audio Tutorial, When first time player choose hex, play the audio
+        /// </summary>
+        private bool _isFirstChosenHex = true;
+        /// <summary>
+        /// For Audio Tutorial, When first time player play card, play the audio
+        /// </summary>
+        private bool _isFirstPlayCard = true;
         #endregion
 
         #region Public Variable
@@ -266,6 +275,12 @@ namespace GameLogic
             if (myState == PlayerStates.Confirm_Phase)
             {
                 targetHexId = HexTileID;
+                if(_isFirstChosenHex)
+                {
+                    AudioManager._instance.Play("ChooseHex");
+                    _isFirstChosenHex = false;
+                }
+                
                 if(networkPlayer)
                 {
                     networkPlayer.Send_ClickOnHex(HexTileID);
@@ -333,6 +348,12 @@ namespace GameLogic
         private void PlayedCardInvoked(int PlayerId, int CardIndex, int HexIndex)
         {
             Debug.LogFormat("Player {0} playing card {1} in hex {2}", PlayerId, CardIndex, HexIndex);
+            if(_isFirstPlayCard)
+            {
+                AudioManager._instance.Play("FirstPlayCard");
+                _isFirstPlayCard = false;
+            }
+            
             InstructionUI.text = "PlayedCard";
             if(networkPlayer)
             {

@@ -52,7 +52,10 @@ namespace Project_Network
         {
             base.SceneLoadLocalDone(scene);
             s_NetworkCallbacks = this;
-            
+
+            if(BoltNetwork.IsServer)
+                AudioManager._instance.Play("WaitForPlayer");
+
             BoltNetwork.Instantiate(BoltPrefabs.Controller_Replicated_, new Vector3(0,0,0), Quaternion.identity);
             BoltNetwork.Instantiate(BoltPrefabs.NetworkPlayer, new Vector3(0, 0, 0), Quaternion.identity);
         }

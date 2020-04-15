@@ -57,6 +57,7 @@ namespace Project_Network
             isClient = true;
             isJoined = false;
             menu.StartClient();
+            AudioManager._instance.Play("LobbyServer");
             ClientTimer = Time.time;
         }
         /// <summary>
@@ -80,6 +81,7 @@ namespace Project_Network
                     if (!BoltNetwork.IsRunning)
                     {
                         menu.StartServer();
+                        AudioManager._instance.Play("LobbyNoServer");
                         isJoined = true;
                     }
                 }

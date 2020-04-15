@@ -211,6 +211,14 @@ namespace GameLogic
                     break;
                 case GameStates.ChooseFirstPlayer:
                     bPlayer0First = multiplayerGameManager.GetLocalPlayerGoFirst();
+                    if(bPlayer0First)
+                    {
+                        AudioManager._instance.Play("FirstPlayer");
+                    }
+                    else
+                    {
+                        AudioManager._instance.Play("SecondPlayer");
+                    }
                     ChangeState(GameStates.UpKeepStep);
                     break;
                 case GameStates.UpKeepStep:
@@ -307,6 +315,7 @@ namespace GameLogic
             List<int> path = new List<int>();
             Player0.Event_ScanFinished.Invoke();
             multiplayerGameManager.ScanFinishedEvent.Invoke();
+            AudioManager._instance.Play("PlaceDoneFirst");
 
             if(currentState == GameStates.Wait_For_Map_Scan)
             {
@@ -343,8 +352,9 @@ namespace GameLogic
         private void MultiplayerGameManager_FinishInitInvoked()
         {
             if(currentState==GameStates.Init)
-            {                
+            {
                 ChangeState(GameStates.Wait_For_Mode_Selection);
+                AudioManager._instance.Play("ScanAndPlace");
             }
             return;
         }

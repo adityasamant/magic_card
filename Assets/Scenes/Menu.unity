@@ -329,3 +329,42 @@ MonoBehaviour:
   SwitchTime: 2
   menu: {fileID: 1732807348}
   isJoined: 0
+--- !u!1001 &8763713206740515828
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 8763713206991694840, guid: 23583e0e619aace45895b1cba5ff69b6,
+        type: 3}
+      propertyPath: m_Name
+      value: AudioManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 8763713206991694841, guid: 23583e0e619aace45895b1cba5ff69b6,
+        type: 3}
+      propertyPath: sounds.Array.data[0].volume
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8763713206991694842, guid: 23583e0e619aace45895b1cba5ff69b6,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8763713206991694842, guid: 23583e0e619aace45895b1cba5ff69b6,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8763713206991694842, guid: 23583e0e619aace45895b1cba5ff69b6,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8763713206991694842, guid: 23583e0e619aace45895b1cba5ff69b6,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 23583e0e619aace45895b1cba5ff69b6, type: 3}

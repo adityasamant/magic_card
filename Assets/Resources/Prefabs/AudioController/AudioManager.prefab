@@ -46,7 +46,7 @@ MonoBehaviour:
   sounds:
   - name: Theme
     clip: {fileID: 8300000, guid: 678eba68b6c0c4102b7492a6497992c6, type: 3}
-    volume: 0.723
+    volume: 0.4
     pitch: 1
     source: {fileID: 0}
     loop: 1
@@ -129,13 +129,13 @@ MonoBehaviour:
     source: {fileID: 0}
     loop: 0
   - name: FirstPlayer
-    clip: {fileID: 8300000, guid: a7f5eee9c66839a48add4507d45b4c86, type: 3}
+    clip: {fileID: 8300000, guid: 46a0475b2dc12d945b63c4337938aea4, type: 3}
     volume: 0.723
     pitch: 1
     source: {fileID: 0}
     loop: 0
   - name: SecondPlayer
-    clip: {fileID: 8300000, guid: 0dc2a2ae7f90762488dc71ee585092f8, type: 3}
+    clip: {fileID: 8300000, guid: 2e57833fe2c7e4749acb8694e18ab379, type: 3}
     volume: 0.723
     pitch: 1
     source: {fileID: 0}
@@ -148,6 +148,36 @@ MonoBehaviour:
     loop: 0
   - name: FirstPlayCard
     clip: {fileID: 8300000, guid: 4facbd526ff2d0844b2a352b44772fb7, type: 3}
+    volume: 0.723
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+  - name: BattleBegin_First
+    clip: {fileID: 8300000, guid: 57a225a2726842846aae3422cc9d6d68, type: 3}
+    volume: 0.723
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+  - name: BattleBegin_Second
+    clip: {fileID: 8300000, guid: 5dc41b61e85b0a84c82846e1e7c4839a, type: 3}
+    volume: 0.723
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+  - name: AfterClickCharacter
+    clip: {fileID: 8300000, guid: 62350713b6b49374bad070025c1ab899, type: 3}
+    volume: 0.723
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+  - name: AfterMoving
+    clip: {fileID: 8300000, guid: 5e009b8296cc47744bfa6ab033211c41, type: 3}
+    volume: 0.723
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+  - name: SecondPlayerFirstBattle
+    clip: {fileID: 8300000, guid: 413671f31d6a800488cf9320c1e044a6, type: 3}
     volume: 0.723
     pitch: 1
     source: {fileID: 0}

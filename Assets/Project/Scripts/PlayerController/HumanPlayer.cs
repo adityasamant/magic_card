@@ -76,6 +76,14 @@ namespace GameLogic
         /// For Audio Tutorial, When first time player play card, play the audio
         /// </summary>
         private bool _isFirstPlayCard = true;
+        /// <summary>
+        /// For Audio Tutorial, When first time player click on a character
+        /// </summary>
+        private bool _isFirstClickOnCharacter = true;
+        /// <summary>
+        /// For Audio Tutorial, When first time player move a charcter
+        /// </summary>
+        private bool _isFirstMove = true;
 
         /// Const num of available monster card
         /// </summary>
@@ -383,6 +391,12 @@ namespace GameLogic
 
             if (myState == PlayerStates.Move_Phase)
             {
+                if(_isFirstMove)
+                {
+                    AudioManager._instance.Play("AfterMoving");
+                    _isFirstMove = false;
+                }
+
                 if (currMonster.CanReach(HexTileID))
                 {
                     MoveDelegate(HexTileID);
@@ -411,6 +425,12 @@ namespace GameLogic
             //choose an action
             if (myState == PlayerStates.Action_Phase)
             {
+                if(_isFirstClickOnCharacter)
+                {
+                    AudioManager._instance.Play("AfterClickCharacter");
+                    _isFirstClickOnCharacter = false;
+                }
+
                 if(currMonster.gameObject.GetComponent<ClickableCharacter>())
                     currMonster.gameObject.GetComponent<ClickableCharacter>().Highlighted(ClickableCharacter.CharHightLightStatus.DEFAULT);
 

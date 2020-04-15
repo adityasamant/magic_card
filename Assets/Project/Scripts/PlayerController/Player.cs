@@ -16,10 +16,11 @@ namespace GameLogic
         WaitForStart,
         ImageTrackingStart,
         Main_Phase,
-        ConfirmMonsterPosition_Phase,
+        ConfirmSpawnPosition_Phase,
         Spawn_Phase,
         Action_Phase,
         Move_Phase,
+        Moved_Phase,
         Attack_Phase,
         ChooseTarget_Phase,
         Skill_Phase,
@@ -54,6 +55,12 @@ namespace GameLogic
     public delegate void AttackDelegate(int PlayerId, Monster currMonster, Monster targetMonster);
 
     /// <summary>
+    /// When this player want to move monster, it will pop a delegate to Main Logic
+    /// </summary>
+    /// <param name="destination">The HexTile Id of the destination.</param>
+    public delegate void MoveDelegate(int destination);
+
+    /// <summary>
     /// When the play ended its battle turn, this delegate should be activated.
     /// </summary>
     /// 
@@ -84,6 +91,11 @@ namespace GameLogic
         /// Define the interface for delegate Attack
         /// </summary>
         public AttackDelegate AttackDelegate;
+
+        /// <summary>
+        /// Define the interface for delegate Move
+        /// </summary>
+        public MoveDelegate MoveDelegate;
 
         /// <summary>
         /// Define the interface for delegate Attack

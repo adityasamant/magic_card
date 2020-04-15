@@ -12951,7 +12951,7 @@ MonoBehaviour:
       m_Calls: []
   PlayerId: 0
   world: {fileID: 946620730}
-  numOfMonsterCouldUse: 2
+  numOfMonsterCouldUse: 3
   numOfTerrainCouldUse: 2
   myCardDataBase: {fileID: 1434865760}
   HexMap: {fileID: 1013766375}
@@ -17690,26 +17690,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f110bb5769469dc47aa4f71297330b2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event_ScanFinished:
-    m_PersistentCalls:
-      m_Calls: []
-    m_CallsDirty: 1
-  Event_PlayerTurnStart:
-    m_PersistentCalls:
-      m_Calls: []
-    m_CallsDirty: 1
-  Event_Battle_PlayerTurnStart:
-    m_PersistentCalls:
-      m_Calls: []
-    m_CallsDirty: 1
-  PlayerId: 1
-  world: {fileID: 0}
-  myCardDataBase: {fileID: 1925191620}
-  HexMap: {fileID: 1013766375}
-  myState: 0
-  _bInit: 0
-  stateBeginTime: 0
-  HexToPlaceIndex: 0
 --- !u!4 &702833976
 Transform:
   m_ObjectHideFlags: 0
@@ -26405,39 +26385,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e44912531b27beb4290a928b94ed43ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event_ScanFinished:
-    m_PersistentCalls:
-      m_Calls: []
-    m_CallsDirty: 1
-  Event_PlayerTurnStart:
-    m_PersistentCalls:
-      m_Calls: []
-    m_CallsDirty: 1
-  Event_Battle_PlayerTurnStart:
-    m_PersistentCalls:
-      m_Calls: []
-    m_CallsDirty: 1
-  PlayerId: 0
-  world: {fileID: 946620730}
-  myState: 0
-  _bInit: 0
-  startTime: 0
-  PlayedCardName: 
-  UIMonsterpreview: {fileID: 0}
-  UIMonsterName: 
-  RayHitPosition: {x: 0, y: 0, z: 0}
-  targetHexId: 0
-  MonsterPreviewField: {fileID: 0}
-  myCardDataBase: {fileID: 1434865760}
-  NumberOfCard: {fileID: 0}
-  CardInfo: {fileID: 0}
-  myHandTrackerObject: {fileID: 1572913794}
-  myHandTracker: {fileID: 1572913796}
-  Instructions: {fileID: 0}
-  HexMap: {fileID: 1013766375}
-  MainCamera: {fileID: 836333947}
-  ControllerManager: {fileID: 836711802}
-  ContentUIManager: {fileID: 0}
 --- !u!1 &1003922252
 GameObject:
   m_ObjectHideFlags: 0
@@ -51390,7 +51337,7 @@ MonoBehaviour:
       m_Calls: []
   PlayerId: 1
   world: {fileID: 946620730}
-  numOfMonsterCouldUse: 2
+  numOfMonsterCouldUse: 3
   numOfTerrainCouldUse: 2
   myCardDataBase: {fileID: 1434865760}
   HexMap: {fileID: 1013766375}

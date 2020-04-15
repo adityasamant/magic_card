@@ -130,12 +130,6 @@ namespace Monsters
         /// </summary>
         [Tooltip("A link to the game world.")]
         public World world;
-
-        /// <summary>
-        /// Created by CZ on Apr 14.
-        /// </summary>
-        [Tooltip("The HP & MP Bar of monster")]
-        public GameObject StatusBar;
         #endregion
 
         #region Delegate and Event Handler
@@ -152,9 +146,9 @@ namespace Monsters
         /// </summary>
         public StateUpdateEvent MonsterStateUpdate;
         /// <summary>
-        /// A standard distance for statusbar( Created by CZ Apr 14
+        /// If isIdle, then the monster cannot move or attack
         /// </summary>
-        public float StandardDistanceForStatusBar;
+        public bool isIdle;
         #endregion
 
         #region Public Function
@@ -168,7 +162,7 @@ namespace Monsters
         /// <param name="spd">Monster Origin Spd</param>
         /// <param name="monsterOwner">Monster Origin Owner</param>
         /// <param name="HexIndex"></param>
-        public void MonsterInit(string name,int hp,int atk,int spd,Player monsterOwner,int HexIndex)
+        public void MonsterInit(string name, int hp, int atk, int spd, Player monsterOwner, int HexIndex)
         {
             uid = monsterCount;
             monsterCount++;
@@ -182,7 +176,7 @@ namespace Monsters
             origin_HexIndex = HexIndex;
             MonsterReset();
 
-            
+
         }
 
         /// <summary>
@@ -191,7 +185,7 @@ namespace Monsters
         /// </summary>
         public void MonsterReset()
         {
-            if(isExiled)
+            if (isExiled)
             {
                 Debug.LogFormat("Monster {0} Error: An exiled monster should be reset.", gameObject.transform.name);
                 return;
@@ -216,7 +210,8 @@ namespace Monsters
         /// <summary>
         /// Sorted Monster by SPD and UID
         /// </summary>
-        static public bool operator <(Monster a, Monster b) {
+        static public bool operator <(Monster a, Monster b)
+        {
             if (a.SPD != b.SPD)
                 return a.SPD < b.SPD;
             else
@@ -225,7 +220,8 @@ namespace Monsters
         /// <summary>
         /// Sorted Monster by SPD and UID
         /// </summary>
-        static public bool operator >(Monster a, Monster b) {
+        static public bool operator >(Monster a, Monster b)
+        {
             if (a.SPD != b.SPD)
                 return a.SPD > b.SPD;
             else
@@ -239,7 +235,7 @@ namespace Monsters
         /// </summary>
         protected void Start()
         {
-            StandardDistanceForStatusBar = 0.5f;
+            isIdle = false;
             moving_animation_time = 1.0f;
             attack_animation_time = 1.0f;
             if (MonsterStartTurn == null)
@@ -248,23 +244,6 @@ namespace Monsters
                 MonsterStateUpdate = new StateUpdateEvent();
             MonsterStartTurn.AddListener(MoveMent);
             MonsterStateUpdate.AddListener(StateUpdate);
-
-            //Initiate Status Bar
-            StatusBar = (GameObject)Resources.Load("Prefabs/StatusBar/StatusBar") as GameObject;
-            StatusBar = Instantiate(StatusBar);
-            Vector3 v3 = new Vector3(1, 1, 1);
-            float dis = (Camera.main.transform.position - transform.position).sqrMagnitude;
-            StatusBar.transform.parent = GameObject.Find("MonsterStatusCanvas").gameObject.transform;
-            //StatusBar.transform.localScale = (StandardDistanceForStatusBar / Mathf.Sqrt(dis)) * v3;
-            //Vector3 v3 = new Vector3(1, 1, 1);
-            //float dis = (Camera.main.transform.position - transform.position).sqrMagnitude;
-            //StatusBar.transform.localScale = (StandardDistanceForStatusBar / Mathf.Sqrt(dis)) * v3;
-            //Debug.Log(StatusBar.transform.localScale);
-            Debug.Log(StatusBar.transform.position);
-            
-            StatusBar.transform.position = Camera.main.WorldToScreenPoint(transform.position);
-            Debug.Log("Obj:" + transform.position);
-            Debug.Log("Screen Position:" + StatusBar.transform.position);
         }
 
         /// <summary>
@@ -298,7 +277,6 @@ namespace Monsters
                     WaitForAnimation = MonsterAction.Nothing;
                 }
             }
-            UpdateStatusBarTransform();
         }
         #endregion
 
@@ -319,30 +297,30 @@ namespace Monsters
                 MonsterTurnEnd();
                 return;
             }
-                
+
 
             int Dist = 99999;
             Monster nearestMonster = null;
-            foreach(KeyValuePair<int,Monster> MonsterItr in world.monsters)
+            foreach (KeyValuePair<int, Monster> MonsterItr in world.monsters)
             {
                 Monster thisMonster = MonsterItr.Value;
                 if (thisMonster.isAlive == false) continue;
                 if (thisMonster.isExiled == true) continue;
                 if (thisMonster.monsterOwner == this.monsterOwner) continue;
                 int thisDist = world.tileMap.getDistance(this.HexIndex, thisMonster.HexIndex);
-                if(thisDist<Dist)
+                if (thisDist < Dist)
                 {
                     Dist = thisDist;
                     nearestMonster = thisMonster;
                 }
             }
-            if (nearestMonster==null)
+            if (nearestMonster == null)
             {
                 Debug.Log("Cannot Find a monster.");
                 MonsterTurnEnd();
                 return;
             }
-            if(Dist==1 || Dist==0)
+            if (Dist == 1 || Dist == 0)
             {//Adjcent to a enemy monster, Attack
                 //Debug.LogFormat("Attack Target Monster{0}, My ATK={1}", uid, this.ATK);
                 nearestMonster.MonsterStateUpdate.Invoke("Damage", this.ATK);
@@ -397,12 +375,12 @@ namespace Monsters
         /// "Move", newState=next HexIndex Index
         /// "Exile", All state=0 and @isExile=true, @isAlive=false
         /// </param>
-        public void StateUpdate(string StateField,int newState)
+        public void StateUpdate(string StateField, int newState)
         {
-            if(StateField=="Damage")
+            if (StateField == "Damage")
             {
                 HP -= newState;
-                //Debug.LogFormat("Monster {0} get hitted. Current HP is: {1}", this.uid, this.HP);
+                Debug.LogFormat("Monster {0} get hitted. Current HP is: {1}", this.uid, this.HP);
                 if (HP <= 0)
                 {
                     isAlive = false;
@@ -412,12 +390,12 @@ namespace Monsters
                 {
                     gameObject.GetComponent<Animator>().SetTrigger("Damage");
                 }
-                    
+
             }
-            if(StateField=="Move")
+            if (StateField == "Move")
             {
                 HexTile hexTile = world.tileMap.getHexTileByIndex(newState);
-                if(hexTile==null)
+                if (hexTile == null)
                 {
                     Debug.Log("Monster Error: Move to a null HexTile!");
                     return;
@@ -428,7 +406,7 @@ namespace Monsters
                 transform.localPosition = new Vector3(0.0f, 0.0f, 0.0f);
                 HexIndex = newState;
             }
-            if(StateField=="Exile")
+            if (StateField == "Exile")
             {
                 isExiled = true;
                 isAlive = false;
@@ -437,20 +415,14 @@ namespace Monsters
                 SPD = 0;
             }
         }
-
-        /// <summary>
-        /// Update the Transfrom of Statusbar (Created by CZ Apr 14
+        
+        // <summary>
+        /// Check the possibility of moving to another Hex
         /// </summary>
-        public void UpdateStatusBarTransform()
-        {
-            Vector3 v3 = new Vector3(1, 1, 1);
-            float dis = (Camera.main.transform.position - transform.position).sqrMagnitude;
-            //StatusBar.transform.localScale = (StandardDistanceForStatusBar / Mathf.Sqrt(dis)) * v3;
-            //Debug.Log(StatusBar.transform.localScale);
-            Debug.Log("Monster World Position" + uid + ":" + transform.position);
-            Debug.Log("Bar World Position" + uid + ":" + StatusBar.transform.position);
-            StatusBar.transform.position = Camera.main.WorldToScreenPoint(gameObject.transform.position);// + Camera.main.transform.forward * 1.5f;
-            Debug.Log("Bar Screen Position:" + StatusBar.transform.position);
+        /// <param name="destination"> the destination Hex</param>
+        public bool CanReach(int destination){
+            //TODO
+            return true;
         }
         #endregion
     }
@@ -470,5 +442,5 @@ namespace Monsters
         }
     }
 
-    
+
 }

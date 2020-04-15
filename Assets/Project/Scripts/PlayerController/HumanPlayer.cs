@@ -67,16 +67,36 @@ namespace GameLogic
         /// The num of terrian card unchosen
         ///</summary>
         private int TCardUnchosen;
+
+        /// <summary>
+        /// Const num of available monster card
+        /// </summary>
+        private int _numOfMonsterCouldUse;
+
+        /// <summary>
+        /// Const num of available terrain card
+        /// </summary>
+        private int _numOfTerrainCouldUse;
+
+        /// <summary>
+        /// Store the time when this state began
+        /// </summary>
+        private float stateBeginTime;
+
+        /// <summary>
+        /// Store player's monster when card selection finish
+        /// </summary>
+        private List<Monster> myMonsters = new List<Monster>();
         #endregion
 
         #region Public Variable
         /// <summary>
-        /// Num of available monster card (default 3)
+        /// Num of available monster card
         /// </summary>
         public int numOfMonsterCouldUse;
 
         /// <summary>
-        /// Num of available terrain card (default 2)
+        /// Num of available terrain card
         /// </summary>
         public int numOfTerrainCouldUse;
 
@@ -120,8 +140,8 @@ namespace GameLogic
         {
             if (_bInit)
             {
-                myState = PlayerStates.Init;
-                startTime = Time.time;
+                ChangeState(PlayerStates.Init);
+                // startTime = Time.time;
                 _bInit = true;
             }
             //Event Init
@@ -139,6 +159,7 @@ namespace GameLogic
 
             PlayedCard += PlayedCardInvoked;
             AttackDelegate += AttackInvoked;
+            MoveDelegate += MoveInvoked;
 
             ControllerManager.ClickOnCard += ClickOnCardInvoked;
             ControllerManager.ClickOnHex += ClickOnHexInvoked;
@@ -147,6 +168,8 @@ namespace GameLogic
 
             MCardUnchosen = numOfMonsterCouldUse;
             TCardUnchosen = numOfTerrainCouldUse;
+            _numOfMonsterCouldUse = numOfMonsterCouldUse;
+            _numOfTerrainCouldUse = numOfTerrainCouldUse;
         }
 
         ///<summary>
@@ -154,6 +177,7 @@ namespace GameLogic
         ///</summary> 
         public virtual void Update()
         {
+            float nowTime = Time.time;
             //Raycast hit point position
             RayHitPosition = ControllerManager.hitPoint;
 
@@ -170,11 +194,28 @@ namespace GameLogic
                     // InstructionUI.text = "Wait For Your Turn";
                     break;
                 case (PlayerStates.Main_Phase):
+                    if (numOfMonsterCouldUse <= 0)
+                    {
+                        ChangeState(PlayerStates.End);
+                        break;
+                    }
                     //(MCardUnchosen <= 0) => Card selection finished
                     if (MCardUnchosen <= 0)
                     {
-                        myState = PlayerStates.Action_Phase;
+                        //init myMonster List
+                        while (myMonsters.Count < _numOfMonsterCouldUse)
+                        {
+                            foreach (KeyValuePair<int, Monster> monsterPair in world.monsters)
+                            {
+                                Monster thisMonster = monsterPair.Value;
+                                if (thisMonster.monsterOwner.GetPlayerId() == PlayerId)
+                                {
+                                    myMonsters.Add(thisMonster);
+                                }
+                            }
+                        }
                         InstructionUI.text = "Player " + PlayerId + " Turn";
+                        ChangeState(PlayerStates.Action_Phase);
                         break;
                     }
                     else
@@ -189,11 +230,17 @@ namespace GameLogic
                 case (PlayerStates.Action_Phase):
                     // InstructionUI.text = "Your Turn";
                     break;
-                case (PlayerStates.Attack_Phase):
-                    myState = PlayerStates.ChooseTarget_Phase;
+                case (PlayerStates.Move_Phase):
                     break;
-                case (PlayerStates.ConfirmMonsterPosition_Phase): // Wait For Click on Hex
-                    //Debug.Log("PlayerStates=ConfirmMonsterPosition_Phase");
+                case (PlayerStates.Moved_Phase):
+                    break;
+                case (PlayerStates.Attack_Phase):
+                    ChangeState(PlayerStates.ChooseTarget_Phase);
+                    break;
+                case (PlayerStates.ChooseTarget_Phase):
+                    break;
+                case (PlayerStates.ConfirmSpawnPosition_Phase): // Wait For Click on Hex
+                    //Debug.Log("PlayerStates=ConfirmSpawnPosition_Phase");
                     InstructionUI.text = "Choose Spawn Position";
                     break;
                 case (PlayerStates.Spawn_Phase):
@@ -205,18 +252,31 @@ namespace GameLogic
                         PlayedCard(PlayerId, myCard.id, targetHexId);
                         MCardUnchosen--;
                     }
-                    myState = PlayerStates.End;
+                    ChangeState(PlayerStates.End);
+                    break;
+                case (PlayerStates.Idle_Phase):
+                    ChangeState(PlayerStates.Main_Phase);
                     break;
                 case (PlayerStates.End):
                     //Return the game control loop to main logic
                     //Debug.Log("PlayerStates=End");
-                    PlayerEnd(PlayerId);
-                    myState = PlayerStates.WaitForStart;
-                    InstructionUI.text = "Wait For Your Turn";
+                    if (nowTime - stateBeginTime > 1)
+                    {
+                        PlayerEnd(PlayerId);
+                        ChangeState(PlayerStates.WaitForStart);
+                        InstructionUI.text = "Wait For Your Turn";
+                    }
                     break;
                 default:
                     break;
             }
+        }
+
+        private void ChangeState(PlayerStates dstStates)
+        {
+            //Debug.LogFormat("PlayerStates: "+dstStates);
+            myState = dstStates;
+            stateBeginTime = Time.time;
         }
 
         #region Event Handler
@@ -228,7 +288,20 @@ namespace GameLogic
         {
             if (myState == PlayerStates.WaitForStart)
             {
-                myState = PlayerStates.Main_Phase;
+                numOfMonsterCouldUse = _numOfMonsterCouldUse;
+                numOfTerrainCouldUse = _numOfTerrainCouldUse;
+                if (myMonsters.Count == _numOfMonsterCouldUse)
+                {
+                    foreach (Monster m in myMonsters)
+                    {
+                        m.isIdle = false;
+                        if (!m.isAlive || m.isExiled)
+                        {
+                            numOfMonsterCouldUse--;
+                        }
+                    }
+                }
+                ChangeState(PlayerStates.Main_Phase);
             }
         }
 
@@ -240,7 +313,7 @@ namespace GameLogic
         {
             if (myState == PlayerStates.Init)
             {
-                myState = PlayerStates.WaitForStart;
+                ChangeState(PlayerStates.WaitForStart);
                 InstructionUI.text = "Wait For Your Turn";
             }
         }
@@ -256,7 +329,7 @@ namespace GameLogic
                 PlayedCardName = CardName;
                 ContentUIManager.ClearContentUI();
                 InstructionUI.text = "Place it!";
-                myState = PlayerStates.ConfirmMonsterPosition_Phase;
+                ChangeState(PlayerStates.ConfirmSpawnPosition_Phase);
             }
             return;
         }
@@ -267,14 +340,22 @@ namespace GameLogic
         /// <param name="HexTileID">The Chosen Hex ID</param>
         private void ClickOnHexInvoked(int HexTileID)
         {
-            if (myState == PlayerStates.ConfirmMonsterPosition_Phase)
+            if (myState == PlayerStates.ConfirmSpawnPosition_Phase)
             {
                 targetHexId = HexTileID;
-                myState = PlayerStates.Spawn_Phase;
+                ChangeState(PlayerStates.Spawn_Phase);
             }
             if (myState == PlayerStates.Move_Phase)
             {
+                if (currMonster.CanReach(HexTileID))
+                {
+                    MoveDelegate(HexTileID);
+                    ChangeState(PlayerStates.Moved_Phase);
+                }
+                else
+                {
 
+                }
             }
             return;
         }
@@ -289,13 +370,15 @@ namespace GameLogic
             if (myState == PlayerStates.Action_Phase)
             {
                 currMonster = clickedMonster;
-                if (currMonster.isAlive && currMonster.monsterOwner.GetPlayerId() == PlayerId)
+                if ((!currMonster.isIdle) && currMonster.isAlive && currMonster.monsterOwner.GetPlayerId() == PlayerId)
                 {
                     ContentUIManager.ShowActionBtn();
                     InstructionUI.text = currMonster.monsterName;
+                    ChangeState(PlayerStates.Move_Phase);
                 }
                 else
                 {
+                    InstructionUI.text = currMonster.monsterName;
                     ContentUIManager.HideActionBtn();
                 }
             }
@@ -311,9 +394,10 @@ namespace GameLogic
                 }
                 else
                 {
+                    return;
                 }
                 //Should go to next monster
-                myState = PlayerStates.End;
+                ChangeState(PlayerStates.Idle_Phase);
             }
             return;
         }
@@ -324,7 +408,7 @@ namespace GameLogic
         /// <param name="btnName"></param>
         private void ClickOnBtnInvoked(string btnName)
         {
-            if (myState == PlayerStates.Action_Phase)
+            if (myState == PlayerStates.Move_Phase || myState == PlayerStates.Moved_Phase)
             {
                 if (currMonster.isAlive && currMonster.monsterOwner.GetPlayerId() == PlayerId)
                 {
@@ -332,16 +416,23 @@ namespace GameLogic
                     {
                         case ("AttackBtn"):
                             InstructionUI.text = "Choose Attack Target";
+                            numOfMonsterCouldUse--;
+                            currMonster.isIdle = true;
                             ContentUIManager.HideActionBtn();
-                            myState = PlayerStates.Attack_Phase;
+                            ChangeState(PlayerStates.Attack_Phase);
                             break;
                         case ("SkillBtn"):
                             InstructionUI.text = "Choose Skill Target";
+                            numOfMonsterCouldUse--;
+                            currMonster.isIdle = true;
                             ContentUIManager.HideActionBtn();
                             break;
                         case ("IdleBtn"):
-                            InstructionUI.text = "Idle";
+
+                            numOfMonsterCouldUse--;
+                            currMonster.isIdle = true;
                             ContentUIManager.HideActionBtn();
+                            ChangeState(PlayerStates.Idle_Phase);
                             break;
                         default:
                             break;
@@ -380,6 +471,16 @@ namespace GameLogic
         {
             Debug.LogFormat("Player {0} use {1} attack {2}", PlayerId, currMonster, targetMonster);
             currMonster.Attack(targetMonster, currMonster.ATK);
+            return;
+        }
+
+        /// <summary>
+        /// Invoked when move
+        /// </summary>
+        /// <param name="destination">The HexTile Id of destination.</param>
+        private void MoveInvoked(int destination)
+        {
+            currMonster.Move(destination);
             return;
         }
         #endregion

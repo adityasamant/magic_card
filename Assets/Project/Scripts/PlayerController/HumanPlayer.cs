@@ -161,41 +161,44 @@ namespace GameLogic
             switch (myState)
             {
                 case (PlayerStates.Init):
-                    Debug.Log("PlayerStates=Init");
+                    //Debug.Log("PlayerStates=Init");
                     ContentUIManager.ShowUICanvas();
                     InstructionUI.text = "Place BattleFiled";
                     break;
                 case (PlayerStates.WaitForStart): //Wait Event From Main Logic
-                    Debug.Log("PlayerStates=WaitForStart");
-                    InstructionUI.text = "Wait For Start";
-                    break;
-                case (PlayerStates.Action_Phase):
-                    InstructionUI.text = "Player " + PlayerId + " Action";
-                    break;
-                case (PlayerStates.Attack_Phase):
-                    myState = PlayerStates.Confirm_Phase;
+                    //Debug.Log("PlayerStates=WaitForStart");
+                    // InstructionUI.text = "Wait For Your Turn";
                     break;
                 case (PlayerStates.Main_Phase):
-                    if (MCardUnchosen == 0)
+                    //(MCardUnchosen <= 0) => Card selection finished
+                    if (MCardUnchosen <= 0)
                     {
                         myState = PlayerStates.Action_Phase;
+                        InstructionUI.text = "Player " + PlayerId + " Turn";
                         break;
                     }
-
-                    InstructionUI.text = "Choose A Card";
-                    if (myCardDataBase)
+                    else
                     {
-                        ContentUIManager.DisplayCard();
+                        InstructionUI.text = "Choose A Card";
+                        if (myCardDataBase)
+                        {
+                            ContentUIManager.DisplayCard();
+                        }
                     }
                     break;
-                case (PlayerStates.Confirm_Phase): // Wait For Click on Hex or Monster
-                    //Debug.Log("PlayerStates=Confirm_Phase");
-                    InstructionUI.text = "Choose target";
+                case (PlayerStates.Action_Phase):
+                    // InstructionUI.text = "Your Turn";
+                    break;
+                case (PlayerStates.Attack_Phase):
+                    myState = PlayerStates.ChooseTarget_Phase;
+                    break;
+                case (PlayerStates.ConfirmMonsterPosition_Phase): // Wait For Click on Hex
+                    //Debug.Log("PlayerStates=ConfirmMonsterPosition_Phase");
+                    InstructionUI.text = "Choose Spawn Position";
                     break;
                 case (PlayerStates.Spawn_Phase):
                     //Debug.Log("PlayerStates=Spawn_Phase");
-                    //Debug.Log("Now is your turn, Spawn-Phase.\n Your monster is spawning into battlefield.");
-                    Debug.Log("Spawn A Charcter Name:" + PlayedCardName);
+                    //Debug.Log("Spawn A Charcter Name:" + PlayedCardName);
                     if (myCardDataBase)
                     {
                         Cards myCard = myCardDataBase.GetCard(PlayedCardName);
@@ -209,6 +212,7 @@ namespace GameLogic
                     //Debug.Log("PlayerStates=End");
                     PlayerEnd(PlayerId);
                     myState = PlayerStates.WaitForStart;
+                    InstructionUI.text = "Wait For Your Turn";
                     break;
                 default:
                     break;
@@ -237,6 +241,7 @@ namespace GameLogic
             if (myState == PlayerStates.Init)
             {
                 myState = PlayerStates.WaitForStart;
+                InstructionUI.text = "Wait For Your Turn";
             }
         }
 
@@ -251,7 +256,7 @@ namespace GameLogic
                 PlayedCardName = CardName;
                 ContentUIManager.ClearContentUI();
                 InstructionUI.text = "Place it!";
-                myState = PlayerStates.Confirm_Phase;
+                myState = PlayerStates.ConfirmMonsterPosition_Phase;
             }
             return;
         }
@@ -262,10 +267,14 @@ namespace GameLogic
         /// <param name="HexTileID">The Chosen Hex ID</param>
         private void ClickOnHexInvoked(int HexTileID)
         {
-            if (myState == PlayerStates.Confirm_Phase)
+            if (myState == PlayerStates.ConfirmMonsterPosition_Phase)
             {
                 targetHexId = HexTileID;
                 myState = PlayerStates.Spawn_Phase;
+            }
+            if (myState == PlayerStates.Move_Phase)
+            {
+
             }
             return;
         }
@@ -283,6 +292,7 @@ namespace GameLogic
                 if (currMonster.isAlive && currMonster.monsterOwner.GetPlayerId() == PlayerId)
                 {
                     ContentUIManager.ShowActionBtn();
+                    InstructionUI.text = currMonster.monsterName;
                 }
                 else
                 {
@@ -291,7 +301,7 @@ namespace GameLogic
             }
 
             //confirm your attack target
-            if (myState == PlayerStates.Confirm_Phase)
+            if (myState == PlayerStates.ChooseTarget_Phase)
             {
                 targetMonster = clickedMonster;
                 //TODO check attack range
@@ -302,6 +312,7 @@ namespace GameLogic
                 else
                 {
                 }
+                //Should go to next monster
                 myState = PlayerStates.End;
             }
             return;
@@ -320,13 +331,16 @@ namespace GameLogic
                     switch (btnName)
                     {
                         case ("AttackBtn"):
+                            InstructionUI.text = "Choose Attack Target";
                             ContentUIManager.HideActionBtn();
                             myState = PlayerStates.Attack_Phase;
                             break;
                         case ("SkillBtn"):
+                            InstructionUI.text = "Choose Skill Target";
                             ContentUIManager.HideActionBtn();
                             break;
                         case ("IdleBtn"):
+                            InstructionUI.text = "Idle";
                             ContentUIManager.HideActionBtn();
                             break;
                         default:
@@ -360,8 +374,8 @@ namespace GameLogic
         /// Invoked when the player is attacking
         /// </summary>
         /// <param name="PlayerId">The Player Id of the played card.</param>
-        /// <param name="CardIndex">The played card index</param>
-        /// <param name="HexIndex">The hex that card has been place on</param>
+        /// <param name="currMonster">Controlled Monster</param>
+        /// <param name="targetMonster">Target Monster</param>
         private void AttackInvoked(int PlayerId, Monster currMonster, Monster targetMonster)
         {
             Debug.LogFormat("Player {0} use {1} attack {2}", PlayerId, currMonster, targetMonster);

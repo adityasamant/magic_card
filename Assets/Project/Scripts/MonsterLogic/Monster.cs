@@ -313,7 +313,7 @@ namespace Monsters
             }
             if(Dist==1 || Dist==0)
             {//Adjcent to a enemy monster, Attack
-                Debug.LogFormat("Attack Target Monster{0}, My ATK={1}", uid, this.ATK);
+                //Debug.LogFormat("Attack Target Monster{0}, My ATK={1}", uid, this.ATK);
                 nearestMonster.MonsterStateUpdate.Invoke("Damage", this.ATK);
                 MonsterTurnEnd();
                 return;
@@ -371,7 +371,7 @@ namespace Monsters
             if(StateField=="Damage")
             {
                 HP -= newState;
-                Debug.LogFormat("Monster {0} get hitted. Current HP is: {1}", this.uid, this.HP);
+                //Debug.LogFormat("Monster {0} get hitted. Current HP is: {1}", this.uid, this.HP);
                 if (HP <= 0)
                 {
                     isAlive = false;

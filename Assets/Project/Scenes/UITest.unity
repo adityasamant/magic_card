@@ -12951,7 +12951,7 @@ MonoBehaviour:
       m_Calls: []
   PlayerId: 0
   world: {fileID: 946620730}
-  numOfMonsterCouldUse: 1
+  numOfMonsterCouldUse: 2
   numOfTerrainCouldUse: 2
   myCardDataBase: {fileID: 1434865760}
   HexMap: {fileID: 1013766375}
@@ -17693,16 +17693,23 @@ MonoBehaviour:
   Event_ScanFinished:
     m_PersistentCalls:
       m_Calls: []
+    m_CallsDirty: 1
   Event_PlayerTurnStart:
     m_PersistentCalls:
       m_Calls: []
+    m_CallsDirty: 1
   Event_Battle_PlayerTurnStart:
     m_PersistentCalls:
       m_Calls: []
+    m_CallsDirty: 1
   PlayerId: 1
   world: {fileID: 0}
   myCardDataBase: {fileID: 1925191620}
   HexMap: {fileID: 1013766375}
+  myState: 0
+  _bInit: 0
+  stateBeginTime: 0
+  HexToPlaceIndex: 0
 --- !u!4 &702833976
 Transform:
   m_ObjectHideFlags: 0
@@ -23454,7 +23461,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 255c30a7015bb463ea358d46d2c08596, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _distance: 1.5
+  _distance: 1.65
   _heightOffset: 0
   _lateralOffset: 0
   _positionSmoothTime: 0.3
@@ -26370,7 +26377,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1002117715
 Transform:
   m_ObjectHideFlags: 0
@@ -26401,14 +26408,25 @@ MonoBehaviour:
   Event_ScanFinished:
     m_PersistentCalls:
       m_Calls: []
+    m_CallsDirty: 1
   Event_PlayerTurnStart:
     m_PersistentCalls:
       m_Calls: []
+    m_CallsDirty: 1
   Event_Battle_PlayerTurnStart:
     m_PersistentCalls:
       m_Calls: []
+    m_CallsDirty: 1
   PlayerId: 0
   world: {fileID: 946620730}
+  myState: 0
+  _bInit: 0
+  startTime: 0
+  PlayedCardName: 
+  UIMonsterpreview: {fileID: 0}
+  UIMonsterName: 
+  RayHitPosition: {x: 0, y: 0, z: 0}
+  targetHexId: 0
   MonsterPreviewField: {fileID: 0}
   myCardDataBase: {fileID: 1434865760}
   NumberOfCard: {fileID: 0}
@@ -29482,7 +29500,7 @@ MonoBehaviour:
   Player0: {fileID: 546041113}
   Player1: {fileID: 2047704422}
   world: {fileID: 946620730}
-  PlayerTurnTimeLimited: 20
+  PlayerTurnTimeLimited: 120
   DicePrefab: {fileID: 100000, guid: 8579f10578058c04f917e8d30bac7ccf, type: 3}
   CardDataBase: {fileID: 703630447}
 --- !u!4 &1128183241
@@ -51372,7 +51390,7 @@ MonoBehaviour:
       m_Calls: []
   PlayerId: 1
   world: {fileID: 946620730}
-  numOfMonsterCouldUse: 1
+  numOfMonsterCouldUse: 2
   numOfTerrainCouldUse: 2
   myCardDataBase: {fileID: 1434865760}
   HexMap: {fileID: 1013766375}

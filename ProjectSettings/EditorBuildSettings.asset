@@ -8,18 +8,9 @@ EditorBuildSettings:
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
-<<<<<<< Updated upstream
   - enabled: 1
     path: Assets/Project/Scenes/MidtermRaycast.unity
     guid: 576bd3d44d1a6422cae4759f2d26343f
-=======
-  - enabled: 0
-    path: Assets/Scenes/Menu.unity
-    guid: 2fe525bc149ab5d459a327f982a635d0
-  - enabled: 1
-    path: Assets/Scenes/TestMap.unity
-    guid: c2922939a42422b49a1c4a42686471d8
->>>>>>> Stashed changes
   m_configObjects:
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 2ba4dbd235ed941bb8fdb5a40ab00f22,
       type: 2}

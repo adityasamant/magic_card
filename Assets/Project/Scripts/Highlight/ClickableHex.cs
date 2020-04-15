@@ -128,22 +128,27 @@ public class ClickableHex : Clickable
         switch (_hightlightstatus)
         {
             case HexHightLightStatus.DEFAULT:
+                HightLightRender.enabled = false;
                 HightLightRender.startColor = Color.black;
                 HightLightRender.endColor = Color.black;
                 break;
             case HexHightLightStatus.HIGHTLIGHT:
+                HightLightRender.enabled = true;
                 HightLightRender.startColor = Color.blue;
                 HightLightRender.endColor = Color.blue;
                 break;
             case HexHightLightStatus.OCCUPIED:
+                HightLightRender.enabled = true;
                 HightLightRender.startColor = Color.black;
                 HightLightRender.endColor = Color.black;
                 break;
             case HexHightLightStatus.MOVEMENT:
+                HightLightRender.enabled = true;
                 HightLightRender.startColor = Color.green;
                 HightLightRender.endColor = Color.green;
                 break;
             case HexHightLightStatus.ATTACK:
+                HightLightRender.enabled = true;
                 HightLightRender.startColor = Color.red;
                 HightLightRender.endColor = Color.red;
                 break;

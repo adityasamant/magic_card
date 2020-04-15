@@ -229,6 +229,10 @@ namespace GameLogic
                             }
                         }
                         InstructionUI.text = "Player " + PlayerId + " Turn";
+                        if (networkPlayer)
+                        {
+                            networkPlayer.Send_ChangeToAction();
+                        }
                         ChangeState(PlayerStates.Action_Phase);
                         break;
                     }
@@ -339,16 +343,17 @@ namespace GameLogic
         /// <param name="CardName">The Chosen Card Name</param>
         private void ClickOnCardInvoked(string CardName)
         {
+            if (networkPlayer)
+            {
+                networkPlayer.Send_ClickOnCard(CardName);
+            }
+
             if (myState == PlayerStates.Main_Phase)
             {
                 PlayedCardName = CardName;
                 ContentUIManager.ClearContentUI();
                 InstructionUI.text = "Place it!";
                 Debug.Log("Now Player want to use " + PlayedCardName);
-                if(networkPlayer)
-                {
-                    networkPlayer.Send_ClickOnCard(CardName);
-                }
                 ChangeState(PlayerStates.ConfirmSpawnPosition_Phase);
             }
             return;
@@ -397,10 +402,23 @@ namespace GameLogic
         /// <param name="HexTileID">The Chosen Hex ID</param>
         private void ClickOnMonsterInvoked(Monster clickedMonster)
         {
+            if (networkPlayer)
+            {
+                //Transform Monster To MonsterUID
+                networkPlayer.Send_ClickOnMonster(clickedMonster.GetUId());
+            }
+
             //choose an action
             if (myState == PlayerStates.Action_Phase)
             {
+                if(currMonster.gameObject.GetComponent<ClickableCharacter>())
+                    currMonster.gameObject.GetComponent<ClickableCharacter>().Highlighted(ClickableCharacter.CharHightLightStatus.DEFAULT);
+
                 currMonster = clickedMonster;
+
+                if(currMonster.gameObject.GetComponent<ClickableCharacter>())
+                    currMonster.gameObject.GetComponent<ClickableCharacter>().Highlighted(ClickableCharacter.CharHightLightStatus.SELECTED);
+
                 if ((!currMonster.isIdle) && currMonster.isAlive && currMonster.monsterOwner.GetPlayerId() == PlayerId)
                 {
                     ContentUIManager.ShowActionBtn();
@@ -439,6 +457,11 @@ namespace GameLogic
         /// <param name="btnName"></param>
         private void ClickOnBtnInvoked(string btnName)
         {
+            if (networkPlayer)
+            {
+                networkPlayer.Send_ClickOnBtn(btnName);
+            }
+
             if (myState == PlayerStates.Move_Phase || myState == PlayerStates.Moved_Phase)
             {
                 if (currMonster.isAlive && currMonster.monsterOwner.GetPlayerId() == PlayerId)

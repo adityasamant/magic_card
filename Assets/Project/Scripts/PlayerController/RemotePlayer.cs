@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using CardInfo;
+using Monsters;
 
 namespace GameLogic
 {
@@ -31,6 +32,24 @@ namespace GameLogic
         /// The ID of one hex to place new monster
         ///</summary>
         private int targetHexId;
+
+        /// <summary>
+        /// The begin time of this state started.
+        /// </summary>
+        private float stateBeginTime;
+
+        /// <summary>
+        /// Current Control Monster
+        /// </summary>
+        private Monster currMonster;
+        /// <summary>
+        /// Attacking Target Monster
+        /// </summary>
+        private Monster targetMonster;
+        /// <summary>
+        /// Store player's monster when card selection finish
+        /// </summary>
+        private List<Monster> myMonsters = new List<Monster>();
         #endregion
 
         #region Network Function
@@ -45,23 +64,26 @@ namespace GameLogic
         public void NetworkSetUp()
         {
             if (networkPlayer == null) return;
-            networkPlayer.Network_ClickOnCard += ClickOnCardInvoked;
-            networkPlayer.Network_ClickOnHex += ClickOnHexInvoked;
+            networkPlayer.Network_ClickOnCard += Network_ClickOnCardInvoked;
+            networkPlayer.Network_ClickOnHex += Network_ClickOnHexInvoked;
             networkPlayer.Network_PlayCard += Network_PlayCardInvoked;
             networkPlayer.Network_PlayerTurnEnd += Network_PlayerTurnEndInvoked;
+            networkPlayer.Network_ClickOnMonster += Network_ClickOnMonsterInvoked;
+            networkPlayer.Network_ClickOnBtn += Network_ClickOnBtnInvoked;
+            networkPlayer.Network_ChangeToAction += Network_ChangeToActionInvoked;
             myState = PlayerStates.WaitForStart;
         }
         /// <summary>
         /// Invoke when receive the Network ClickOnCard Event
         /// </summary>
         /// <param name="CardName">Name of used cards</param>
-        private void ClickOnCardInvoked(string CardName)
+        private void Network_ClickOnCardInvoked(string CardName)
         {
-            if(myState == PlayerStates.Main_Phase)
+            if (myState == PlayerStates.Main_Phase)
             {
                 PlayedCardName = CardName;
                 Debug.LogFormat("Now Player {0} want to use {1}", PlayerId, PlayedCardName);
-                myState = PlayerStates.Confirm_Phase;
+                ChangeState(PlayerStates.ConfirmSpawnPosition_Phase);
             }
             return;
         }
@@ -69,13 +91,20 @@ namespace GameLogic
         /// Invoke when receive the Network ClickOnHex Event
         /// </summary>
         /// <param name="HexTileID">The Chosen Hex ID</param>
-        private void ClickOnHexInvoked(int HexTileID)
+        private void Network_ClickOnHexInvoked(int HexTileID)
         {
-            if (myState == PlayerStates.Confirm_Phase)
+            if (myState == PlayerStates.ConfirmSpawnPosition_Phase)
             {
                 targetHexId = HexTileID;
-                Debug.LogFormat("Now Player {0} want to Play Card in Hex {1}", PlayerId, HexTileID);
-                myState = PlayerStates.Spawn_Phase;
+                ChangeState(PlayerStates.Spawn_Phase);
+            }
+            if (myState == PlayerStates.Move_Phase)
+            {
+                if (currMonster.CanReach(HexTileID))
+                {
+                    MoveDelegate(HexTileID);
+                    ChangeState(PlayerStates.Moved_Phase);
+                }
             }
             return;
         }
@@ -89,7 +118,7 @@ namespace GameLogic
         {
             if (PlayerId != this.PlayerId) return;
             this.PlayedCard.Invoke(PlayerId, CardIndex, HexIndex);
-            myState = PlayerStates.End;
+            ChangeState(PlayerStates.End);
             return;
         }
         /// <summary>
@@ -101,8 +130,91 @@ namespace GameLogic
         {
             if (PlayerId != this.PlayerId) return;
             PlayerEnd(PlayerId);
-            myState = PlayerStates.WaitForStart;
+            ChangeState(PlayerStates.WaitForStart);
             return;
+        }
+
+        /// <summary>
+        /// Invoke when receive the Network Click On Monster Event
+        /// Transform MonsterId to clickedMonster
+        /// </summary>
+        private void Network_ClickOnMonsterInvoked(int MonsterId)
+        {
+            //Transform MonsterId to Monster
+            Monster clickedMonster = world.getMonsterByID(MonsterId);
+
+            //choose an action
+            if (myState == PlayerStates.Action_Phase)
+            {
+                currMonster = clickedMonster;
+                if ((!currMonster.isIdle) && currMonster.isAlive && currMonster.monsterOwner.GetPlayerId() == PlayerId)
+                {
+                    ChangeState(PlayerStates.Move_Phase);
+                }
+            }
+
+            //confirm your attack target
+            if (myState == PlayerStates.ChooseTarget_Phase)
+            {
+                targetMonster = clickedMonster;
+                //TODO check attack range
+                if (targetMonster.isAlive && targetMonster.monsterOwner.GetPlayerId() != PlayerId)
+                {
+                    AttackDelegate(PlayerId, currMonster, targetMonster);
+                }
+                else
+                {
+                    return;
+                }
+                //Should go to next monster
+                ChangeState(PlayerStates.Idle_Phase);
+            }
+            return;
+        }
+
+        /// <summary>
+        /// Invoke when receive the Network Click On Btn Event
+        /// </summary>
+        private void Network_ClickOnBtnInvoked(string BtnName)
+        {
+            if (myState == PlayerStates.Move_Phase || myState == PlayerStates.Moved_Phase)
+            {
+                if (currMonster.isAlive && currMonster.monsterOwner.GetPlayerId() == PlayerId)
+                {
+                    switch (BtnName)
+                    {
+                        case ("AttackBtn"):
+                            currMonster.isIdle = true;
+                            ChangeState(PlayerStates.Attack_Phase);
+                            break;
+                        case ("SkillBtn"):
+                            // InstructionUI.text = "Choose Skill Target";
+                            // numOfMonsterCouldUse--;
+                            // currMonster.isIdle = true;
+                            // ContentUIManager.HideActionBtn();
+                            break;
+                        case ("IdleBtn"):
+                            currMonster.isIdle = true;
+                            ChangeState(PlayerStates.Idle_Phase);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                else
+                {
+                    Debug.Log("Current Monster doesn't match UI!");
+                }
+            }
+            return;
+        }
+        /// <summary>
+        /// Invoke when receive the Network ChangeToAction Event
+        /// Set my state to Action Phase
+        /// </summary>
+        private void Network_ChangeToActionInvoked()
+        {
+            ChangeState(PlayerStates.Action_Phase);
         }
         #endregion
 
@@ -128,11 +240,25 @@ namespace GameLogic
                     break;
                 case (PlayerStates.Main_Phase): // Wait For Network_ClickOnCard Event
                     break;
-                case (PlayerStates.Confirm_Phase): // Wait For Network_ClickOnHex Event
+                case (PlayerStates.ConfirmSpawnPosition_Phase): // Wait For Network_ClickOnHex Event
                     break;
                 case (PlayerStates.Spawn_Phase):// Wait For Network_PlayCard Event
                     break;
+                case (PlayerStates.Action_Phase):// Wait For Select Monster
+                    break;
+                case (PlayerStates.Move_Phase): //Wait For Move
+                    break;
+                case (PlayerStates.Moved_Phase): //Wait for Other Btn Function(Attack,Skill,Idle)
+                    break;
+                case (PlayerStates.Attack_Phase):
+                    ChangeState(PlayerStates.ChooseTarget_Phase);
+                    break;
+                case (PlayerStates.ChooseTarget_Phase):
+                    break;
                 case (PlayerStates.End): //Wait For Netowrk_PlayerTurnEnd Event
+                    break;
+                case (PlayerStates.Idle_Phase):
+                    ChangeState(PlayerStates.Main_Phase);
                     break;
                 default:
                     break;
@@ -149,7 +275,20 @@ namespace GameLogic
         {
             if (myState == PlayerStates.WaitForStart)
             {
-                myState = PlayerStates.Main_Phase;
+                myMonsters.Clear();
+                foreach (KeyValuePair<int, Monster> monsterPair in world.monsters)
+                {
+                    Monster thisMonster = monsterPair.Value;
+                    if (thisMonster.monsterOwner.GetPlayerId() == PlayerId)
+                    {
+                        myMonsters.Add(thisMonster);
+                    }
+                }
+                foreach (Monster m in myMonsters)
+                {
+                    m.isIdle = false;
+                }
+                ChangeState(PlayerStates.Main_Phase);
             }
         }
         /// <summary>
@@ -162,6 +301,19 @@ namespace GameLogic
         {
             Debug.LogFormat("RemotePlayer: Player {0} playing card {1} in hex {2}", PlayerId, CardIndex, HexIndex);
             return;
+        }
+        #endregion
+
+        #region Private Function
+        /// <summary>
+        /// Change Player State
+        /// </summary>
+        /// <param name="dstStates">Target State</param>
+        private void ChangeState(PlayerStates dstStates)
+        {
+            //Debug.LogFormat("PlayerStates: "+dstStates);
+            myState = dstStates;
+            stateBeginTime = Time.time;
         }
         #endregion
     }

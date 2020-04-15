@@ -28,6 +28,21 @@ namespace GameLogic
     /// </summary>
     /// <param name="PlayerId">The Index of the comming player</param>
     public delegate void Network_PlayerTurnEnd(int PlayerId);
+    /// <summary>
+    /// Invoke when receive a Network ChangeToAction Event
+    /// </summary>
+    public delegate void Network_ChangeToAction();
+    /// <summary>
+    /// Invoke when receive a Network Click on Button Event
+    /// </summary>
+    /// <param name="BtnName">The Name of the button</param>
+    public delegate void Network_ClickOnBtn(string BtnName);
+    /// <summary>
+    /// Invoke when receive a Network Click on Monster Event
+    /// Need to tranfrom Monster and MonsterId
+    /// </summary>
+    /// <param name="MonsterId">The uid of the monster</param>
+    public delegate void Network_ClickOnMonster(int MonsterId);
 
     /// <summary>
     /// This Player is replicated from server
@@ -41,6 +56,10 @@ namespace GameLogic
         /// All real function should be call by GameObject
         /// </summary>
         private Player PlayerGameObject;
+        /// <summary>
+        /// _enableDebugLog = true will print out more information
+        /// </summary>
+        private bool _enableDebugLog = true;
         #endregion
         #region Event Definition
         /// <summary>
@@ -59,6 +78,19 @@ namespace GameLogic
         /// Invoke when receive a Network PlayerTurnEnd Event
         /// </summary>
         public Network_PlayerTurnEnd Network_PlayerTurnEnd;
+        /// <summary>
+        /// Invoke when receive a Network ChangeToAction Event
+        /// </summary>
+        public Network_ChangeToAction Network_ChangeToAction;
+        /// <summary>
+        /// Invoke when receive a Network Click on Button Event
+        /// </summary>
+        public Network_ClickOnBtn Network_ClickOnBtn;
+        /// <summary>
+        /// Invoke when receive a Network Click on Monster Event
+        /// Need to tranfrom Monster and MonsterId
+        /// </summary>
+        public Network_ClickOnMonster Network_ClickOnMonster;
         #endregion
 
         #region Unity Function
@@ -107,7 +139,9 @@ namespace GameLogic
             Network_ClickOnHex += Network_ClickonHexInvoked;
             Network_PlayCard += Network_PlayCardInvoked;
             Network_PlayerTurnEnd += Network_PlayerTurnEndInvoked;
-
+            Network_ClickOnMonster += Network_ClickOnMonsterInvoked;
+            Network_ClickOnBtn += Network_ClickOnBtnInvoked;
+            Network_ChangeToAction += Network_ChangeToActionInvoked;
         }
 
         /// <summary>
@@ -164,6 +198,36 @@ namespace GameLogic
             base.OnEvent(evnt);
             if (evnt.PlayerId != state.PlayerId) return;
             this.Network_PlayerTurnEnd(evnt.PlayerId);
+        }
+
+        /// <summary>
+        /// Receive Network event from remote player and sent to local player
+        /// </summary>
+        /// <param name="evnt">Event Class</param>
+        public override void OnEvent(ChangeToAction evnt)
+        {
+            base.OnEvent(evnt);
+            this.Network_ChangeToAction();
+        }
+
+        /// <summary>
+        /// Receive Network event from remote player and sent to local player
+        /// </summary>
+        /// <param name="evnt">Event Class</param>
+        public override void OnEvent(ClickOnBtn evnt)
+        {
+            base.OnEvent(evnt);
+            this.Network_ClickOnBtn(evnt.BtnName);
+        }
+
+        /// <summary>
+        /// Receive Network event from remote player and sent to local player
+        /// </summary>
+        /// <param name="evnt">Event Class</param>
+        public override void OnEvent(ClickOnMonster evnt)
+        {
+            base.OnEvent(evnt);
+            this.Network_ClickOnMonster(evnt.MonsterId);
         }
         #endregion
 
@@ -231,6 +295,50 @@ namespace GameLogic
                 newEvent.Send();
             }
         }
+
+        /// <summary>
+        /// Send ChangeToAction to other player
+        /// Only Owner allow to send event
+        /// </summary>
+        public void Send_ChangeToAction()
+        {
+            if (entity.IsOwner)
+            {
+                var newEvnt = ChangeToAction.Create(entity);
+                newEvnt.Send();
+            }
+        }
+
+        /// <summary>
+        /// Send Click On Monster to other player
+        /// Only Owner allow to send event
+        /// Need to transform Monster to MonsterId before send
+        /// </summary>
+        /// <param name="MonsterId">Monster UID</param>
+        public void Send_ClickOnMonster(int MonsterId)
+        {
+            if (entity.IsOwner)
+            {
+                var newEvnt = ClickOnMonster.Create(entity);
+                newEvnt.MonsterId = MonsterId;
+                newEvnt.Send();
+            }
+        }
+
+        /// <summary>
+        /// Send Click On Button Event to other player
+        /// Only Owner allow to send event
+        /// </summary>
+        /// <param name="BtnName">Button Name</param>
+        public void Send_ClickOnBtn(string BtnName)
+        {
+            if (entity.IsOwner)
+            {
+                var newEvnt = ClickOnBtn.Create(entity);
+                newEvnt.BtnName = BtnName;
+                newEvnt.Send();
+            }
+        }
         #endregion
 
         #region Event Handle
@@ -239,7 +347,10 @@ namespace GameLogic
         /// </summary>
         private void Network_ClickonCardInvoked(string CardName)
         {
-            Debug.LogFormat("NetworkPlayer: Click On Card Invoked, CardName={0}", CardName);
+            if (_enableDebugLog)
+            {
+                Debug.LogFormat("NetworkPlayer: Click On Card Invoked, CardName={0}", CardName);
+            }
         }
 
         /// <summary>
@@ -247,15 +358,20 @@ namespace GameLogic
         /// </summary>
         private void Network_ClickonHexInvoked(int HexIndex)
         {
-            Debug.LogFormat("NetworkPlayer: Click On Hex Invoked, HexIndex={0}", HexIndex);
+            if (_enableDebugLog)
+            {
+                Debug.LogFormat("NetworkPlayer: Click On Hex Invoked, HexIndex={0}", HexIndex);
+            }
         }
-
         /// <summary>
         /// Private Handle the PlayCard Event
         /// </summary>
         private void Network_PlayCardInvoked(int PlayerId, int CardIndex, int HexIndex)
         {
-            Debug.LogFormat("NetworkPlayer: Play Card Invoked, PlayerId={0}, CardIndex={1}, HexIndex={2}", PlayerId, CardIndex, HexIndex);
+            if (_enableDebugLog)
+            {
+                Debug.LogFormat("NetworkPlayer: Play Card Invoked, PlayerId={0}, CardIndex={1}, HexIndex={2}", PlayerId, CardIndex, HexIndex);
+            }
         }
 
         /// <summary>
@@ -263,7 +379,42 @@ namespace GameLogic
         /// </summary>
         private void Network_PlayerTurnEndInvoked(int PlayerId)
         {
-            Debug.LogFormat("NetworkPlayer: Player Turn End Invoked, PlayerId={0}", PlayerId);
+            if (_enableDebugLog)
+            {
+                Debug.LogFormat("NetworkPlayer: Player Turn End Invoked, PlayerId={0}", PlayerId);
+            }
+        }
+
+        /// <summary>
+        /// Private Handle the ClickOnMonster Event
+        /// </summary>
+        private void Network_ClickOnMonsterInvoked(int MonsterId)
+        {
+            if (_enableDebugLog)
+            {
+                Debug.LogFormat("NetworkPlayer: Player click on Monster, UID={0}", MonsterId);
+            }
+        }
+
+        /// <summary>
+        /// Private Handle the ClickOnBtn Event
+        /// </summary>
+        private void Network_ClickOnBtnInvoked(string BtnName)
+        {
+            if (_enableDebugLog)
+            {
+                Debug.LogFormat("NetworkPlayer: Player click on button, Button Name={0}", BtnName);
+            }
+        }
+        /// <summary>
+        /// Private Handle the ChangeToAction Event
+        /// </summary>
+        private void Network_ChangeToActionInvoked()
+        {
+            if (_enableDebugLog)
+            {
+                Debug.Log("NetworkPlayer: Now Change to Action Phase");
+            }
         }
         #endregion
     }

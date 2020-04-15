@@ -53,6 +53,11 @@ public class ClickableHex : Clickable
             HightLightRender = transform.Find("range").GetComponent<LineRenderer>();
         }
 
+        if(_myTile==null)
+        {
+            _myTile = gameObject.GetComponent<HexTile>();
+        }
+
         if(HightLightRender)
         {
             HightLightRender.startWidth = 0.02f;

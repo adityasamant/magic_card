@@ -422,10 +422,10 @@ namespace GameLogic
                             ChangeState(PlayerStates.Attack_Phase);
                             break;
                         case ("SkillBtn"):
-                            InstructionUI.text = "Choose Skill Target";
-                            numOfMonsterCouldUse--;
-                            currMonster.isIdle = true;
-                            ContentUIManager.HideActionBtn();
+                            // InstructionUI.text = "Choose Skill Target";
+                            // numOfMonsterCouldUse--;
+                            // currMonster.isIdle = true;
+                            // ContentUIManager.HideActionBtn();
                             break;
                         case ("IdleBtn"):
 

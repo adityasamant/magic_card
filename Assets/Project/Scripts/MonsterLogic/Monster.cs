@@ -130,6 +130,12 @@ namespace Monsters
         /// </summary>
         [Tooltip("A link to the game world.")]
         public World world;
+
+        /// <summary>
+        /// Created by CZ on Apr 14.
+        /// </summary>
+        [Tooltip("The HP & MP Bar of monster")]
+        public GameObject StatusBar;
         #endregion
 
         #region Delegate and Event Handler
@@ -145,6 +151,10 @@ namespace Monsters
         /// A Event invoked by the world and other monster, that tell the monster to update their state.
         /// </summary>
         public StateUpdateEvent MonsterStateUpdate;
+        /// <summary>
+        /// A standard distance for statusbar( Created by CZ Apr 14
+        /// </summary>
+        public float StandardDistanceForStatusBar;
         #endregion
 
         #region Public Function
@@ -171,6 +181,8 @@ namespace Monsters
             origin_monsterOwner = monsterOwner;
             origin_HexIndex = HexIndex;
             MonsterReset();
+
+            
         }
 
         /// <summary>
@@ -227,6 +239,7 @@ namespace Monsters
         /// </summary>
         protected void Start()
         {
+            StandardDistanceForStatusBar = 0.5f;
             moving_animation_time = 1.0f;
             attack_animation_time = 1.0f;
             if (MonsterStartTurn == null)
@@ -235,6 +248,23 @@ namespace Monsters
                 MonsterStateUpdate = new StateUpdateEvent();
             MonsterStartTurn.AddListener(MoveMent);
             MonsterStateUpdate.AddListener(StateUpdate);
+
+            //Initiate Status Bar
+            StatusBar = (GameObject)Resources.Load("Prefabs/StatusBar/StatusBar") as GameObject;
+            StatusBar = Instantiate(StatusBar);
+            Vector3 v3 = new Vector3(1, 1, 1);
+            float dis = (Camera.main.transform.position - transform.position).sqrMagnitude;
+            StatusBar.transform.parent = GameObject.Find("MonsterStatusCanvas").gameObject.transform;
+            //StatusBar.transform.localScale = (StandardDistanceForStatusBar / Mathf.Sqrt(dis)) * v3;
+            //Vector3 v3 = new Vector3(1, 1, 1);
+            //float dis = (Camera.main.transform.position - transform.position).sqrMagnitude;
+            //StatusBar.transform.localScale = (StandardDistanceForStatusBar / Mathf.Sqrt(dis)) * v3;
+            //Debug.Log(StatusBar.transform.localScale);
+            Debug.Log(StatusBar.transform.position);
+            
+            StatusBar.transform.position = Camera.main.WorldToScreenPoint(transform.position);
+            Debug.Log("Obj:" + transform.position);
+            Debug.Log("Screen Position:" + StatusBar.transform.position);
         }
 
         /// <summary>
@@ -268,6 +298,7 @@ namespace Monsters
                     WaitForAnimation = MonsterAction.Nothing;
                 }
             }
+            UpdateStatusBarTransform();
         }
         #endregion
 
@@ -406,6 +437,21 @@ namespace Monsters
                 SPD = 0;
             }
         }
+
+        /// <summary>
+        /// Update the Transfrom of Statusbar (Created by CZ Apr 14
+        /// </summary>
+        public void UpdateStatusBarTransform()
+        {
+            Vector3 v3 = new Vector3(1, 1, 1);
+            float dis = (Camera.main.transform.position - transform.position).sqrMagnitude;
+            //StatusBar.transform.localScale = (StandardDistanceForStatusBar / Mathf.Sqrt(dis)) * v3;
+            //Debug.Log(StatusBar.transform.localScale);
+            Debug.Log("Monster World Position" + uid + ":" + transform.position);
+            Debug.Log("Bar World Position" + uid + ":" + StatusBar.transform.position);
+            StatusBar.transform.position = Camera.main.WorldToScreenPoint(gameObject.transform.position);// + Camera.main.transform.forward * 1.5f;
+            Debug.Log("Bar Screen Position:" + StatusBar.transform.position);
+        }
         #endregion
     }
 
@@ -423,4 +469,6 @@ namespace Monsters
                 return m1.GetUId() - m2.GetUId();
         }
     }
+
+    
 }

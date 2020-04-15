@@ -413,14 +413,32 @@ namespace GameLogic
         {
             Debug.LogFormat("AIPlayer {0} playing card {1} in hex {2}", PlayerId, CardIndex, HexIndex);
             NewCard thisCard = CardDataBase.GetCardByIndex(CardIndex);
-            //GameObject monsterClass = Resources.Load<GameObject>(thisCard.PrefabPath);
             HexTile TargetHex = world.tileMap.getHexTileByIndex(HexIndex);
-            GameObject newMonster = Instantiate(thisCard.CardPrefab, TargetHex.transform);
-            if(newMonster.GetComponent<Monster>()==null)
-                newMonster.AddComponent<Monster>();
-            newMonster.GetComponent<Monster>().world = world;
-            newMonster.GetComponent<Monster>().MonsterInit(thisCard.CardName, thisCard.HP, thisCard.Attack, thisCard.Speed, (PlayerId == 0 ? Player0 : Player1), HexIndex);
-            world.uploadMonsterInWorld(newMonster.GetComponent<Monster>());
+            if (thisCard.isMonster)
+            {
+                GameObject newMonster = Instantiate(thisCard.CardPrefab, TargetHex.transform);
+                if (newMonster.GetComponent<Monster>() == null)
+                    newMonster.AddComponent<Monster>();
+                newMonster.GetComponent<Monster>().world = world;
+                newMonster.GetComponent<Monster>().MonsterInit(thisCard.CardName, thisCard.HP, thisCard.Attack, thisCard.Speed, (PlayerId == 0 ? Player0 : Player1), HexIndex);
+                world.uploadMonsterInWorld(newMonster.GetComponent<Monster>());
+            }
+            else
+            {
+                GameObject newTerrain = Instantiate(thisCard.CardPrefab, TargetHex.transform);
+                if(newTerrain.GetComponent<InteractiveTerrain>()==null)
+                {
+                    newTerrain.AddComponent<InteractiveTerrain>();
+                }
+                newTerrain.GetComponent<InteractiveTerrain>().World = world;
+                List<int> Affective = new List<int>();
+                Affective.Add(TargetHex.getID());
+                newTerrain.GetComponent<InteractiveTerrain>().TerrainCardInit(thisCard.CardName,Affective);
+                world.uploadTerrainInWorld(newTerrain.GetComponent<InteractiveTerrain>());
+            }
+
+            //GameObject monsterClass = Resources.Load<GameObject>(thisCard.PrefabPath);
+            
         }
         #endregion
     }

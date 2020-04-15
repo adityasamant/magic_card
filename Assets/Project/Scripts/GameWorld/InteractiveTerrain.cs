@@ -57,7 +57,7 @@ namespace GameWorld
         /// <summary>
         /// Public Reference to get the game world
         /// </summary>
-        public World World { get { return _world; } }
+        public World World { get { return _world; } set { _world = value; } }
         /// <summary>
         /// Pulbic Interface to get which Hex this terrain card is on
         /// The terrain card can only be placed in the init process, It will never change during the game

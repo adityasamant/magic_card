@@ -34,6 +34,7 @@ namespace GameWorld
         /// </summary>
         public Dictionary<int, Monster> monsters = new Dictionary<int, Monster>();
         public Dictionary<int, Player> players = new Dictionary<int, Player>();
+        public Dictionary<int, InteractiveTerrain> terrains = new Dictionary<int, InteractiveTerrain>();
         /// <summary>
         /// the game map
         /// </summary>
@@ -83,6 +84,18 @@ namespace GameWorld
             }
             monsters[uid] = monster;
             monster.MonsterTurnEnd += MonsterMoveEnd;
+            return uid;
+        }
+
+        public int uploadTerrainInWorld(InteractiveTerrain interactiveTerrain)
+        {
+            int uid = interactiveTerrain.UniqueIndex;
+            if(terrains.ContainsKey(uid)==true)
+            {
+                Debug.LogErrorFormat("Error! Terrain with uid {0} already exists", uid);
+                return -1;
+            }
+            terrains[uid] = interactiveTerrain;
             return uid;
         }
 

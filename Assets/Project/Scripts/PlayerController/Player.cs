@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.Events;
 using UnityEngine;
 using GameWorld;
+using Monsters;
 
 namespace GameLogic
 {
@@ -18,6 +19,9 @@ namespace GameLogic
         Confirm_Phase,
         Spawn_Phase,
         Action_Phase,
+        Attack_Phase,
+        Skill_Phase,
+        Idle_Phase,
         ImageTrackingStop,
         End,
         Error
@@ -38,6 +42,14 @@ namespace GameLogic
     /// <param name="CardIndex">The Card Index of the played card.</param>
     /// <param name="HexIndex">The Hex Index of the player camera.</param>
     public delegate void PlayedCard(int PlayerId, int CardIndex, int HexIndex);
+
+    /// <summary>
+    /// When this player click Attack Btn, it will pop a delegate to Main Logic
+    /// </summary>
+    /// <param name="PlayerId">The Player Id of the card.</param>
+    /// <param name="CardIndex">The Card Index of the played card.</param>
+    /// <param name="HexIndex">The Hex Index of the player camera.</param>
+    public delegate void AttackDelegate(int PlayerId, Monster currMonster, Monster targetMonster);
 
     /// <summary>
     /// When the play ended its battle turn, this delegate should be activated.
@@ -67,7 +79,12 @@ namespace GameLogic
         public PlayerEnd PlayerEnd;
 
         /// <summary>
-        /// Define the interface for delegate PlayedCard
+        /// Define the interface for delegate Attack
+        /// </summary>
+        public AttackDelegate AttackDelegate;
+
+        /// <summary>
+        /// Define the interface for delegate Attack
         /// </summary>
         public PlayedCard PlayedCard;
 

@@ -349,6 +349,7 @@ namespace Monsters
         /// <param name="animationTime"> Animation time. </param>
         public virtual void Attack(Monster subjectMonster, int atk = -1)
         {
+            gameObject.transform.LookAt(subjectMonster.transform.position);
             if (atk < 0) atk = this.ATK;
             GetComponent<Animator>().SetTrigger("Attack");
             AnimationFinishedTime = Time.time + attack_animation_time;

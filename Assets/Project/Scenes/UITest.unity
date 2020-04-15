@@ -12908,7 +12908,7 @@ GameObject:
   - component: {fileID: 546041112}
   - component: {fileID: 546041113}
   m_Layer: 0
-  m_Name: HumanPlayer
+  m_Name: HumanPlayer0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12959,6 +12959,8 @@ MonoBehaviour:
   ControllerManager: {fileID: 836711802}
   ContentUIManager: {fileID: 1824549677}
   InstructionUI: {fileID: 743861674}
+  currMonster: {fileID: 0}
+  targetMonster: {fileID: 0}
 --- !u!1 &549203883
 GameObject:
   m_ObjectHideFlags: 0
@@ -29480,7 +29482,7 @@ MonoBehaviour:
   Player0: {fileID: 546041113}
   Player1: {fileID: 2047704422}
   world: {fileID: 946620730}
-  PlayerTurnTimeLimited: 30
+  PlayerTurnTimeLimited: 20
   DicePrefab: {fileID: 100000, guid: 8579f10578058c04f917e8d30bac7ccf, type: 3}
   CardDataBase: {fileID: 703630447}
 --- !u!4 &1128183241
@@ -35744,7 +35746,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4473913279387900, guid: b8c53b54524957f48a35e6b0795487bc, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4474634083496628, guid: b8c53b54524957f48a35e6b0795487bc, type: 3}
       propertyPath: m_LocalPosition.x
@@ -35788,7 +35790,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4581806024089112, guid: b8c53b54524957f48a35e6b0795487bc, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4769557671692792, guid: b8c53b54524957f48a35e6b0795487bc, type: 3}
       propertyPath: m_RootOrder
@@ -51327,7 +51329,7 @@ GameObject:
   - component: {fileID: 2047704421}
   - component: {fileID: 2047704422}
   m_Layer: 0
-  m_Name: HumanPlayer2
+  m_Name: HumanPlayer1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -51378,6 +51380,8 @@ MonoBehaviour:
   ControllerManager: {fileID: 836711802}
   ContentUIManager: {fileID: 1824549677}
   InstructionUI: {fileID: 743861674}
+  currMonster: {fileID: 0}
+  targetMonster: {fileID: 0}
 --- !u!1 &2051250543
 GameObject:
   m_ObjectHideFlags: 0

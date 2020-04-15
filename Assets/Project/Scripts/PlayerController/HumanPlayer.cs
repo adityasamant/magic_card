@@ -110,6 +110,9 @@ namespace GameLogic
         /// </summary>
         [Tooltip("The Text box in UI show Instructions.")]
         public Text InstructionUI;
+
+        public Monster currMonster;
+        public Monster targetMonster;
         #endregion
 
         // Start is called before the first frame update
@@ -127,6 +130,7 @@ namespace GameLogic
                 Event_PlayerTurnStart = new UnityEvent();
             }
             Event_PlayerTurnStart.AddListener(PlayerTurnStartInvoke);
+
             if (Event_ScanFinished == null)
             {
                 Event_ScanFinished = new UnityEvent();
@@ -134,10 +138,12 @@ namespace GameLogic
             Event_ScanFinished.AddListener(ScanFinishedInvoke);
 
             PlayedCard += PlayedCardInvoked;
+            AttackDelegate += AttackInvoked;
 
             ControllerManager.ClickOnCard += ClickOnCardInvoked;
             ControllerManager.ClickOnHex += ClickOnHexInvoked;
             ControllerManager.ClickOnMonster += ClickOnMonsterInvoked;
+            ControllerManager.ClickOnBtn += ClickOnBtnInvoked;
 
             MCardUnchosen = numOfMonsterCouldUse;
             TCardUnchosen = numOfTerrainCouldUse;
@@ -164,7 +170,10 @@ namespace GameLogic
                     InstructionUI.text = "Wait For Start";
                     break;
                 case (PlayerStates.Action_Phase):
-                    InstructionUI.text = "Action";
+                    InstructionUI.text = "Player " + PlayerId + " Action";
+                    break;
+                case (PlayerStates.Attack_Phase):
+                    myState = PlayerStates.Confirm_Phase;
                     break;
                 case (PlayerStates.Main_Phase):
                     if (MCardUnchosen == 0)
@@ -179,8 +188,9 @@ namespace GameLogic
                         ContentUIManager.DisplayCard();
                     }
                     break;
-                case (PlayerStates.Confirm_Phase): // Wait For Click on Hex
+                case (PlayerStates.Confirm_Phase): // Wait For Click on Hex or Monster
                     //Debug.Log("PlayerStates=Confirm_Phase");
+                    InstructionUI.text = "Choose target";
                     break;
                 case (PlayerStates.Spawn_Phase):
                     //Debug.Log("PlayerStates=Spawn_Phase");
@@ -257,20 +267,6 @@ namespace GameLogic
                 targetHexId = HexTileID;
                 myState = PlayerStates.Spawn_Phase;
             }
-            // if (myState == PlayerStates.Action_Phase)
-            // {
-            //     foreach (KeyValuePair<int, Monster> monsterPair in world.monsters)
-            //     {
-            //         Monster thisMonster = monsterPair.Value;
-            //         if (thisMonster.isAlive && thisMonster.HexIndex == HexTileID){
-            //             if(thisMonster.monsterOwner.GetPlayerId() == PlayerId){
-            //                 ContentUIManager.ShowActionBtn();
-            //             }else{
-            //                 ContentUIManager.HideActionBtn();
-            //             }
-            //         }
-            //     }
-            // }
             return;
         }
 
@@ -278,10 +274,12 @@ namespace GameLogic
         /// This function will call when click on a monster
         /// </summary>
         /// <param name="HexTileID">The Chosen Hex ID</param>
-        private void ClickOnMonsterInvoked(Monster currMonster)
+        private void ClickOnMonsterInvoked(Monster clickedMonster)
         {
+            //choose an action
             if (myState == PlayerStates.Action_Phase)
             {
+                currMonster = clickedMonster;
                 if (currMonster.isAlive && currMonster.monsterOwner.GetPlayerId() == PlayerId)
                 {
                     ContentUIManager.ShowActionBtn();
@@ -289,6 +287,55 @@ namespace GameLogic
                 else
                 {
                     ContentUIManager.HideActionBtn();
+                }
+            }
+
+            //confirm your attack target
+            if (myState == PlayerStates.Confirm_Phase)
+            {
+                targetMonster = clickedMonster;
+                //TODO check attack range
+                if (targetMonster.isAlive && targetMonster.monsterOwner.GetPlayerId() != PlayerId)
+                {
+                    AttackDelegate(PlayerId, currMonster, targetMonster);
+                }
+                else
+                {
+                }
+                myState = PlayerStates.End;
+            }
+            return;
+        }
+
+        /// <summary>
+        /// This function will call when click on a button
+        /// </summary>
+        /// <param name="btnName"></param>
+        private void ClickOnBtnInvoked(string btnName)
+        {
+            if (myState == PlayerStates.Action_Phase)
+            {
+                if (currMonster.isAlive && currMonster.monsterOwner.GetPlayerId() == PlayerId)
+                {
+                    switch (btnName)
+                    {
+                        case ("AttackBtn"):
+                            ContentUIManager.HideActionBtn();
+                            myState = PlayerStates.Attack_Phase;
+                            break;
+                        case ("SkillBtn"):
+                            ContentUIManager.HideActionBtn();
+                            break;
+                        case ("IdleBtn"):
+                            ContentUIManager.HideActionBtn();
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                else
+                {
+                    Debug.Log("Current Monster doesn't match UI!");
                 }
             }
             return;
@@ -306,6 +353,19 @@ namespace GameLogic
         private void PlayedCardInvoked(int PlayerId, int CardIndex, int HexIndex)
         {
             Debug.LogFormat("Player {0} playing card {1} in hex {2}", PlayerId, CardIndex, HexIndex);
+            return;
+        }
+
+        /// <summary>
+        /// Invoked when the player is attacking
+        /// </summary>
+        /// <param name="PlayerId">The Player Id of the played card.</param>
+        /// <param name="CardIndex">The played card index</param>
+        /// <param name="HexIndex">The hex that card has been place on</param>
+        private void AttackInvoked(int PlayerId, Monster currMonster, Monster targetMonster)
+        {
+            Debug.LogFormat("Player {0} use {1} attack {2}", PlayerId, currMonster, targetMonster);
+            currMonster.Attack(targetMonster, currMonster.ATK);
             return;
         }
         #endregion

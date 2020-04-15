@@ -114,7 +114,7 @@ namespace GameLogic
         /// GameObject of the CardUIManager
         /// </summary>
         [Tooltip("GameObject of the CardUIManager")]
-        public CardUIManager CardUIManager;
+        public ContentUIManager ContentUIManager;
         #endregion
 
         // Start is called before the first frame update
@@ -189,7 +189,7 @@ namespace GameLogic
                     // }
                     if (myCardDataBase)
                     {
-                        CardUIManager.ShowUICanvas();
+                        ContentUIManager.ShowUICanvas();
                         
                         //Cards myCard = myCardDataBase.GetCard(PlayedCardName);
                         // CardInfo.text = "CardName:" + myCard.CardName + "\n"
@@ -312,7 +312,7 @@ namespace GameLogic
             if(myState==PlayerStates.Main_Phase)
             {
                 PlayedCardName=myCardDataBase.GetRandomCard().CardName;
-                CardUIManager.HideUICanvas();
+                ContentUIManager.HideUICanvas();
                 Debug.Log("Now Player want to use " + PlayedCardName);
                 myState = PlayerStates.Confirm_Phase;
                 //Debug.LogFormat("Now Player want to use {0}, ATK: {1}, HP: {2}, SPEED: {3}, SPECIAL EFFECT: {4}", PlayedCardName.CardName, PlayedCardName.Attack, PlayedCardName.HP, PlayedCardName.Speed, PlayedCardName.SpecialEffect);

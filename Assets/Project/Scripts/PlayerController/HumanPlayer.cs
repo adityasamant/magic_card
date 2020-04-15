@@ -7,6 +7,8 @@ using CardInfo;
 using UnityEngine.XR.MagicLeap;
 using InputController;
 using UI;
+using GameWorld;
+using Monsters;
 
 namespace GameLogic
 {
@@ -55,6 +57,16 @@ namespace GameLogic
         /// The ID of one hex to place new monster
         ///</summary>
         private int targetHexId;
+
+        ///<summary>
+        /// The num of monster card unchosen
+        ///</summary>
+        private int MCardUnchosen;
+
+        ///<summary>
+        /// The num of terrian card unchosen
+        ///</summary>
+        private int TCardUnchosen;
         #endregion
 
         #region Public Variable
@@ -62,6 +74,16 @@ namespace GameLogic
         /// NetworkEvent Sender
         /// </summary>
         public NetworkPlayer networkPlayer = null;
+
+        /// <summary>
+        /// Num of available monster card (default 3)
+        /// </summary>
+        public int numOfMonsterCouldUse = 3;
+
+        /// <summary>
+        /// Num of available terrain card (default 2)
+        /// </summary>
+        public int numOfTerrainCouldUse = 2;
 
         /// <summary>
         /// CardInfo Reader
@@ -85,11 +107,11 @@ namespace GameLogic
         public ControllerManager ControllerManager;
 
         /// <summary>
-        /// GameObject of the CardUIManager
+        /// GameObject of the ContentUIManager
         /// </summary>
-        [Tooltip("GameObject of the CardUIManager")]
-        public CardUIManager CardUIManager;
-       /// <summary>
+        [Tooltip("GameObject of the ContentUIManager")]
+        public ContentUIManager ContentUIManager;
+        /// <summary>
         /// The Text box in UI show Instructions.
         /// </summary>
         [Tooltip("The Text box in UI show Instructions.")]
@@ -122,7 +144,10 @@ namespace GameLogic
 
             ControllerManager.ClickOnCard += ClickOnCardInvoked;
             ControllerManager.ClickOnHex += ClickOnHexInvoked;
+            ControllerManager.ClickOnMonster += ClickOnMonsterInvoked;
 
+            MCardUnchosen = numOfMonsterCouldUse;
+            TCardUnchosen = numOfTerrainCouldUse;
         }
 
         ///<summary>
@@ -137,20 +162,26 @@ namespace GameLogic
             switch (myState)
             {
                 case (PlayerStates.Init):
-                    CardUIManager.ShowUICanvas();
+                    Debug.Log("PlayerStates=Init");
+                    ContentUIManager.ShowUICanvas();
                     InstructionUI.text = "Place BattleFiled";
                     break;
                 case (PlayerStates.WaitForStart): //Wait Event From Main Logic
                     InstructionUI.text = "Wait For Start";
                     break;
-                case (PlayerStates.ImageTrackingStart):
-                    myState = PlayerStates.Main_Phase;
+                case (PlayerStates.Action_Phase):
+                    InstructionUI.text = "Action";
                     break;
-                case (PlayerStates.Main_Phase): // Wait For Hand Event From Hand Tracker
+                case (PlayerStates.Main_Phase):
+                    if (MCardUnchosen == 0)
+                    {
+                        myState = PlayerStates.Action_Phase;
+                        break;
+                    }
                     InstructionUI.text = "Choose A Card";
                     if (myCardDataBase)
                     {
-                        CardUIManager.DisplayCard();
+                        ContentUIManager.DisplayCard();
                     }
                     break;
                 case (PlayerStates.Confirm_Phase): // Wait For Click on Hex
@@ -165,6 +196,7 @@ namespace GameLogic
                     {
                         NewCard myCard = myCardDataBase.GetCard(PlayedCardName);
                         PlayedCard(PlayerId, myCard.id, targetHexId);
+                        MCardUnchosen--;
                     }
                     myState = PlayerStates.End;
                     break;
@@ -212,8 +244,8 @@ namespace GameLogic
         {
             if (myState == PlayerStates.Main_Phase)
             {
-                PlayedCardName= CardName;
-                CardUIManager.ClearCardUI();
+                PlayedCardName = CardName;
+                ContentUIManager.ClearContentUI();
                 InstructionUI.text = "Place it!";
                 Debug.Log("Now Player want to use " + PlayedCardName);
                 if(networkPlayer)
@@ -239,6 +271,40 @@ namespace GameLogic
                     networkPlayer.Send_ClickOnHex(HexTileID);
                 }
                 myState = PlayerStates.Spawn_Phase;
+            }
+            // if (myState == PlayerStates.Action_Phase)
+            // {
+            //     foreach (KeyValuePair<int, Monster> monsterPair in world.monsters)
+            //     {
+            //         Monster thisMonster = monsterPair.Value;
+            //         if (thisMonster.isAlive && thisMonster.HexIndex == HexTileID){
+            //             if(thisMonster.monsterOwner.GetPlayerId() == PlayerId){
+            //                 ContentUIManager.ShowActionBtn();
+            //             }else{
+            //                 ContentUIManager.HideActionBtn();
+            //             }
+            //         }
+            //     }
+            // }
+            return;
+        }
+
+        /// <summary>
+        /// This function will call when click on a monster
+        /// </summary>
+        /// <param name="HexTileID">The Chosen Hex ID</param>
+        private void ClickOnMonsterInvoked(Monster currMonster)
+        {
+            if (myState == PlayerStates.Action_Phase)
+            {
+                if (currMonster.isAlive && currMonster.monsterOwner.GetPlayerId() == PlayerId)
+                {
+                    ContentUIManager.ShowActionBtn();
+                }
+                else
+                {
+                    ContentUIManager.HideActionBtn();
+                }
             }
             return;
         }

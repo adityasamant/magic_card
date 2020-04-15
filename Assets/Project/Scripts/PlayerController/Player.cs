@@ -17,6 +17,7 @@ namespace GameLogic
         Main_Phase,
         Confirm_Phase,
         Spawn_Phase,
+        Action_Phase,
         ImageTrackingStop,
         End,
         Error

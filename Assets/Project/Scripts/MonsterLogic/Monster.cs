@@ -145,6 +145,10 @@ namespace Monsters
         /// A Event invoked by the world and other monster, that tell the monster to update their state.
         /// </summary>
         public StateUpdateEvent MonsterStateUpdate;
+        /// <summary>
+        /// If isIdle, then the monster cannot move or attack
+        /// </summary>
+        public bool isIdle;
         #endregion
 
         #region Public Function
@@ -158,7 +162,7 @@ namespace Monsters
         /// <param name="spd">Monster Origin Spd</param>
         /// <param name="monsterOwner">Monster Origin Owner</param>
         /// <param name="HexIndex"></param>
-        public void MonsterInit(string name,int hp,int atk,int spd,Player monsterOwner,int HexIndex)
+        public void MonsterInit(string name, int hp, int atk, int spd, Player monsterOwner, int HexIndex)
         {
             uid = monsterCount;
             monsterCount++;
@@ -171,6 +175,8 @@ namespace Monsters
             origin_monsterOwner = monsterOwner;
             origin_HexIndex = HexIndex;
             MonsterReset();
+
+
         }
 
         /// <summary>
@@ -179,7 +185,7 @@ namespace Monsters
         /// </summary>
         public void MonsterReset()
         {
-            if(isExiled)
+            if (isExiled)
             {
                 Debug.LogFormat("Monster {0} Error: An exiled monster should be reset.", gameObject.transform.name);
                 return;
@@ -204,7 +210,8 @@ namespace Monsters
         /// <summary>
         /// Sorted Monster by SPD and UID
         /// </summary>
-        static public bool operator <(Monster a, Monster b) {
+        static public bool operator <(Monster a, Monster b)
+        {
             if (a.SPD != b.SPD)
                 return a.SPD < b.SPD;
             else
@@ -213,7 +220,8 @@ namespace Monsters
         /// <summary>
         /// Sorted Monster by SPD and UID
         /// </summary>
-        static public bool operator >(Monster a, Monster b) {
+        static public bool operator >(Monster a, Monster b)
+        {
             if (a.SPD != b.SPD)
                 return a.SPD > b.SPD;
             else
@@ -227,6 +235,7 @@ namespace Monsters
         /// </summary>
         protected void Start()
         {
+            isIdle = false;
             moving_animation_time = 1.0f;
             attack_animation_time = 1.0f;
             if (MonsterStartTurn == null)
@@ -288,32 +297,32 @@ namespace Monsters
                 MonsterTurnEnd();
                 return;
             }
-                
+
 
             int Dist = 99999;
             Monster nearestMonster = null;
-            foreach(KeyValuePair<int,Monster> MonsterItr in world.monsters)
+            foreach (KeyValuePair<int, Monster> MonsterItr in world.monsters)
             {
                 Monster thisMonster = MonsterItr.Value;
                 if (thisMonster.isAlive == false) continue;
                 if (thisMonster.isExiled == true) continue;
                 if (thisMonster.monsterOwner == this.monsterOwner) continue;
                 int thisDist = world.tileMap.getDistance(this.HexIndex, thisMonster.HexIndex);
-                if(thisDist<Dist)
+                if (thisDist < Dist)
                 {
                     Dist = thisDist;
                     nearestMonster = thisMonster;
                 }
             }
-            if (nearestMonster==null)
+            if (nearestMonster == null)
             {
                 Debug.Log("Cannot Find a monster.");
                 MonsterTurnEnd();
                 return;
             }
-            if(Dist==1 || Dist==0)
+            if (Dist == 1 || Dist == 0)
             {//Adjcent to a enemy monster, Attack
-                Debug.LogFormat("Attack Target Monster{0}, My ATK={1}", uid, this.ATK);
+                //Debug.LogFormat("Attack Target Monster{0}, My ATK={1}", uid, this.ATK);
                 nearestMonster.MonsterStateUpdate.Invoke("Damage", this.ATK);
                 MonsterTurnEnd();
                 return;
@@ -349,6 +358,7 @@ namespace Monsters
         /// <param name="animationTime"> Animation time. </param>
         public virtual void Attack(Monster subjectMonster, int atk = -1)
         {
+            gameObject.transform.LookAt(subjectMonster.transform.position);
             if (atk < 0) atk = this.ATK;
             GetComponent<Animator>().SetTrigger("Attack");
             AnimationFinishedTime = Time.time + attack_animation_time;
@@ -365,9 +375,9 @@ namespace Monsters
         /// "Move", newState=next HexIndex Index
         /// "Exile", All state=0 and @isExile=true, @isAlive=false
         /// </param>
-        public void StateUpdate(string StateField,int newState)
+        public void StateUpdate(string StateField, int newState)
         {
-            if(StateField=="Damage")
+            if (StateField == "Damage")
             {
                 HP -= newState;
                 Debug.LogFormat("Monster {0} get hitted. Current HP is: {1}", this.uid, this.HP);
@@ -380,12 +390,12 @@ namespace Monsters
                 {
                     gameObject.GetComponent<Animator>().SetTrigger("Damage");
                 }
-                    
+
             }
-            if(StateField=="Move")
+            if (StateField == "Move")
             {
                 HexTile hexTile = world.tileMap.getHexTileByIndex(newState);
-                if(hexTile==null)
+                if (hexTile == null)
                 {
                     Debug.Log("Monster Error: Move to a null HexTile!");
                     return;
@@ -396,7 +406,7 @@ namespace Monsters
                 transform.localPosition = new Vector3(0.0f, 0.0f, 0.0f);
                 HexIndex = newState;
             }
-            if(StateField=="Exile")
+            if (StateField == "Exile")
             {
                 isExiled = true;
                 isAlive = false;
@@ -404,6 +414,15 @@ namespace Monsters
                 ATK = 0;
                 SPD = 0;
             }
+        }
+        
+        // <summary>
+        /// Check the possibility of moving to another Hex
+        /// </summary>
+        /// <param name="destination"> the destination Hex</param>
+        public bool CanReach(int destination){
+            //TODO
+            return true;
         }
         #endregion
     }
@@ -422,4 +441,6 @@ namespace Monsters
                 return m1.GetUId() - m2.GetUId();
         }
     }
+
+
 }

@@ -26,6 +26,12 @@ namespace InputController
     /// </summary>
     /// <param name="currMonster">The selected Monster.</param>
     public delegate void ClickOnMonster(Monster currMonster);
+
+    /// <summary>
+    /// When bumper click on a button, this delegate invoked
+    /// </summary>
+    /// <param name="currMonster">The selected Monster.</param>
+    public delegate void ClickOnBtn(string btnName);
     #endregion
 
     public class ControllerManager : MonoBehaviour
@@ -50,6 +56,7 @@ namespace InputController
         public ClickOnHex ClickOnHex;
         public ClickOnCard ClickOnCard;
         public ClickOnMonster ClickOnMonster;
+        public ClickOnBtn ClickOnBtn;
         #endregion
 
         #region Unity Methods
@@ -97,7 +104,7 @@ namespace InputController
                             ClickOnMonster(selectedGameObject.GetComponent<Monster>());
                             break;
                         case ("ActionBtn"):
-                            
+                            ClickOnBtn(selectedGameObject.name);
                             break;
                             
                         default:

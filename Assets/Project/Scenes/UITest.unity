@@ -12908,7 +12908,7 @@ GameObject:
   - component: {fileID: 546041112}
   - component: {fileID: 546041113}
   m_Layer: 0
-  m_Name: HumanPlayer
+  m_Name: HumanPlayer0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12951,7 +12951,7 @@ MonoBehaviour:
       m_Calls: []
   PlayerId: 0
   world: {fileID: 946620730}
-  numOfMonsterCouldUse: 1
+  numOfMonsterCouldUse: 3
   numOfTerrainCouldUse: 2
   myCardDataBase: {fileID: 1434865760}
   HexMap: {fileID: 1013766375}
@@ -12959,6 +12959,8 @@ MonoBehaviour:
   ControllerManager: {fileID: 836711802}
   ContentUIManager: {fileID: 1824549677}
   InstructionUI: {fileID: 743861674}
+  currMonster: {fileID: 0}
+  targetMonster: {fileID: 0}
 --- !u!1 &549203883
 GameObject:
   m_ObjectHideFlags: 0
@@ -17688,19 +17690,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f110bb5769469dc47aa4f71297330b2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event_ScanFinished:
-    m_PersistentCalls:
-      m_Calls: []
-  Event_PlayerTurnStart:
-    m_PersistentCalls:
-      m_Calls: []
-  Event_Battle_PlayerTurnStart:
-    m_PersistentCalls:
-      m_Calls: []
-  PlayerId: 1
-  world: {fileID: 0}
-  myCardDataBase: {fileID: 1925191620}
-  HexMap: {fileID: 1013766375}
 --- !u!4 &702833976
 Transform:
   m_ObjectHideFlags: 0
@@ -23452,7 +23441,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 255c30a7015bb463ea358d46d2c08596, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _distance: 1.5
+  _distance: 1.65
   _heightOffset: 0
   _lateralOffset: 0
   _positionSmoothTime: 0.3
@@ -26368,7 +26357,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1002117715
 Transform:
   m_ObjectHideFlags: 0
@@ -26396,28 +26385,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e44912531b27beb4290a928b94ed43ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event_ScanFinished:
-    m_PersistentCalls:
-      m_Calls: []
-  Event_PlayerTurnStart:
-    m_PersistentCalls:
-      m_Calls: []
-  Event_Battle_PlayerTurnStart:
-    m_PersistentCalls:
-      m_Calls: []
-  PlayerId: 0
-  world: {fileID: 946620730}
-  MonsterPreviewField: {fileID: 0}
-  myCardDataBase: {fileID: 1434865760}
-  NumberOfCard: {fileID: 0}
-  CardInfo: {fileID: 0}
-  myHandTrackerObject: {fileID: 1572913794}
-  myHandTracker: {fileID: 1572913796}
-  Instructions: {fileID: 0}
-  HexMap: {fileID: 1013766375}
-  MainCamera: {fileID: 836333947}
-  ControllerManager: {fileID: 836711802}
-  ContentUIManager: {fileID: 0}
 --- !u!1 &1003922252
 GameObject:
   m_ObjectHideFlags: 0
@@ -29480,7 +29447,7 @@ MonoBehaviour:
   Player0: {fileID: 546041113}
   Player1: {fileID: 2047704422}
   world: {fileID: 946620730}
-  PlayerTurnTimeLimited: 30
+  PlayerTurnTimeLimited: 120
   DicePrefab: {fileID: 100000, guid: 8579f10578058c04f917e8d30bac7ccf, type: 3}
   CardDataBase: {fileID: 703630447}
 --- !u!4 &1128183241
@@ -35744,7 +35711,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4473913279387900, guid: b8c53b54524957f48a35e6b0795487bc, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4474634083496628, guid: b8c53b54524957f48a35e6b0795487bc, type: 3}
       propertyPath: m_LocalPosition.x
@@ -35788,7 +35755,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4581806024089112, guid: b8c53b54524957f48a35e6b0795487bc, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4769557671692792, guid: b8c53b54524957f48a35e6b0795487bc, type: 3}
       propertyPath: m_RootOrder
@@ -51327,7 +51294,7 @@ GameObject:
   - component: {fileID: 2047704421}
   - component: {fileID: 2047704422}
   m_Layer: 0
-  m_Name: HumanPlayer2
+  m_Name: HumanPlayer1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -51370,7 +51337,7 @@ MonoBehaviour:
       m_Calls: []
   PlayerId: 1
   world: {fileID: 946620730}
-  numOfMonsterCouldUse: 1
+  numOfMonsterCouldUse: 3
   numOfTerrainCouldUse: 2
   myCardDataBase: {fileID: 1434865760}
   HexMap: {fileID: 1013766375}
@@ -51378,6 +51345,8 @@ MonoBehaviour:
   ControllerManager: {fileID: 836711802}
   ContentUIManager: {fileID: 1824549677}
   InstructionUI: {fileID: 743861674}
+  currMonster: {fileID: 0}
+  targetMonster: {fileID: 0}
 --- !u!1 &2051250543
 GameObject:
   m_ObjectHideFlags: 0

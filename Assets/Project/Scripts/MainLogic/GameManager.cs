@@ -235,22 +235,25 @@ namespace GameLogic
                             Debug.Log("Player0 Go First.");
                             playerTurnList.Add(Player0);
                             playerTurnList.Add(Player1);
-                            bPlayer0First = false;  //Switch Player go first next turn
+                            //bPlayer0First = false;  //Switch Player go first next turn
+                            //For manual control: Do not Switch Player go first next turn
                         }
                         else
                         {
                             Debug.Log("Player1 Go First.");
                             playerTurnList.Add(Player1);
                             playerTurnList.Add(Player0);
-                            bPlayer0First = true;   //Switch Player go first next turn
+                            // bPlayer0First = true;   //Switch Player go first next turn
                         }
                         ChangeState(GameStates.Player_Turn_Begin);
                     }
                     break;
                 case GameStates.Player_Turn_Begin:
                     if (playerTurnList.Count == 0) // all players' turn is over. 
-                        ChangeState(GameStates.Battle_Begin);
-                    if (nowTime - stateBeginTime > 0.5)
+                        //skip auto battle
+                        //ChangeState(GameStates.Battle_Begin);
+                        ChangeState(GameStates.Turn_Begin);
+                    if (nowTime - stateBeginTime > 1)
                     {
                         Player currentPlayer = playerTurnList[0];
                         playerTurnList.Remove(currentPlayer);
@@ -261,6 +264,7 @@ namespace GameLogic
                     }
                     break ;
                 case GameStates.Wait_For_Player_Turn:
+                    // Do Manual Control in this state
                     if (nowTime - stateBeginTime > PlayerTurnTimeLimited) // Setting a time limit for each player. TODO: when this is triggered, a delegent should be sent to the Player.
                     {
                         Debug.LogWarningFormat("Player {0}'s time out. The system will consider it hasn't done anything.", currentPlayerId);

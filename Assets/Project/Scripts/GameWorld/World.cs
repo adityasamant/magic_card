@@ -50,7 +50,7 @@ namespace GameWorld
         public World_ResetFinished World_ResetFinished;
 
         public UnityEvent Event_ResetStart;
-        
+
         public bool created = false;
 
         private float steptime;
@@ -167,7 +167,7 @@ namespace GameWorld
         /// Invoke when World is enable
         /// </summary>
         void Start()
-        { 
+        {
             Debug.Log("Creating a new world");
             actingMonsterList = new SortedSet<Monster>(new MonsterComparator());
             actingPlayerList = new List<Player>();
@@ -177,17 +177,20 @@ namespace GameWorld
             if (Event_BattleBegin == null)
                 Event_BattleBegin = new UnityEvent();
             Event_BattleBegin.AddListener(BattleBegin);
+
+            //TODO Remove
             if (Event_ResetStart == null)
                 Event_ResetStart = new UnityEvent();
             Event_ResetStart.AddListener(ResetBegin);
         }
-        
+
         /// <summary>
         /// FSM for each tick
         /// </summary>
         void Update()
         {
             float nowTime = Time.time;
+            //Debug.Log("WorldStates=" + currentState);
             switch (currentState)
             {
                 case WorldStates.Idle:
@@ -197,34 +200,15 @@ namespace GameWorld
                 case WorldStates.Wait_For_Player:
                     if (nowTime - stateBeginTime > 1)
                     {
-                        Debug.LogFormat("Player {0} Time out.", currentActPlayer.GetPlayerId());
                         ChangeState(WorldStates.Battle);
                     }
                     break;
                 case WorldStates.Battle:
-                    if (actingMonsterList.Count == 0)
-                    {
-                        if(actingPlayerList.Count == 0)
-                            ChangeState(WorldStates.Summary);
-                        else
-                        {
-                            currentActPlayer = actingPlayerList[0];
-                            actingPlayerList.Remove(currentActPlayer);
-                            Debug.LogFormat("Player {0} is taking control...", currentActPlayer.GetPlayerId());
-                            ChangeState(WorldStates.Wait_For_Player);
-                            currentActPlayer.Event_Battle_PlayerTurnStart.Invoke();
-                        }
-                    }
-                    else
-                    {
-                        // choose the next monster and 
-                        currentActMonster = actingMonsterList.Min;
-                        actingMonsterList.Remove(currentActMonster);
-                        Debug.LogFormat("Monster {0} is moving...", currentActMonster.GetUId());
-                        ChangeState(WorldStates.Wait_For_Monster);
-                        currentActMonster.MonsterStartTurn.Invoke();
-                        //currentActMonster.MonsterTurnEnd += MonsterMoveEnd;
-                    }
+                    currentActPlayer = actingPlayerList[0];
+                    actingPlayerList.Remove(currentActPlayer);
+                    Debug.LogFormat("Player {0} is taking control...", currentActPlayer.GetPlayerId());
+                    ChangeState(WorldStates.Wait_For_Player);
+                    currentActPlayer.Event_Battle_PlayerTurnStart.Invoke();
                     break;
                 case WorldStates.Summary:
                     if (nowTime - steptime < 1) break;
@@ -269,7 +253,7 @@ namespace GameWorld
             foreach (KeyValuePair<int, Monster> monsterPair in monsters)
             {
                 Monster monster = monsterPair.Value;
-                if (monster.isExiled == false && monster.isAlive == true) 
+                if (monster.isExiled == false && monster.isAlive == true)
                     actingMonsterList.Add(monster);
             }
             foreach (KeyValuePair<int, Player> playerPair in players)
@@ -289,30 +273,30 @@ namespace GameWorld
             ResetForOneTurn();
             int Player0Count = 0;
             int Player1Count = 0;
-            foreach(Monster monster in actingMonsterList)
+            foreach (Monster monster in actingMonsterList)
             {
-                if(monster.monsterOwner==gameManager.Player0)
+                if (monster.monsterOwner == gameManager.Player0)
                 {
                     Player0Count++;
                 }
-                else if(monster.monsterOwner==gameManager.Player1)
+                else if (monster.monsterOwner == gameManager.Player1)
                 {
                     Player1Count++;
                 }
             }
-            if(worldAttrib.currentTurn<20 && Player0Count>0 && Player1Count>0)
+            if (worldAttrib.currentTurn < 20 && Player0Count > 0 && Player1Count > 0)
             {
                 worldAttrib.currentTurn++;
                 ChangeState(WorldStates.Battle);
                 return;
             }
 
-            if(Player0Count==Player1Count)
+            if (Player0Count == Player1Count)
             {//Draw
                 Debug.Log("This turn Draw");
                 BattleEnd(-1);
             }
-            else if(Player0Count<Player1Count)
+            else if (Player0Count < Player1Count)
             {//Player1Win
                 Debug.Log("Player 1 wins.");
                 BattleEnd(1);
@@ -345,7 +329,7 @@ namespace GameWorld
             Debug.LogFormat("Monster {0} move ended.", currentActMonster.GetUId());
 
             ChangeState(WorldStates.Battle);
-        }        
+        }
         /// <summary>
         /// Delegate PlayerTurn End Handler
         /// </summary>
@@ -361,7 +345,7 @@ namespace GameWorld
         private void BattleBegin()
         {
             Debug.Log("World: Battle begin.");
-            ResetForOneBattle();
+            // ResetForOneBattle();
             ChangeState(WorldStates.Battle);
         }
         #endregion

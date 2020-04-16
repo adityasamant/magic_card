@@ -93,6 +93,7 @@ namespace GameLogic
         /// <param name="HexTileID">The Chosen Hex ID</param>
         private void Network_ClickOnHexInvoked(int HexTileID)
         {
+            Debug.LogFormat("RemotePlayer: ClickOnHex, State={0}, HexTileId={1}", myState.ToString(), HexTileID);
             if (myState == PlayerStates.ConfirmSpawnPosition_Phase)
             {
                 targetHexId = HexTileID;
@@ -100,8 +101,10 @@ namespace GameLogic
             }
             if (myState == PlayerStates.Move_Phase)
             {
+                Debug.LogFormat("RemotePlayer0: Move Current Monster{0}", currMonster.GetUId());
                 if (currMonster.CanReach(HexTileID))
                 {
+                    Debug.LogFormat("RemotePlayer1: Move Current Monster{0}", currMonster.GetUId());
                     MoveDelegate(HexTileID);
                     ChangeState(PlayerStates.Moved_Phase);
                 }
@@ -177,6 +180,8 @@ namespace GameLogic
         /// </summary>
         private void Network_ClickOnBtnInvoked(string BtnName)
         {
+            Debug.LogFormat("Remote Player Click on Button, myState={0}, ButtonName={1}", myState.ToString(), BtnName);
+
             if (myState == PlayerStates.Move_Phase || myState == PlayerStates.Moved_Phase)
             {
                 if (currMonster.isAlive && currMonster.monsterOwner.GetPlayerId() == PlayerId)
@@ -325,6 +330,7 @@ namespace GameLogic
         /// <param name="destination">The HexTile Id of destination.</param>
         private void MoveInvoked(int destination)
         {
+            Debug.LogFormat("RemotePlayer0 in Delegate: Move Current Monster{0}", currMonster.GetUId());
             currMonster.Move(destination);
             return;
         }

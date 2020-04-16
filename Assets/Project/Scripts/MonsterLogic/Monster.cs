@@ -43,7 +43,7 @@ namespace Monsters
         /// <summary>
         /// the unique id of this monster 
         /// </summary>
-        protected int uid;
+        public int uid;
         /// <summary>
         /// The link to the GameObject
         /// </summary>

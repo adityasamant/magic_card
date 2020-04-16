@@ -449,7 +449,7 @@ namespace GameLogic
                 if (newMonster.GetComponent<Monster>() == null)
                     newMonster.AddComponent<Monster>();
                 newMonster.GetComponent<Monster>().world = world;
-                newMonster.GetComponent<Monster>().MonsterInit(thisCard.CardName, thisCard.HP, thisCard.Attack, thisCard.Speed, (PlayerId == 0 ? Player0 : Player1), HexIndex);
+                newMonster.GetComponent<Monster>().MonsterInit(thisCard.CardName, thisCard.HP, thisCard.Attack, thisCard.Speed, (PlayerId == Player0.PlayerId ? Player0 : Player1), HexIndex);
                 world.uploadMonsterInWorld(newMonster.GetComponent<Monster>());
             }
             else

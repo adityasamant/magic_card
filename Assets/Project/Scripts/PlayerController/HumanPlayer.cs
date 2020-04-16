@@ -431,13 +431,15 @@ namespace GameLogic
                     _isFirstClickOnCharacter = false;
                 }
 
-                if(currMonster.gameObject.GetComponent<ClickableCharacter>())
-                    currMonster.gameObject.GetComponent<ClickableCharacter>().Highlighted(ClickableCharacter.CharHightLightStatus.DEFAULT);
+                if(currMonster)
+                    if(currMonster.gameObject.GetComponent<ClickableCharacter>())
+                        currMonster.gameObject.GetComponent<ClickableCharacter>().Highlighted(ClickableCharacter.CharHightLightStatus.DEFAULT);
 
                 currMonster = clickedMonster;
 
-                if(currMonster.gameObject.GetComponent<ClickableCharacter>())
-                    currMonster.gameObject.GetComponent<ClickableCharacter>().Highlighted(ClickableCharacter.CharHightLightStatus.SELECTED);
+                if(currMonster)
+                    if(currMonster.gameObject.GetComponent<ClickableCharacter>())
+                        currMonster.gameObject.GetComponent<ClickableCharacter>().Highlighted(ClickableCharacter.CharHightLightStatus.SELECTED);
 
                 if ((!currMonster.isIdle) && currMonster.isAlive && currMonster.monsterOwner.GetPlayerId() == PlayerId)
                 {

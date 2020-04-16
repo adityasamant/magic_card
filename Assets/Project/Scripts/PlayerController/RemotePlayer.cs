@@ -226,6 +226,9 @@ namespace GameLogic
         {
             Event_PlayerTurnStart.AddListener(PlayerTurnStartInvoke);
             PlayedCard += PlayedCardInvoked;
+
+            AttackDelegate += AttackInvoked;
+            MoveDelegate += MoveInvoked;
         }
 
         // Update is called once per frame
@@ -300,6 +303,29 @@ namespace GameLogic
         private void PlayedCardInvoked(int PlayerId, int CardIndex, int HexIndex)
         {
             Debug.LogFormat("RemotePlayer: Player {0} playing card {1} in hex {2}", PlayerId, CardIndex, HexIndex);
+            return;
+        }
+
+        /// <summary>
+        /// Invoked when the player is attacking
+        /// </summary>
+        /// <param name="PlayerId">The Player Id of the played card.</param>
+        /// <param name="currMonster">Controlled Monster</param>
+        /// <param name="targetMonster">Target Monster</param>
+        private void AttackInvoked(int PlayerId, Monster currMonster, Monster targetMonster)
+        {
+            Debug.LogFormat("Player {0} use {1} attack {2}", PlayerId, currMonster, targetMonster);
+            currMonster.Attack(targetMonster, currMonster.ATK);
+            return;
+        }
+
+        /// <summary>
+        /// Invoked when move
+        /// </summary>
+        /// <param name="destination">The HexTile Id of destination.</param>
+        private void MoveInvoked(int destination)
+        {
+            currMonster.Move(destination);
             return;
         }
         #endregion

@@ -147,6 +147,19 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   isIdle: 0
+--- !u!114 &5667499688100449907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2397522791942515241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0dc501c1f6ce99546a22e36d13d311f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SelectionCircle: {fileID: 5423469222450403774}
 --- !u!1001 &5936970611102167840
 PrefabInstance:
   m_ObjectHideFlags: 0

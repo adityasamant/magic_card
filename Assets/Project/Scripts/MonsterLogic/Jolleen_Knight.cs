@@ -10,6 +10,7 @@ namespace Monsters
         
         public virtual void Spell(Monster subjectMonster)
         {
+            gameObject.transform.LookAt(subjectMonster.transform.position);
             GetComponent<Animator>().SetTrigger("Spell");
             AnimationFinishedTime = Time.time + spell_animation_time;
             //WaitForAnimation = MonsterAction.Spell;

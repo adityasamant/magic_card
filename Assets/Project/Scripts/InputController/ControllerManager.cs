@@ -106,7 +106,6 @@ namespace InputController
                         case ("ActionBtn"):
                             ClickOnBtn(selectedGameObject.name);
                             break;
-                            
                         default:
                             break;
                     }

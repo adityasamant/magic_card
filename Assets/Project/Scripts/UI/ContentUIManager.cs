@@ -49,6 +49,10 @@ namespace UI
         public GameObject AttackBtnPrefab;
         public GameObject SkillBtnPrefab;
         public GameObject IdleBtnPrefab;
+        public int numOfPortal;
+        public int numOfMist;
+        public int numOfTor;
+        public int numOfFire;
         #endregion
 
         #region Private Variable
@@ -63,6 +67,10 @@ namespace UI
             lastTrans = new Vector3(0.25f, 0, 0);
             HideUICanvas();
             HideActionBtn();
+            numOfPortal = 0;
+            numOfMist = 0;
+            numOfTor = 0;
+            numOfFire = 0;
         }
         #endregion
 
@@ -126,8 +134,9 @@ namespace UI
         /// <param name=""></param>
         public void ClearContentUI()
         {
-            for(int i = 0; i < ContentUI.transform.childCount; i++){
-                if(i == 0) continue;
+            for (int i = 0; i < ContentUI.transform.childCount; i++)
+            {
+                if (i == 0) continue;
                 GameObject.Destroy(ContentUI.transform.GetChild(i).gameObject);
             }
             // foreach (Transform child in ContentUI.transform)
@@ -178,8 +187,31 @@ namespace UI
 
             for (int i = 0; i < numOfCardsOnDeck; i++)
             {
-                // Get one card from card deck randomly
-                GameObject newCard = Instantiate(cards[Random.Range(0, 6)]);
+                GameObject newCard;
+                if (i == 0)
+                {
+                    if (numOfPortal < 2)
+                    {
+                        newCard = Instantiate(cards[7]);
+                        numOfPortal++;
+                    }else if(numOfFire < 1){
+                        newCard = Instantiate(cards[6]);
+                        numOfFire++;
+                    }else if(numOfMist < 1){
+                        newCard = Instantiate(cards[9]);
+                        numOfMist++;
+                    }else if(numOfTor < 1){
+                        newCard = Instantiate(cards[8]);
+                        numOfTor++;
+                    }else{
+                        newCard = Instantiate(cards[Random.Range(0, 6)]);
+                    }
+                }
+                else
+                {
+                    // Get one card from card deck randomly
+                    newCard = Instantiate(cards[Random.Range(0, 6)]);
+                }
 
                 //attch each card to ContentUI as the parent 
                 newCard.transform.SetParent(ContentUI.transform);

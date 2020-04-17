@@ -10,6 +10,7 @@ namespace Monsters
 
         public virtual void DoubleShot(Monster subjectMonster, int atk)
         {
+            gameObject.transform.LookAt(subjectMonster.transform.position);
             GetComponent<Animator>().SetTrigger("DoubleShot");
             AnimationFinishedTime = Time.time + doubleshot_animation_time;
             ActionParam.AttackDamage = atk*2;

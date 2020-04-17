@@ -8,6 +8,7 @@ TagManager:
   - Card
   - HexTile
   - Monster
+  - ActionBtn
   layers:
   - Default
   - TransparentFX

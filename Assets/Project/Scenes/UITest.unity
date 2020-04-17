@@ -12951,7 +12951,7 @@ MonoBehaviour:
       m_Calls: []
   PlayerId: 0
   world: {fileID: 946620730}
-  numOfMonsterCouldUse: 3
+  numOfMonsterCouldUse: 5
   numOfTerrainCouldUse: 2
   myCardDataBase: {fileID: 1434865760}
   HexMap: {fileID: 1013766375}
@@ -46060,6 +46060,10 @@ MonoBehaviour:
     type: 3}
   IdleBtnPrefab: {fileID: 101677888158783586, guid: 0a0291b799b1b4ea091e3dcde8ea72e3,
     type: 3}
+  numOfPortal: 0
+  numOfMist: 0
+  numOfTor: 0
+  numOfFire: 0
 --- !u!1 &1833388920
 GameObject:
   m_ObjectHideFlags: 0
@@ -51337,7 +51341,7 @@ MonoBehaviour:
       m_Calls: []
   PlayerId: 1
   world: {fileID: 946620730}
-  numOfMonsterCouldUse: 3
+  numOfMonsterCouldUse: 5
   numOfTerrainCouldUse: 2
   myCardDataBase: {fileID: 1434865760}
   HexMap: {fileID: 1013766375}

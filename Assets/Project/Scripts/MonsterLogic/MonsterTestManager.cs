@@ -39,8 +39,8 @@ namespace Monsters
                 //monster_erica.Move(180);
                //monster_erica.Move(179);
                 //monster_erica.DoubleShot(monster_brute, 9);
-                monster_brute.Attack(monster_jolleen, 9);
-                Debug.Log("class="+monster_brute.GetComponent<Monster>());
+                
+                monster_jolleen.Spell(monster_brute);
             }
             if (button == MLInputControllerButton.HomeTap)
             {

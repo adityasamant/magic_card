@@ -11,7 +11,8 @@ public class ClickableHex : Clickable
         HIGHTLIGHT, //Over Hover
         OCCUPIED, //Been OCCUPIED
         MOVEMENT,
-        ATTACK
+        ATTACK,
+        ERROR
     };
 
     #region Private Variable
@@ -151,6 +152,11 @@ public class ClickableHex : Clickable
                 HightLightRender.enabled = true;
                 HightLightRender.startColor = Color.red;
                 HightLightRender.endColor = Color.red;
+                break;
+            case HexHightLightStatus.ERROR:
+                HightLightRender.enabled = true;
+                HightLightRender.startColor = Color.black;
+                HightLightRender.endColor = Color.black;
                 break;
         }
     }

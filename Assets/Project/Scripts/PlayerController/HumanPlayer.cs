@@ -241,6 +241,7 @@ namespace GameLogic
                         {
                             networkPlayer.Send_ChangeToAction();
                         }
+                        world.UnHighLightAll();
                         ChangeState(PlayerStates.Action_Phase);
                         break;
                     }
@@ -445,6 +446,7 @@ namespace GameLogic
                 {
                     ContentUIManager.ShowActionBtn();
                     InstructionUI.text = currMonster.monsterName;
+                    world.HighLightMovementZone(currMonster);
                     ChangeState(PlayerStates.Move_Phase);
                 }
                 else
@@ -468,6 +470,7 @@ namespace GameLogic
                     return;
                 }
                 //Should go to next monster
+                world.UnHighLightAll();
                 ChangeState(PlayerStates.Idle_Phase);
             }
             return;
@@ -495,6 +498,7 @@ namespace GameLogic
                             numOfMonsterCouldUse--;
                             currMonster.isIdle = true;
                             ContentUIManager.HideActionBtn();
+                            world.HighLightAttackZone(currMonster);
                             ChangeState(PlayerStates.Attack_Phase);
                             break;
                         case ("SkillBtn"):

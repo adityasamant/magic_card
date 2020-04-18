@@ -7,7 +7,6 @@ using Monsters;
 
 namespace GameWorld
 {
-
     public delegate void World_ResetFinished();
 
     public enum WorldStates
@@ -29,12 +28,31 @@ namespace GameWorld
 
     public class World : MonoBehaviour
     {
+        #region Static Variable
+        /// <summary>
+        /// Static value to store the only _instant
+        /// </summary>
+        private static World _instant;
+
+        /// <summary>
+        /// Public Interface to get the World Instant
+        /// </summary>
+        /// <returns>Return the World Instant</returns>
+        public static World GetInstant()
+        {
+            return _instant;
+        }
+        #endregion
+
         /// <summary>
         /// data structure of all monsters
         /// </summary>
         public Dictionary<int, Monster> monsters = new Dictionary<int, Monster>();
         public Dictionary<int, Player> players = new Dictionary<int, Player>();
         public Dictionary<int, InteractiveTerrain> terrains = new Dictionary<int, InteractiveTerrain>();
+
+        public List<PermanentObstacle> obstacles = new List<PermanentObstacle>();
+
         /// <summary>
         /// the game map
         /// </summary>
@@ -69,6 +87,180 @@ namespace GameWorld
         private Player currentActPlayer;
 
         #region Public Function
+        /// <summary>
+        /// Register New Obstacle
+        /// </summary>
+        /// <param name="obstacle">New Obstacle</param>
+        public void RegisterPermanentObstacle(PermanentObstacle obstacle)
+        {
+            foreach(var itr in obstacles)
+            {
+                if (itr == obstacle) return;
+            }
+            obstacles.Add(obstacle);
+            return;
+        }
+
+        /// <summary>
+        /// HighLight all monster moveable zone
+        /// </summary>
+        /// <param name="monster">The selected monster</param>
+        public void HighLightMovementZone(Monster monster)
+        {
+            foreach(var itr in tileMap.CoordToHexTile)
+            {
+                TerrainScanning.HexTile hex = itr.Value;
+                if (hex == null) continue;
+                if (hex.gameObject == null) continue;
+                ClickableHex clickable=hex.gameObject.GetComponent<ClickableHex>();
+                if (clickable == null) continue;
+                if(hex.isObstacle==true)
+                {
+                    clickable.Highlighted(ClickableHex.HexHightLightStatus.ERROR);
+                }
+                else
+                {
+                    int Dist = tileMap.getDistance(monster.HexIndex, hex.getID());
+                    if (Dist <= monster.MaxMovementRange)
+                    {
+                        if(hex.isMonsterOn==true)
+                        {
+                            if(hex.monster.monsterOwner==monster.monsterOwner)
+                            {
+                                clickable.Highlighted(ClickableHex.HexHightLightStatus.ERROR);
+                            }
+                            else
+                            {
+                                clickable.Highlighted(ClickableHex.HexHightLightStatus.ATTACK);
+                            }
+                        }
+                        else
+                        {
+                            clickable.Highlighted(ClickableHex.HexHightLightStatus.MOVEMENT);
+                        }
+                    }
+                    else if (Dist <= monster.MaxMovementRange + monster.MaxAttackRange)
+                    {
+                        if (hex.isMonsterOn == true)
+                        {
+                            if (hex.monster.monsterOwner == monster.monsterOwner)
+                            {
+                                clickable.Highlighted(ClickableHex.HexHightLightStatus.ERROR);
+                            }
+                            else
+                            {
+                                clickable.Highlighted(ClickableHex.HexHightLightStatus.ATTACK);
+                            }
+                        }
+                        else
+                        {
+                            clickable.Highlighted(ClickableHex.HexHightLightStatus.ATTACK);
+                        }
+                    }
+                    else
+                    {
+                        clickable.Highlighted(ClickableHex.HexHightLightStatus.DEFAULT);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// HighLight all monster attackable zone
+        /// </summary>
+        /// <param name="monster">The selected monster</param>
+        public void HighLightAttackZone(Monster monster)
+        {
+            foreach (var itr in tileMap.CoordToHexTile)
+            {
+                TerrainScanning.HexTile hex = itr.Value;
+                if (hex == null) continue;
+                if (hex.gameObject == null) continue;
+                ClickableHex clickable = hex.gameObject.GetComponent<ClickableHex>();
+                if (clickable == null) continue;
+                if (hex.isObstacle == true)
+                {
+                    clickable.Highlighted(ClickableHex.HexHightLightStatus.ERROR);
+                }
+                else
+                {
+                    int Dist = tileMap.getDistance(monster.HexIndex, hex.getID());
+                    if (Dist < monster.MinAttackRange)
+                    {
+                        clickable.Highlighted(ClickableHex.HexHightLightStatus.ERROR);
+                    }
+                    else if(Dist<=monster.MaxAttackRange)
+                    {
+                        if (hex.isMonsterOn == true)
+                        {
+                            if (hex.monster.monsterOwner == monster.monsterOwner)
+                            {
+                                clickable.Highlighted(ClickableHex.HexHightLightStatus.ERROR);
+                            }
+                            else
+                            {
+                                clickable.Highlighted(ClickableHex.HexHightLightStatus.ATTACK);
+                            }
+                        }
+                        else
+                        {
+                            clickable.Highlighted(ClickableHex.HexHightLightStatus.ATTACK);
+                        }
+                    }
+                    else
+                    {
+                        clickable.Highlighted(ClickableHex.HexHightLightStatus.DEFAULT);
+                    }
+                    
+                }
+            }
+        }
+
+        /// <summary>
+        /// Set all highlight to original
+        /// </summary>
+        public void UnHighLightAll()
+        {
+            foreach (var itr in tileMap.CoordToHexTile)
+            {
+                TerrainScanning.HexTile hex = itr.Value;
+                if (hex == null) continue;
+                if (hex.gameObject == null) continue;
+                ClickableHex clickable = hex.gameObject.GetComponent<ClickableHex>();
+                if (clickable == null) continue;
+                if (hex.isObstacle == true)
+                {
+                    clickable.Highlighted(ClickableHex.HexHightLightStatus.ERROR);
+                }
+                else
+                {
+                    clickable.Highlighted(ClickableHex.HexHightLightStatus.DEFAULT);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Set all hextile accessible of all obstacle
+        /// </summary>
+        public void SetAllObstacle()
+        {
+            foreach(var itr in obstacles)
+            {
+                foreach(var coord in itr.BlockHexCoord)
+                {
+                    GameWorld.HexTileMap.HexCoord tempCoord = new HexTileMap.HexCoord();
+                    tempCoord.X = coord.X;
+                    tempCoord.Y = coord.Y;
+                    tempCoord.Z = coord.Z;
+                    if(tileMap.CoordToHexTile.ContainsKey(tempCoord))
+                    {
+                        tileMap.CoordToHexTile[tempCoord].isObstacle = true;
+                    }
+                }
+            }
+            UnHighLightAll();
+        }
+
         /// <summary>
         /// Upload the information of the monster to the world(Monsters)
         /// </summary>
@@ -169,6 +361,15 @@ namespace GameWorld
         void Start()
         {
             Debug.Log("Creating a new world");
+            if(_instant==null)
+            {
+                _instant = this;
+            }
+            else
+            {
+                Destroy(this.gameObject);
+            }
+
             actingMonsterList = new SortedSet<Monster>(new MonsterComparator());
             actingPlayerList = new List<Player>();
             if (tileMap == null)
@@ -317,6 +518,7 @@ namespace GameWorld
         /// </summary>
         private void ResetBegin()
         {
+            SetAllObstacle();
             TurnInit(); //Reset all monster at the begin of the turn.
             return;
         }

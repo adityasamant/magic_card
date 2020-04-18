@@ -49,10 +49,10 @@ MonoBehaviour:
   mesh: {fileID: 1223231204433960998}
   HexMats:
   - {fileID: 2100000, guid: 73874b0d9d7b1b84cb4996d7e346fe73, type: 2}
-  - {fileID: 2100000, guid: a0d65493d19be2d48ace07d8053dcf40, type: 2}
-  - {fileID: 2100000, guid: 1a700cec96d1dd5428c9a34b76662c82, type: 2}
-  - {fileID: 2100000, guid: 985e942e777b1b949a0ae1e4481ebde0, type: 2}
-  - {fileID: 2100000, guid: 7fd9933741bb1c74ead6dd99c1ab09f9, type: 2}
+  - {fileID: 2100000, guid: d8506c8519acbb847a92e9c389376360, type: 2}
+  - {fileID: 2100000, guid: 8869846520f0898468118088302fc628, type: 2}
+  - {fileID: 2100000, guid: 8869846520f0898468118088302fc628, type: 2}
+  - {fileID: 2100000, guid: 7ca3c9c370f3fac4e97e4b8a80e015f5, type: 2}
   hexStatus: 0
 --- !u!114 &1655934871099991373
 MonoBehaviour:

@@ -39,10 +39,12 @@ namespace TerrainScanning
             //tile.AddComponent<HexTile>();
             tile.GetComponent<HexTile>().setStatus(status);
             tile.GetComponent<HexTile>().setType(type);
-            tile.GetComponent<HexTile>().setCoordinates(coordx, coordy);
+            tile.GetComponent<HexTile>().setCoordinates(coordx, coordz);
             tile.GetComponent<HexTile>().setID(cellID);
             tile.GetComponent<HexTile>().setAccessible(true);
             tile.name = "HexTile" + tile.GetComponent<HexTile>().getID() + " [" + coordx.ToString() + "," + coordy.ToString() + "," + coordz.ToString() + "]";
+
+            GameWorld.HexTileMap.GetInstant().RegisterHexTile(tile.GetComponent<HexTile>());
         }
 
         public void createHex(Vector3 hitPosition)
@@ -79,6 +81,7 @@ namespace TerrainScanning
                     float z = 0.075f * coordy;
                     float x = 0.0866f * (coordx + coordy / 2f);
                     addHex(x, 0.0f, z, coordx, coordy, coordz, cellID++, HexStatus.Normal, (HexType)Random.Range(1, 5));
+                    
                 }
 
             GameObject.Find("FancyGrid").SetActive(false);

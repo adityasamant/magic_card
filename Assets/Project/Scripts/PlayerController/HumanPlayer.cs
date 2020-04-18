@@ -241,6 +241,7 @@ namespace GameLogic
                         {
                             networkPlayer.Send_ChangeToAction();
                         }
+                        world.UnHighLightAll();
                         ChangeState(PlayerStates.Action_Phase);
                         break;
                     }
@@ -361,6 +362,11 @@ namespace GameLogic
                 PlayedCardName = CardName;
                 ContentUIManager.ClearContentUI();
                 InstructionUI.text = "Place it!";
+                if (_isFirstChosenHex)
+                {
+                    AudioManager._instance.Play("ChooseHex");
+                    _isFirstChosenHex = false;
+                }
                 Debug.Log("Now Player want to use " + PlayedCardName);
                 ChangeState(PlayerStates.ConfirmSpawnPosition_Phase);
             }
@@ -381,11 +387,6 @@ namespace GameLogic
             if (myState == PlayerStates.ConfirmSpawnPosition_Phase)
             {
                 targetHexId = HexTileID;
-                if(_isFirstChosenHex)
-                {
-                    AudioManager._instance.Play("ChooseHex");
-                    _isFirstChosenHex = false;
-                }
                 ChangeState(PlayerStates.Spawn_Phase);
             }
 
@@ -445,6 +446,7 @@ namespace GameLogic
                 {
                     ContentUIManager.ShowActionBtn();
                     InstructionUI.text = currMonster.monsterName;
+                    world.HighLightMovementZone(currMonster);
                     ChangeState(PlayerStates.Move_Phase);
                 }
                 else
@@ -468,6 +470,7 @@ namespace GameLogic
                     return;
                 }
                 //Should go to next monster
+                world.UnHighLightAll();
                 ChangeState(PlayerStates.Idle_Phase);
             }
             return;
@@ -495,6 +498,7 @@ namespace GameLogic
                             numOfMonsterCouldUse--;
                             currMonster.isIdle = true;
                             ContentUIManager.HideActionBtn();
+                            world.HighLightAttackZone(currMonster);
                             ChangeState(PlayerStates.Attack_Phase);
                             break;
                         case ("SkillBtn"):

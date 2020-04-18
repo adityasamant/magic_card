@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace TerrainScanning
@@ -28,18 +29,34 @@ namespace TerrainScanning
         private int z;
         private int id;
         private bool accessible;
+        public bool isObstacle;
+
+        public bool isMonsterOn;
+        public Monsters.Monster monster;
+
         public HexStatus hexStatus = HexStatus.Normal;
         private HexType hexType = HexType.Empty;
 
         private void Update()
         {
-            if(this.transform.childCount>1)
+            //if(this.transform.childCount>1)
+            //{
+            //    setAccessible(false);
+            //}
+            //else
+            //{
+            //    setAccessible(true);
+            //}
+            isMonsterOn = false;
+            for (int i = 0; i < this.transform.childCount; i++) 
             {
-                setAccessible(false);
-            }
-            else
-            {
-                setAccessible(true);
+                var tempObject = this.transform.GetChild(i);
+                Monsters.Monster monster = tempObject.GetComponent<Monsters.Monster>();
+                if(monster!=null)
+                {
+                    isMonsterOn = true;
+                    this.monster = monster;
+                }
             }
         }
 
@@ -140,6 +157,14 @@ namespace TerrainScanning
             // TODO: write your implementation of GetHashCode() here
             throw new System.NotImplementedException();
             return base.GetHashCode();
+        }
+
+        public static int operator-(HexTile a,HexTile b)
+        {
+            if (a == null) return -1;
+            if (b == null) return -1;
+
+            return (Math.Abs(a.getX() - b.getX()) + Math.Abs(a.getY() - b.getY()) + Math.Abs(a.getZ() - b.getZ())) / 2;
         }
     }
 }

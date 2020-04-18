@@ -130,6 +130,18 @@ namespace Monsters
         /// </summary>
         [Tooltip("A link to the game world.")]
         public World world;
+        /// <summary>
+        /// Monster Maximum Movement Range in a turn
+        /// </summary>
+        public int MaxMovementRange=3;
+        /// <summary>
+        /// Monster Minimum Movement Range in a turn
+        /// </summary>
+        public int MinAttackRange = 1;
+        /// <summary>
+        /// Monster Maximum Movement Range in a turn
+        /// </summary>
+        public int MaxAttackRange = 1;
         #endregion
 
         #region Delegate and Event Handler

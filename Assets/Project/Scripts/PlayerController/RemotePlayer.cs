@@ -152,6 +152,7 @@ namespace GameLogic
                 currMonster = clickedMonster;
                 if ((!currMonster.isIdle) && currMonster.isAlive && currMonster.monsterOwner.GetPlayerId() == PlayerId)
                 {
+                    world.HighLightMovementZone(currMonster);
                     ChangeState(PlayerStates.Move_Phase);
                 }
             }
@@ -170,6 +171,7 @@ namespace GameLogic
                     return;
                 }
                 //Should go to next monster
+                world.UnHighLightAll();
                 ChangeState(PlayerStates.Idle_Phase);
             }
             return;
@@ -190,6 +192,7 @@ namespace GameLogic
                     {
                         case ("AttackBtn"):
                             currMonster.isIdle = true;
+                            world.HighLightAttackZone(currMonster);
                             ChangeState(PlayerStates.Attack_Phase);
                             break;
                         case ("SkillBtn"):
@@ -219,6 +222,7 @@ namespace GameLogic
         /// </summary>
         private void Network_ChangeToActionInvoked()
         {
+            world.UnHighLightAll();
             ChangeState(PlayerStates.Action_Phase);
         }
         #endregion

@@ -362,6 +362,11 @@ namespace GameLogic
                 PlayedCardName = CardName;
                 ContentUIManager.ClearContentUI();
                 InstructionUI.text = "Place it!";
+                if (_isFirstChosenHex)
+                {
+                    AudioManager._instance.Play("ChooseHex");
+                    _isFirstChosenHex = false;
+                }
                 Debug.Log("Now Player want to use " + PlayedCardName);
                 ChangeState(PlayerStates.ConfirmSpawnPosition_Phase);
             }
@@ -382,11 +387,6 @@ namespace GameLogic
             if (myState == PlayerStates.ConfirmSpawnPosition_Phase)
             {
                 targetHexId = HexTileID;
-                if(_isFirstChosenHex)
-                {
-                    AudioManager._instance.Play("ChooseHex");
-                    _isFirstChosenHex = false;
-                }
                 ChangeState(PlayerStates.Spawn_Phase);
             }
 

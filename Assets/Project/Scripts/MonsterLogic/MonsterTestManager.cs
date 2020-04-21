@@ -48,7 +48,13 @@ namespace Monsters
                 //monster_jolleen.Attack(monster_erica, 4);
                 //monster0.Attack(monster_jolleen, 4);
                 //monster_erica.Attack(monster_brute, 4);
-                monster_brute.Move(180);
+                //monster_brute.Move(180);
+                List<int> path = new List<int>();
+                path.Add(180);
+                path.Add(179);
+                path.Add(178);
+                path.Add(165);
+                monster_erica.Move(path);
             }
         }
     }

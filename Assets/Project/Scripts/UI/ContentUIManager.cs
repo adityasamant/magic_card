@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using GameLogic;
 
 namespace UI
 {
@@ -49,10 +50,7 @@ namespace UI
         public GameObject AttackBtnPrefab;
         public GameObject SkillBtnPrefab;
         public GameObject IdleBtnPrefab;
-        public int numOfPortal;
-        public int numOfMist;
-        public int numOfTor;
-        public int numOfFire;
+        public GameManager GM; 
         #endregion
 
         #region Private Variable
@@ -67,10 +65,6 @@ namespace UI
             lastTrans = new Vector3(0.25f, 0, 0);
             HideUICanvas();
             HideActionBtn();
-            numOfPortal = 0;
-            numOfMist = 0;
-            numOfTor = 0;
-            numOfFire = 0;
         }
         #endregion
 
@@ -188,31 +182,8 @@ namespace UI
             for (int i = 0; i < numOfCardsOnDeck; i++)
             {
                 GameObject newCard;
-                if (i == 0)
-                {
-                    if (numOfPortal < 2)
-                    {
-                        newCard = Instantiate(cards[7]);
-                        numOfPortal++;
-                    }else if(numOfFire < 1){
-                        newCard = Instantiate(cards[6]);
-                        numOfFire++;
-                    }else if(numOfMist < 1){
-                        newCard = Instantiate(cards[9]);
-                        numOfMist++;
-                    }else if(numOfTor < 1){
-                        newCard = Instantiate(cards[8]);
-                        numOfTor++;
-                    }else{
-                        newCard = Instantiate(cards[Random.Range(0, 6)]);
-                    }
-                }
-                else
-                {
-                    // Get one card from card deck randomly
-                    newCard = Instantiate(cards[Random.Range(0, 6)]);
-                }
-
+                // Get one card from card deck randomly
+                newCard = Instantiate(DealCard(cards, GM.currentTurn));
                 //attch each card to ContentUI as the parent 
                 newCard.transform.SetParent(ContentUI.transform);
                 newCard.transform.localScale = new Vector3(0.16f, 0.16f, 0.16f);
@@ -236,6 +207,23 @@ namespace UI
         #endregion
 
         #region Private Function
+        /// <summary>
+        /// Deal Card
+        /// </summary>
+        /// <param name=""></param>
+        private GameObject DealCard(GameObject[] cardsDeck, int turnID)
+        {
+            //deal terrain card for 4th and 5th turns
+            if (turnID == 4 || turnID == 5)
+            {
+                return cards[Random.Range(6, 10)];
+            }
+            //deal monster cards for first 3 turns
+            else
+            {
+                return cards[Random.Range(0, 6)];
+            }
+        }
         #endregion
 
 

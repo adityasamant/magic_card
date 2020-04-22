@@ -103,7 +103,7 @@ namespace GameLogic
         /// <summary>
         /// CardInfo Reader
         /// </summary>
-        public GetCardInstruction myCardDataBase;
+        public NewCardDB myCardDataBase;
 
         /// <summary>
         /// The Array of HexMap
@@ -199,8 +199,8 @@ namespace GameLogic
                         ChangeState(PlayerStates.End);
                         break;
                     }
-                    //(MCardUnchosen <= 0) => Card selection finished
-                    if (MCardUnchosen <= 0)
+                    //Card selection finished
+                    if (MCardUnchosen == 0 && TCardUnchosen == 0)
                     {
                         //init myMonster List
                         while (myMonsters.Count < _numOfMonsterCouldUse)
@@ -248,9 +248,16 @@ namespace GameLogic
                     //Debug.Log("Spawn A Charcter Name:" + PlayedCardName);
                     if (myCardDataBase)
                     {
-                        Cards myCard = myCardDataBase.GetCard(PlayedCardName);
+                        NewCard myCard = myCardDataBase.GetCard(PlayedCardName);
                         PlayedCard(PlayerId, myCard.id, targetHexId);
-                        MCardUnchosen--;
+                        if (myCard.id >= 6)
+                        {
+                            TCardUnchosen--;
+                        }
+                        else
+                        {
+                            MCardUnchosen--;
+                        }
                     }
                     ChangeState(PlayerStates.End);
                     break;

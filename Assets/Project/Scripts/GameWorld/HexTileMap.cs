@@ -8,14 +8,72 @@ namespace GameWorld
 {
     public class HexTileMap : MonoBehaviour
     {
+        #region Static Variable
+        /// <summary>
+        /// Store the only instant in the game
+        /// Only one HexTileMap can be existed in the game
+        /// </summary>
+        private static HexTileMap _instant;
+        /// <summary>
+        /// Return the only instant of Hex Tile in the game
+        /// </summary>
+        /// <returns>The Instant of hexTilemap</returns>
+        public static HexTileMap GetInstant()
+        {
+            return _instant;
+        }
+        /// <summary>
+        /// Public Struct to store the HexCoord
+        /// </summary>
+        public struct HexCoord
+        {
+            public int X;
+            public int Y;
+            public int Z;
+
+            public override string ToString()
+            {
+                string s = "(X=" + X.ToString() + ",Y=" + Y.ToString() + ",Z=" + Z.ToString() + ")";
+                return s;
+
+            }
+        };
+        #endregion
+
+        #region Private Variable
+        /// <summary>
+        /// Private Dictionary to get all hextile
+        /// </summary>
+        private Dictionary<HexCoord, HexTile> _coordToHexTile = new Dictionary<HexCoord, HexTile>();
+        #endregion
+
+        #region Public Variable
+        /// <summary>
+        /// Public Interface to visit all hextile
+        /// </summary>
+        public Dictionary<HexCoord, HexTile> CoordToHexTile { get { return _coordToHexTile; } }
+        #endregion
+
         public Material OriginalMat;
         public Material NewMat;
         
         private GameObject HexMap;
         private static int[][] directions = new int[][] { new int[] { 1, -1, 0 }, new int[] { 1, 0, -1 }, new int[] { 0, 1, -1 }, new int[] { -1, 1, 0 }, new int[] { -1, 0, 1 }, new int[] { 0, -1, 1 } };
         private static Dictionary<Tuple<int, int>, int> coordinatesToId = new Dictionary<Tuple<int,int>, int>();
+
+        
+
         void Start()
         {
+            if(_instant==null)
+            {
+                _instant = this;
+            }
+            else
+            {
+                Destroy(this.gameObject);
+            }
+
             HexMap = GameObject.Find("HexMap");
         }
 
@@ -180,6 +238,76 @@ namespace GameWorld
             //     HexMap.transform.GetChild(path[i]).GetChild(0).GetComponent<Renderer>().material = NewMat;
             // }
         }
+
+
+        /// <summary>
+        /// Get a random hex index which is:
+        /// No Terrain Effect,
+        /// No Obstacle,
+        /// No Occupied
+        /// </summary>
+        /// <returns></returns>
+        public int GetARandomAviableIndex()
+        {
+            while(true)
+            {
+                int RandomNumber = UnityEngine.Random.Range(0, HexMap.transform.childCount - 1);
+                HexTile RandomHex = getHexTileByIndex(RandomNumber);
+                if (RandomHex.isObstacle) continue;
+                if (RandomHex.isMonsterOn) continue;
+                World world = World.GetInstant();
+                if(world!=null)
+                {
+                    if (world.CheckTerrainEffect(RandomHex.getID()) != null) continue;
+                }
+                return RandomNumber;
+            }
+        }
+
+        public List<int> GetAllSurroundHexIndex(int HexIndex)
+        {
+            List<int> ans = new List<int>();
+
+            HexTile tile = getHexTileByIndex(HexIndex);
+            if (tile == null) return ans;
+            
+            foreach(var dir in directions)
+            {
+                HexCoord hexCoord = new HexCoord();
+                hexCoord.X = tile.getX() + dir[0];
+                hexCoord.Y = tile.getY() + dir[1];
+                hexCoord.Z = tile.getZ() + dir[2];
+
+                if (!CoordToHexTile.ContainsKey(hexCoord)) continue;
+
+                ans.Add(CoordToHexTile[hexCoord].getID());
+            }
+            return ans;
+        }
+
+        /// <summary>
+        /// Let HexTile register itself at the begin of game
+        /// </summary>
+        /// <param name="hexTile">The HexTile</param>
+        public void RegisterHexTile(HexTile hexTile)
+        {
+            if (hexTile == null) return;
+
+            HexCoord hexCoord = new HexCoord();
+            hexCoord.X = hexTile.getX();
+            hexCoord.Y = hexTile.getY();
+            hexCoord.Z = hexTile.getZ();
+
+            if(_coordToHexTile.ContainsKey(hexCoord))
+            {
+                //This Coordination is already existed
+                Debug.LogErrorFormat("This Coordination {0} is already existed.", hexCoord.ToString());
+                return;
+            }
+            else
+            {
+                _coordToHexTile.Add(hexCoord, hexTile);
+            }
+        }
     }
 }
-

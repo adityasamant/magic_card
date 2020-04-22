@@ -29,11 +29,28 @@ namespace GameWorld
 
     public class World : MonoBehaviour
     {
+        #region Static Variable
+        /// <summary>
+        /// Static value to store the only _instant
+        /// </summary>
+        private static World _instant;
+
+        /// <summary>
+        /// Public Interface to get the World Instant
+        /// </summary>
+        /// <returns>Return the World Instant</returns>
+        public static World GetInstant()
+        {
+            return _instant;
+        }
+        #endregion
+
         /// <summary>
         /// data structure of all monsters
         /// </summary>
         public Dictionary<int, Monster> monsters = new Dictionary<int, Monster>();
         public Dictionary<int, Player> players = new Dictionary<int, Player>();
+        public Dictionary<int, InteractiveTerrain> terrains = new Dictionary<int, InteractiveTerrain>();
         /// <summary>
         /// the game map
         /// </summary>
@@ -69,6 +86,27 @@ namespace GameWorld
 
         #region Public Function
         /// <summary>
+        /// Return the terrain effect of the hextile
+        /// </summary>
+        /// <param name="HexTileIndex">The index of HexTile</param>
+        public InteractiveTerrain CheckTerrainEffect(int HexTileIndex)
+        {
+            InteractiveTerrain terrain = null;
+            foreach(var itr in terrains)
+            {
+                foreach(var hexs in itr.Value.HexIndex)
+                {
+                    if(hexs==HexTileIndex)
+                    {
+                        terrain = itr.Value;
+                        return terrain;
+                    }
+                }
+            }
+            return terrain;
+        }
+        
+        /// <summary>
         /// Upload the information of the monster to the world(Monsters)
         /// </summary>
         /// <param name="monster">A link to the monster</param>
@@ -86,6 +124,18 @@ namespace GameWorld
             return uid;
         }
 
+        public int uploadTerrainInWorld(InteractiveTerrain interactiveTerrain)
+        {
+            int uid = interactiveTerrain.UniqueIndex;
+            if (terrains.ContainsKey(uid) == true)
+            {
+                Debug.LogErrorFormat("Error! Terrain with uid {0} already exists", uid);
+                return -1;
+            }
+            terrains[uid] = interactiveTerrain;
+            return uid;
+        }
+        
         /// <summary>
         /// Upload the information of the monster to the world(Monsters)
         /// </summary>
@@ -142,7 +192,7 @@ namespace GameWorld
 
         private void ChangeState(WorldStates dstStates)
         {
-            Debug.LogFormat("Game Manager: Now Change to " + dstStates);
+            Debug.LogFormat("World Manager: Now Change to " + dstStates);
             currentState = dstStates;
             stateBeginTime = Time.time;
         }
@@ -177,7 +227,7 @@ namespace GameWorld
         void Update()
         {
             float nowTime = Time.time;
-            //Debug.Log("WorldStates=" + currentState);
+            Debug.Log("WorldStates=" + currentState);
             switch (currentState)
             {
                 case WorldStates.Idle:

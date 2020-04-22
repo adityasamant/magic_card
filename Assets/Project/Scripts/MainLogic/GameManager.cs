@@ -9,7 +9,7 @@ using Monsters;
 
 namespace GameLogic
 {
-    
+
     public enum GameStates
     {
         Init,
@@ -23,7 +23,7 @@ namespace GameLogic
         Player_Turn_Begin,
         Wait_For_Player_Turn,
         Battle_Begin,
-        Wait_For_Battle, 
+        Wait_For_Battle,
         Battle_End,
         Turn_End,
         Game_End,
@@ -95,8 +95,12 @@ namespace GameLogic
         /// A link to the Card Database
         /// </summary>
         [Tooltip("A link to the Card Database")]
-        public GetCardInstruction CardDataBase;
+        public NewCardDB CardDataBase;
 
+        /// <summary>
+        /// num of current Turn, first turn = 1
+        /// </summary>
+        public int currentTurn;
         #endregion
 
         #region Private Variable
@@ -125,7 +129,7 @@ namespace GameLogic
         /// <summary>
         /// Boolean for waiting for dice stop
         /// </summary>
-        private bool bWaitForDice=false;
+        private bool bWaitForDice = false;
 
         /// <summary>
         /// Boolean true for Player0 go first, false for Player1 go first
@@ -135,16 +139,16 @@ namespace GameLogic
 
         private void ChangeState(GameStates dstStates)
         {
-            Debug.LogFormat("Game Manager: Now Change to "+dstStates);
+            Debug.LogFormat("Game Manager: Now Change to " + dstStates);
             currentState = dstStates;
             stateBeginTime = Time.time;
-        } 
+        }
 
         // Start is called before the first frame update
         void Start()
         {
             gameGlobalState = new GameGlobalState();
-            playerTurnList = new List<Player>() ;
+            playerTurnList = new List<Player>();
 
             ScanMesh.ScanFinished += ScanFinshedUpdate;
 
@@ -161,11 +165,12 @@ namespace GameLogic
             world.BattleEnd += BattleEndUpdate;
             world.World_ResetFinished += World_ResetFinishedUpdate;
 
-            DiceObject = Instantiate(DicePrefab,transform);
+            DiceObject = Instantiate(DicePrefab, transform);
             DiceObject.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
             DiceInstant = DiceObject.GetComponent<Dice>();
-            
+
             DiceObject.SetActive(false);
+            currentTurn = 0;
             ChangeState(GameStates.Init);
         }
 
@@ -200,7 +205,7 @@ namespace GameLogic
                     }
                     break;
                 case GameStates.ChooseFirstPlayer:
-                    if(!bWaitForDice)
+                    if (!bWaitForDice)
                     {
                         bWaitForDice = true;
                         DiceObject.SetActive(true);
@@ -209,7 +214,7 @@ namespace GameLogic
                     }
                     break;
                 case GameStates.UpKeepStep:
-                    if(nowTime-stateBeginTime>3)
+                    if (nowTime - stateBeginTime > 3)
                     {
                         world.Event_ResetStart.Invoke();
                     }
@@ -217,7 +222,7 @@ namespace GameLogic
                 case GameStates.Turn_Begin:
                     if (nowTime - stateBeginTime > 2)
                     {
-                        if(bPlayer0First==true)
+                        if (bPlayer0First == true)
                         {
                             Debug.Log("Player0 Go First.");
                             playerTurnList.Add(Player0);
@@ -232,6 +237,7 @@ namespace GameLogic
                             playerTurnList.Add(Player0);
                             // bPlayer0First = true;   //Switch Player go first next turn
                         }
+                        currentTurn++;
                         ChangeState(GameStates.Player_Turn_Begin);
                     }
                     break;
@@ -248,7 +254,7 @@ namespace GameLogic
                         currentPlayer.Event_PlayerTurnStart.Invoke();
                         ChangeState(GameStates.Wait_For_Player_Turn);
                     }
-                    break ;
+                    break;
                 case GameStates.Wait_For_Player_Turn:
                     // Do Manual Control in this state
                     if (nowTime - stateBeginTime > PlayerTurnTimeLimited) // Setting a time limit for each player. TODO: when this is triggered, a delegent should be sent to the Player.
@@ -291,7 +297,7 @@ namespace GameLogic
                     break;
                 case GameStates.Error:
                     // TODO: some operations to get back to init.
-                    if(nowTime - stateBeginTime > 10)
+                    if (nowTime - stateBeginTime > 10)
                     {
                         ChangeState(GameStates.Init);
                     }
@@ -304,7 +310,7 @@ namespace GameLogic
             Debug.Log("ScanFinished");
             List<int> path = new List<int>();
             Player0.Event_ScanFinished.Invoke();
-            if(currentState == GameStates.Wait_For_Map_Scan)
+            if (currentState == GameStates.Wait_For_Map_Scan)
             {
                 if (currentMode == GameMode.Offline_Mode)
                 {
@@ -361,9 +367,9 @@ namespace GameLogic
         ///</summary>
         void DiceStopHandle()
         {
-            if(currentState==GameStates.ChooseFirstPlayer)
+            if (currentState == GameStates.ChooseFirstPlayer)
             {
-                if(DiceInstant.GetDiceCount()<=3)
+                if (DiceInstant.GetDiceCount() <= 3)
                 {
                     bPlayer0First = true;
                 }
@@ -388,15 +394,46 @@ namespace GameLogic
         private void PlayedCardInvoke(int PlayerId,int CardIndex,int HexIndex)
         {
             Debug.LogFormat("AIPlayer {0} playing card {1} in hex {2}", PlayerId, CardIndex, HexIndex);
-            Cards thisCard = CardDataBase.GetCardByIndex(CardIndex);
-            GameObject monsterClass = Resources.Load<GameObject>(thisCard.PrefabPath);
+            NewCard thisCard = CardDataBase.GetCardByIndex(CardIndex);
             HexTile TargetHex = world.tileMap.getHexTileByIndex(HexIndex);
-            GameObject newMonster = Instantiate(monsterClass, TargetHex.transform);
-            if(newMonster.GetComponent<Monster>()==null)
-                newMonster.AddComponent<Monster>();
-            newMonster.GetComponent<Monster>().world = world;
-            newMonster.GetComponent<Monster>().MonsterInit(thisCard.CardName, thisCard.HP, thisCard.Attack, thisCard.Speed, (PlayerId == 0 ? Player0 : Player1), HexIndex);
-            world.uploadMonsterInWorld(newMonster.GetComponent<Monster>());
+            if (thisCard.isMonster)
+            {
+                GameObject newMonster = Instantiate(thisCard.CardPrefab, TargetHex.transform);
+                if (newMonster.GetComponent<Monster>() == null)
+                    newMonster.AddComponent<Monster>();
+                newMonster.GetComponent<Monster>().world = world;
+                newMonster.GetComponent<Monster>().MonsterInit(thisCard.CardName, thisCard.HP, thisCard.Attack, thisCard.Speed, (PlayerId == Player0.PlayerId ? Player0 : Player1), HexIndex);
+                world.uploadMonsterInWorld(newMonster.GetComponent<Monster>());
+            }
+            else
+            {
+                GameObject newTerrain = Instantiate(thisCard.CardPrefab, TargetHex.transform);
+                if(newTerrain.GetComponent<InteractiveTerrain>()==null)
+                {
+                    newTerrain.AddComponent<InteractiveTerrain>();
+                }
+                newTerrain.GetComponent<InteractiveTerrain>().World = world;
+                List<int> Affective = new List<int>();
+                Affective.Add(TargetHex.getID());
+                if(thisCard.CardName!="Portal")
+                {
+                    var temp=world.tileMap.GetAllSurroundHexIndex(HexIndex);
+                    foreach(var itr in temp)
+                    {
+                        Affective.Add(itr);
+                    }
+                }
+                else
+                {
+                    int CentralIndex = 10;
+                    Affective.Add(CentralIndex);
+                }
+                newTerrain.GetComponent<InteractiveTerrain>().TerrainCardInit(thisCard.CardName,Affective);
+                world.uploadTerrainInWorld(newTerrain.GetComponent<InteractiveTerrain>());
+            }
+
+            //GameObject monsterClass = Resources.Load<GameObject>(thisCard.PrefabPath);
+            
         }
         #endregion
     }

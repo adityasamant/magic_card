@@ -50,7 +50,7 @@ namespace UI
         public GameObject AttackBtnPrefab;
         public GameObject SkillBtnPrefab;
         public GameObject IdleBtnPrefab;
-        public GameManager GM; 
+        public GameManager GM;
         #endregion
 
         #region Private Variable
@@ -178,12 +178,17 @@ namespace UI
             // the length of the display board is the lastPosition.x - firstPositon.x
             int numOfCardsOnDeck = 2;
             float space = (lastTrans.x - firstTrans.x) / (numOfCardsOnDeck - 1);
-
+            HashSet<string> CardNameSet = new HashSet<string>();
             for (int i = 0; i < numOfCardsOnDeck; i++)
             {
                 GameObject newCard;
-                // Get one card from card deck randomly
+                // Get one distinct card from card deck
                 newCard = Instantiate(DealCard(cards, GM.currentTurn));
+                while (CardNameSet.Contains(newCard.name.Split('_')[0]))
+                {
+                    newCard = Instantiate(DealCard(cards, GM.currentTurn));
+                }
+                CardNameSet.Add(newCard.name.Split('_')[0]);
                 //attch each card to ContentUI as the parent 
                 newCard.transform.SetParent(ContentUI.transform);
                 newCard.transform.localScale = new Vector3(0.16f, 0.16f, 0.16f);

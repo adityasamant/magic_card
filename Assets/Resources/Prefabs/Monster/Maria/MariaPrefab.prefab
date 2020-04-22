@@ -101,9 +101,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uid: 0
-  HP: 10
-  ATK: 10
-  SPD: 10
+  HP: 25
+  ATK: 4
+  SPD: 1
   monsterOwner: {fileID: 0}
   monsterName: Maria
   HexIndex: 13
@@ -113,7 +113,7 @@ MonoBehaviour:
   SkillCoolDownCounter: 0
   SkillCoolDownMax: 1
   world: {fileID: 0}
-  MaxMovementRange: 3
+  MaxMovementRange: 4
   MinAttackRange: 1
   MaxAttackRange: 1
   MonsterStartTurn:

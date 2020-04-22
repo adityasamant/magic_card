@@ -754,6 +754,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92b7ceff86bec404b823228c3f607382, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  uid: 0
   HP: 10
   ATK: 2
   SPD: 1
@@ -762,13 +763,20 @@ MonoBehaviour:
   HexIndex: 156
   isAlive: 1
   isExiled: 0
+  canSkill: 1
+  SkillCoolDownCounter: 0
+  SkillCoolDownMax: 0
   world: {fileID: 0}
+  MaxMovementRange: 3
+  MinAttackRange: 1
+  MaxAttackRange: 3
   MonsterStartTurn:
     m_PersistentCalls:
       m_Calls: []
   MonsterStateUpdate:
     m_PersistentCalls:
       m_Calls: []
+  isIdle: 0
 --- !u!65 &6394480420992036212
 BoxCollider:
   m_ObjectHideFlags: 0

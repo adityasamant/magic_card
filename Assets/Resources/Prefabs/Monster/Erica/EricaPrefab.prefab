@@ -1275,8 +1275,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uid: 0
-  HP: 10
-  ATK: 10
+  HP: 20
+  ATK: 3
   SPD: 10
   monsterOwner: {fileID: 0}
   monsterName: Erica
@@ -1287,9 +1287,9 @@ MonoBehaviour:
   SkillCoolDownCounter: 0
   SkillCoolDownMax: 2
   world: {fileID: 0}
-  MaxMovementRange: 3
-  MinAttackRange: 1
-  MaxAttackRange: 3
+  MaxMovementRange: 6
+  MinAttackRange: 2
+  MaxAttackRange: 4
   MonsterStartTurn:
     m_PersistentCalls:
       m_Calls: []

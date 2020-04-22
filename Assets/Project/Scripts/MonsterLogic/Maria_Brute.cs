@@ -69,6 +69,17 @@ namespace Monsters
             {
                 UnDefense();
             }
+            else if(is_defensed && StateField=="Damage")
+            {
+                ///Since it defense, the damage will decrease by 3
+                ///If damage is less than 3 then no damage and animation will be played
+                if(newState>=3)
+                    base.StateUpdate(StateField, newState - 3);
+                else
+                {
+                    //Nothing to do
+                }
+            }
             else
             {
                 base.StateUpdate(StateField, newState);

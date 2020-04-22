@@ -447,6 +447,7 @@ namespace GameLogic
                     ContentUIManager.ShowActionBtn();
                     InstructionUI.text = currMonster.monsterName;
                     world.HighLightMovementZone(currMonster);
+                    currMonster.OnSelected();
                     ChangeState(PlayerStates.Move_Phase);
                 }
                 else
@@ -502,6 +503,33 @@ namespace GameLogic
                             ChangeState(PlayerStates.Attack_Phase);
                             break;
                         case ("SkillBtn"):
+                            if (currMonster.canSkill == false)
+                                break;//Still Cool Down
+                            if(currMonster is Maria_Brute)
+                            {
+                                var currMaria_Brute = (Maria_Brute)currMonster;
+                                currMaria_Brute.MonsterStateUpdate.Invoke("Defense", 0);
+                                numOfMonsterCouldUse--;
+                                currMonster.isIdle = true;
+                                ContentUIManager.HideActionBtn();
+                                ChangeState(PlayerStates.Idle_Phase);
+                            }
+                            else if(currMonster is Erica_Surviver) //TODO:Implement
+                            {
+                                numOfMonsterCouldUse--;
+                                currMonster.isIdle = true;
+                                ContentUIManager.HideActionBtn();
+                                ChangeState(PlayerStates.Idle_Phase);
+                                break;
+                            }
+                            else if(currMonster is Jolleen_Knight)//TODO:Implement
+                            {
+                                numOfMonsterCouldUse--;
+                                currMonster.isIdle = true;
+                                ContentUIManager.HideActionBtn();
+                                ChangeState(PlayerStates.Idle_Phase);
+                                break;
+                            }
                             // InstructionUI.text = "Choose Skill Target";
                             // numOfMonsterCouldUse--;
                             // currMonster.isIdle = true;

@@ -10,6 +10,9 @@ namespace Monsters
         protected float defense_animation_time = 0.5f;
         protected float undefense_animation_time = 0.5f;
 
+        [SerializeField]
+        private ParticleSystem DefenseParticle;
+
         override public void Move(int destination)
         {
             is_defensed = false;
@@ -23,6 +26,10 @@ namespace Monsters
             GetComponent<Animator>().SetTrigger("Defense");
             AnimationFinishedTime = Time.time + defense_animation_time;
             WaitForAnimation = MonsterAction.Defense;
+            if(DefenseParticle!=null)
+            {
+                DefenseParticle.Play();
+            }
         }
         public virtual void UnDefense()
         {
@@ -31,6 +38,52 @@ namespace Monsters
             GetComponent<Animator>().SetTrigger("Reset");
             AnimationFinishedTime = Time.time + undefense_animation_time;
             WaitForAnimation = MonsterAction.Defense;
+            if(DefenseParticle!=null)
+            {
+                DefenseParticle.Stop();
+                DefenseParticle.Clear();
+            }
+        }
+
+        /// <summary>
+        /// this function will transmit all states of the monster to its respective GameObject (with visualization)
+        /// </summary>
+        /// <param name="StateField">
+        /// "Damage", HP-=newState
+        /// "Move", newState=next HexIndex Index
+        /// "Exile", All state=0 and @isExile=true, @isAlive=false
+        /// </param>
+        public override void StateUpdate(string StateField, int newState)
+        {
+            if(StateField=="Defense")
+            {
+                Defense();
+                if(SkillCoolDownMax!=0)
+                {
+                    canSkill = false;
+                    SkillCoolDownCounter = SkillCoolDownMax;
+                }
+
+            }
+            else if(StateField=="UnDefense")
+            {
+                UnDefense();
+            }
+            else
+            {
+                base.StateUpdate(StateField, newState);
+            }
+        }
+
+        /// <summary>
+        /// Invoked when player select this monster
+        /// </summary>
+        public override void OnSelected()
+        {
+            base.OnSelected();
+            StateUpdate("UnDefense", 0);
+            
+            return;
         }
     }
 }

@@ -124,6 +124,19 @@ namespace Monsters
         /// A exiled monster will have no move and no effect. And will do nothing when turn begin.
         /// </summary>
         public bool isExiled;
+        /// <summary>
+        /// A bool value to store wether the monster can do skill this turn or not.
+        /// A monster can play skill and cool down for SkillCoolDownCounter turn.
+        /// </summary>
+        public bool canSkill = true;
+        /// <summary>
+        /// A int value to store how many turn still need to cool down
+        /// </summary>
+        public int SkillCoolDownCounter = 0;
+        /// <summary>
+        /// A int value to store the max turns to cool down
+        /// </summary>
+        public int SkillCoolDownMax = 0;
         #endregion
 
         #region Public Variable
@@ -448,7 +461,7 @@ namespace Monsters
         /// "Move", newState=next HexIndex Index
         /// "Exile", All state=0 and @isExile=true, @isAlive=false
         /// </param>
-        public void StateUpdate(string StateField, int newState)
+        public virtual void StateUpdate(string StateField, int newState)
         {
             if (StateField == "Damage")
             {
@@ -504,6 +517,20 @@ namespace Monsters
         public bool CanReach(int destination){
             //TODO
             return true;
+        }
+
+        /// <summary>
+        /// Invoked when player select this monster
+        /// </summary>
+        public virtual void OnSelected()
+        {
+            if(SkillCoolDownCounter>0)
+                SkillCoolDownCounter--;
+            if (SkillCoolDownCounter <= 0)
+            {
+                canSkill = true;
+            }
+            return;
         }
         #endregion
     }

@@ -19066,6 +19066,9 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 7fd9933741bb1c74ead6dd99c1ab09f9, type: 2}
   - {fileID: 2100000, guid: 82a9f663d02ee2f46b5dbf92431c86c9, type: 2}
   - {fileID: 0}
+  isObstacle: 0
+  isMonsterOn: 0
+  monster: {fileID: 0}
   hexStatus: 0
 --- !u!1 &854359488
 GameObject:
@@ -28966,6 +28969,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f900bf06b3fb84f4bbfe62ffd5dda984, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  obstacles: []
   tileMap: {fileID: 465594582}
   Event_BattleBegin:
     m_PersistentCalls:

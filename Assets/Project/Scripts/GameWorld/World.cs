@@ -88,6 +88,27 @@ namespace GameWorld
 
         #region Public Function
         /// <summary>
+        /// Return the terrain effect of the hextile
+        /// </summary>
+        /// <param name="HexTileIndex">The index of HexTile</param>
+        public InteractiveTerrain CheckTerrainEffect(int HexTileIndex)
+        {
+            InteractiveTerrain terrain = null;
+            foreach(var itr in terrains)
+            {
+                foreach(var hexs in itr.Value.HexIndex)
+                {
+                    if(hexs==HexTileIndex)
+                    {
+                        terrain = itr.Value;
+                        return terrain;
+                    }
+                }
+            }
+            return terrain;
+        }
+
+        /// <summary>
         /// Register New Obstacle
         /// </summary>
         /// <param name="obstacle">New Obstacle</param>

@@ -462,6 +462,19 @@ namespace GameLogic
                 newTerrain.GetComponent<InteractiveTerrain>().World = world;
                 List<int> Affective = new List<int>();
                 Affective.Add(TargetHex.getID());
+                if(thisCard.CardName!="Portal")
+                {
+                    var temp=world.tileMap.GetAllSurroundHexIndex(HexIndex);
+                    foreach(var itr in temp)
+                    {
+                        Affective.Add(itr);
+                    }
+                }
+                else
+                {
+                    int CentralIndex = 10;
+                    Affective.Add(CentralIndex);
+                }
                 newTerrain.GetComponent<InteractiveTerrain>().TerrainCardInit(thisCard.CardName,Affective);
                 world.uploadTerrainInWorld(newTerrain.GetComponent<InteractiveTerrain>());
             }

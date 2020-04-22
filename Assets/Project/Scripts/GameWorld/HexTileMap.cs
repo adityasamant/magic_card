@@ -239,6 +239,52 @@ namespace GameWorld
             // }
         }
 
+
+        /// <summary>
+        /// Get a random hex index which is:
+        /// No Terrain Effect,
+        /// No Obstacle,
+        /// No Occupied
+        /// </summary>
+        /// <returns></returns>
+        public int GetARandomAviableIndex()
+        {
+            while(true)
+            {
+                int RandomNumber = UnityEngine.Random.Range(0, HexMap.transform.childCount - 1);
+                HexTile RandomHex = getHexTileByIndex(RandomNumber);
+                if (RandomHex.isObstacle) continue;
+                if (RandomHex.isMonsterOn) continue;
+                World world = World.GetInstant();
+                if(world!=null)
+                {
+                    if (world.CheckTerrainEffect(RandomHex.getID()) != null) continue;
+                }
+                return RandomNumber;
+            }
+        }
+
+        public List<int> GetAllSurroundHexIndex(int HexIndex)
+        {
+            List<int> ans = new List<int>();
+
+            HexTile tile = getHexTileByIndex(HexIndex);
+            if (tile == null) return ans;
+            
+            foreach(var dir in directions)
+            {
+                HexCoord hexCoord = new HexCoord();
+                hexCoord.X = tile.getX() + dir[0];
+                hexCoord.Y = tile.getY() + dir[1];
+                hexCoord.Z = tile.getZ() + dir[2];
+
+                if (!CoordToHexTile.ContainsKey(hexCoord)) continue;
+
+                ans.Add(CoordToHexTile[hexCoord].getID());
+            }
+            return ans;
+        }
+
         /// <summary>
         /// Let HexTile register itself at the begin of game
         /// </summary>

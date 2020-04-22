@@ -295,6 +295,46 @@ namespace Monsters
         }
         #endregion
 
+        #region Protected Virtual Function
+        /// <summary>
+        /// Change the State by terrrain Effect
+        /// </summary>
+        protected virtual void CheckTerrainEffect()
+        {
+            World world = World.GetInstant();
+            if (world == null) return;
+            InteractiveTerrain terrain = world.CheckTerrainEffect(HexIndex);
+            switch(terrain.myTerrainEffect)
+            {
+                case (TerrainEffect.Fire):
+                    this.StateUpdate("Damage", 5);
+                    break;
+                case (TerrainEffect.Mist):
+                    moving_path.Clear();
+                    break;
+                case (TerrainEffect.Portal):
+                    moving_path.Clear();
+                    int TargetHex = -1;
+                    foreach(var itr in terrain.HexIndex)
+                    {
+                        if(itr!=this.HexIndex)
+                        {
+                            TargetHex = itr;
+                            break;
+                        }
+                    }
+                    if (TargetHex != -1) moving_path.Add(TargetHex);
+                    break;
+                case (TerrainEffect.Tornado):
+                    this.StateUpdate("Damage", 3);
+                    moving_path.Clear();
+                    int RandomHex = world.tileMap.GetARandomAviableIndex();
+                    moving_path.Add(RandomHex);
+                    break;
+            }
+
+        }
+        #endregion
 
         #region Event Function
         /// <summary>
@@ -438,6 +478,8 @@ namespace Monsters
                 //gameObject.transform.localPosition.Set(0.0f, 0.0f, -1.5f);
                 transform.localPosition = new Vector3(0.0f, 0.0f, 0.0f);
                 HexIndex = newState;
+                //Check TerrainEffect After every movement
+                CheckTerrainEffect();
                 if(moving_path.Count != 0)
                 {
                     int nextHex = moving_path[0];

@@ -96,6 +96,7 @@ namespace GameWorld
             InteractiveTerrain terrain = null;
             foreach(var itr in terrains)
             {
+                if (itr.Value.HexIndex == null) continue;
                 foreach(var hexs in itr.Value.HexIndex)
                 {
                     if(hexs==HexTileIndex)

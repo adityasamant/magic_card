@@ -38,7 +38,7 @@ namespace GameWorld
         /// Private variable to store the hex index
         /// Include all the affected hex, for example fire card should be 7 and portal should be 2
         /// </summary>
-        private List<int> _hexIndex;
+        private List<int> _hexIndex=new List<int>();
         /// <summary>
         /// Private variable to store the unique ID of this card
         /// </summary>
@@ -104,6 +104,10 @@ namespace GameWorld
                 default:
                     _terrainEffect = TerrainEffect.None;
                     break;
+            }
+            foreach(int itr in AffectedHexs)
+            {
+                _hexIndex.Add(itr);
             }
         }
         #endregion

@@ -317,6 +317,7 @@ namespace Monsters
             World world = World.GetInstant();
             if (world == null) return;
             InteractiveTerrain terrain = world.CheckTerrainEffect(HexIndex);
+            if (terrain == null) return; //NO Effect
             switch(terrain.myTerrainEffect)
             {
                 case (TerrainEffect.Fire):

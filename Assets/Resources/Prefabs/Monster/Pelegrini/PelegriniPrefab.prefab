@@ -2570,6 +2570,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3215642841151791602}
     m_Modifications:
+    - target: {fileID: 8375672368076200459, guid: 91f147bf666c32b46b12fe7292fc8032,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8398342611745158107, guid: 91f147bf666c32b46b12fe7292fc8032,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8433546149141189931, guid: 91f147bf666c32b46b12fe7292fc8032,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2665,6 +2675,11 @@ PrefabInstance:
       propertyPath: InitialModule.startColor.maxColor.r
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8621754281583374627, guid: 91f147bf666c32b46b12fe7292fc8032,
+        type: 3}
+      propertyPath: looping
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8621809829874430657, guid: 91f147bf666c32b46b12fe7292fc8032,
         type: 3}
       propertyPath: playOnAwake
@@ -2685,6 +2700,11 @@ PrefabInstance:
       propertyPath: InitialModule.startColor.maxColor.r
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8621809829874430657, guid: 91f147bf666c32b46b12fe7292fc8032,
+        type: 3}
+      propertyPath: looping
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8621833508707972897, guid: 91f147bf666c32b46b12fe7292fc8032,
         type: 3}
       propertyPath: playOnAwake
@@ -2704,6 +2724,11 @@ PrefabInstance:
         type: 3}
       propertyPath: InitialModule.startColor.maxColor.r
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8621833508707972897, guid: 91f147bf666c32b46b12fe7292fc8032,
+        type: 3}
+      propertyPath: looping
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8635693876415743317, guid: 91f147bf666c32b46b12fe7292fc8032,
         type: 3}
@@ -2740,9 +2765,19 @@ PrefabInstance:
       propertyPath: InitialModule.startColor.minColor.b
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8635693876415743317, guid: 91f147bf666c32b46b12fe7292fc8032,
+        type: 3}
+      propertyPath: looping
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8635709267328112839, guid: 91f147bf666c32b46b12fe7292fc8032,
         type: 3}
       propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8635709267328112839, guid: 91f147bf666c32b46b12fe7292fc8032,
+        type: 3}
+      propertyPath: looping
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8635811029546715667, guid: 91f147bf666c32b46b12fe7292fc8032,
@@ -2750,9 +2785,19 @@ PrefabInstance:
       propertyPath: playOnAwake
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8635811029546715667, guid: 91f147bf666c32b46b12fe7292fc8032,
+        type: 3}
+      propertyPath: looping
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8635844282440661501, guid: 91f147bf666c32b46b12fe7292fc8032,
         type: 3}
       propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8635844282440661501, guid: 91f147bf666c32b46b12fe7292fc8032,
+        type: 3}
+      propertyPath: looping
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8635889524710859155, guid: 91f147bf666c32b46b12fe7292fc8032,
@@ -2760,9 +2805,19 @@ PrefabInstance:
       propertyPath: playOnAwake
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8635889524710859155, guid: 91f147bf666c32b46b12fe7292fc8032,
+        type: 3}
+      propertyPath: looping
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8635897297588788079, guid: 91f147bf666c32b46b12fe7292fc8032,
         type: 3}
       propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8635897297588788079, guid: 91f147bf666c32b46b12fe7292fc8032,
+        type: 3}
+      propertyPath: looping
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8636040914605472265, guid: 91f147bf666c32b46b12fe7292fc8032,
@@ -2785,9 +2840,19 @@ PrefabInstance:
       propertyPath: InitialModule.startColor.maxColor.b
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8636040914605472265, guid: 91f147bf666c32b46b12fe7292fc8032,
+        type: 3}
+      propertyPath: looping
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8636083117814561329, guid: 91f147bf666c32b46b12fe7292fc8032,
         type: 3}
       propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8636083117814561329, guid: 91f147bf666c32b46b12fe7292fc8032,
+        type: 3}
+      propertyPath: looping
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8636176486400792317, guid: 91f147bf666c32b46b12fe7292fc8032,
@@ -2795,14 +2860,29 @@ PrefabInstance:
       propertyPath: playOnAwake
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8636176486400792317, guid: 91f147bf666c32b46b12fe7292fc8032,
+        type: 3}
+      propertyPath: looping
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8636507810326679883, guid: 91f147bf666c32b46b12fe7292fc8032,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8636507810326679883, guid: 91f147bf666c32b46b12fe7292fc8032,
+        type: 3}
+      propertyPath: looping
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8636532760919441253, guid: 91f147bf666c32b46b12fe7292fc8032,
         type: 3}
       propertyPath: playOnAwake
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8636532760919441253, guid: 91f147bf666c32b46b12fe7292fc8032,
         type: 3}
-      propertyPath: playOnAwake
+      propertyPath: looping
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8636666868832718405, guid: 91f147bf666c32b46b12fe7292fc8032,
@@ -2835,9 +2915,19 @@ PrefabInstance:
       propertyPath: playOnAwake
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8636709084940508689, guid: 91f147bf666c32b46b12fe7292fc8032,
+        type: 3}
+      propertyPath: looping
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8636724962870901727, guid: 91f147bf666c32b46b12fe7292fc8032,
         type: 3}
       propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8636724962870901727, guid: 91f147bf666c32b46b12fe7292fc8032,
+        type: 3}
+      propertyPath: looping
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8636777690519989369, guid: 91f147bf666c32b46b12fe7292fc8032,
@@ -2859,6 +2949,11 @@ PrefabInstance:
         type: 3}
       propertyPath: InitialModule.startColor.maxColor.r
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8636777690519989369, guid: 91f147bf666c32b46b12fe7292fc8032,
+        type: 3}
+      propertyPath: looping
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 91f147bf666c32b46b12fe7292fc8032, type: 3}

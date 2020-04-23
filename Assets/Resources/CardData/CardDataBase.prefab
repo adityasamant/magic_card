@@ -132,5 +132,5 @@ MonoBehaviour:
     HP: 0
     Speed: 0
     SpecialEffect: NULL
-    CardPrefab: {fileID: 1725463167829462975, guid: dac0ad3ea7590451a89090a604d5eb86,
+    CardPrefab: {fileID: 7881888983010210501, guid: 483d060ecafa643359cf34bec5ae812e,
       type: 3}

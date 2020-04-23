@@ -221,8 +221,8 @@ namespace GameLogic
                         ChangeState(PlayerStates.End);
                         break;
                     }
-                    //(MCardUnchosen <= 0) => Card selection finished
-                    if (MCardUnchosen <= 0)
+                    //Card selection finished
+                    if (MCardUnchosen <= 0 && TCardUnchosen <= 0)
                     {
                         //init myMonster List
                         while (myMonsters.Count < _numOfMonsterCouldUse)
@@ -278,7 +278,14 @@ namespace GameLogic
                     {
                         NewCard myCard = myCardDataBase.GetCard(PlayedCardName);
                         PlayedCard(PlayerId, myCard.id, targetHexId);
-                        MCardUnchosen--;
+                        if (myCard.id >= 6)
+                        {
+                            TCardUnchosen--;
+                        }
+                        else
+                        {
+                            MCardUnchosen--;
+                        }
                     }
                     ChangeState(PlayerStates.End);
                     break;

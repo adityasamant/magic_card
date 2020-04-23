@@ -28,6 +28,23 @@ namespace TerrainScanning
         /// Generate by PlaneGenerator during gameplay.
         /// </summary>
         private GameObject quadObject;
+        /// <summary>
+        /// Camps for different player
+        /// </summary>
+        private int[] Camp0 = new int[] {
+            161,146,130,113,96,80,65,51,38,26,15,5,
+            147,131,114,97,81,66,52,39,27,16,6,
+            132,115,98,82,67,53,40,28,17,7,
+            116,99,83,68,54,41,29,18,8
+        };
+        private HashSet<int> CampSet0 = new HashSet<int>();
+        private int[] Camp1 = new int[] {
+            55,70,86,103,120,136,151,165,178,190,201,211,
+            69,85,102,119,135,150,164,177,189,200,210,
+            84,101,118,134,149,163,176,188,199,209,
+            100,117,133,148,162,175,187,198,208
+        };
+        private HashSet<int> CampSet1 = new HashSet<int>();
         #endregion
 
         private void addHex(float x, float y, float z, int coordx, int coordy, int coordz, int cellID, HexStatus status, HexType type)
@@ -73,6 +90,17 @@ namespace TerrainScanning
 
             Vector3 cent = (rend.bounds.min + rend.bounds.max) / 2;
 
+            foreach (var item in Camp0)
+            {
+                CampSet0.Add(item);
+            }
+            foreach (var item in Camp1)
+            {
+                CampSet1.Add(item);
+            }
+            //Texture type
+            int HexTypeIndex;
+
             for (int coordx = -hexRange; coordx <= hexRange; coordx++)
                 for (int coordz = hexRange; coordz >= -hexRange; coordz--)
                 {
@@ -80,8 +108,20 @@ namespace TerrainScanning
                     if (coordy < -hexRange || coordy > hexRange) continue;
                     float z = 0.075f * coordy;
                     float x = 0.0866f * (coordx + coordy / 2f);
-                    addHex(x, 0.0f, z, coordx, coordy, coordz, cellID++, HexStatus.Normal, (HexType)Random.Range(1, 5));
                     
+                    if (CampSet0.Contains(cellID))
+                    {
+                        HexTypeIndex = 1;
+                    }
+                    else if (CampSet1.Contains(cellID))
+                    {
+                        HexTypeIndex = 2;
+                    }
+                    else
+                    {
+                        HexTypeIndex = 3;
+                    }
+                    addHex(x, 0.0f, z, coordx, coordy, coordz, cellID++, HexStatus.Normal, (HexType)HexTypeIndex);
                 }
 
             GameObject.Find("FancyGrid").SetActive(false);

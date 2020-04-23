@@ -149,7 +149,7 @@ namespace GameLogic
         /// <summary>
         /// Counter how many turns
         /// </summary>
-        private int TurnCounter = 0;
+        public int TurnCounter = 0;
         #endregion
 
         private void ChangeState(GameStates dstStates)
@@ -251,7 +251,7 @@ namespace GameLogic
                             // bPlayer0First = true;   //Switch Player go first next turn
                         }
                         TurnCounter++;
-                        if(TurnCounter==4)
+                        if(TurnCounter==6)
                         {
                             if (bPlayer0First) AudioManager._instance.Play("BattleBegin_First");
                             else AudioManager._instance.Play("BattleBegin_Second");
@@ -267,7 +267,7 @@ namespace GameLogic
                     if (nowTime - stateBeginTime > 1)
                     {
                         Player currentPlayer = playerTurnList[0];
-                        if(TurnCounter==4 && bPlayer0First==false && currentPlayer==Player0)
+                        if(TurnCounter==6 && bPlayer0First==false && currentPlayer==Player0)
                         {
                             AudioManager._instance.Play("SecondPlayerFirstBattle");
                         }

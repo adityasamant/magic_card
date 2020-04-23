@@ -474,6 +474,49 @@ namespace GameLogic
                 world.UnHighLightAll();
                 ChangeState(PlayerStates.Idle_Phase);
             }
+            else if(myState==PlayerStates.Double_Attack_1_Phase)
+            {
+                targetMonster = clickedMonster;
+                //TODO check attack range
+                if (targetMonster.isAlive && targetMonster.monsterOwner.GetPlayerId() != PlayerId)
+                {
+                    AttackDelegate(PlayerId, currMonster, targetMonster);
+                }
+                else
+                {
+                    return;
+                }
+                ChangeState(PlayerStates.Double_Attack_2_Phase);
+            }
+            else if (myState == PlayerStates.Double_Attack_2_Phase)
+            {
+                targetMonster = clickedMonster;
+                //TODO check attack range
+                if (targetMonster.isAlive && targetMonster.monsterOwner.GetPlayerId() != PlayerId)
+                {
+                    AttackDelegate(PlayerId, currMonster, targetMonster);
+                }
+                else
+                {
+                    return;
+                }
+                world.UnHighLightAll();
+                ChangeState(PlayerStates.Idle_Phase);
+            }
+            else if(myState==PlayerStates.AOE_Phase)
+            {
+                targetMonster = clickedMonster;
+                if (targetMonster.isAlive && targetMonster.monsterOwner.GetPlayerId() != PlayerId)
+                {
+                    currMonster.MonsterStateUpdate.Invoke("AOE", targetMonster.GetUId());
+                }
+                else
+                {
+                    return;
+                }
+                world.UnHighLightAll();
+                ChangeState(PlayerStates.Idle_Phase);
+            }
             return;
         }
 
@@ -507,27 +550,32 @@ namespace GameLogic
                                 break;//Still Cool Down
                             if(currMonster is Maria_Brute)
                             {
-                                var currMaria_Brute = (Maria_Brute)currMonster;
-                                currMaria_Brute.MonsterStateUpdate.Invoke("Defense", 0);
+                                //var currMaria_Brute = (Maria_Brute)currMonster;
+                                currMonster.MonsterStateUpdate.Invoke("Defense", 0);
                                 numOfMonsterCouldUse--;
                                 currMonster.isIdle = true;
                                 ContentUIManager.HideActionBtn();
                                 ChangeState(PlayerStates.Idle_Phase);
                             }
-                            else if(currMonster is Erica_Surviver) //TODO:Implement
+                            else if(currMonster is Erica_Surviver) //Double_Attack
                             {
+                                InstructionUI.text = "Choose 2 Attack Targets";
+                                currMonster.MonsterStateUpdate.Invoke("DoubleAttack", 0);
                                 numOfMonsterCouldUse--;
                                 currMonster.isIdle = true;
                                 ContentUIManager.HideActionBtn();
-                                ChangeState(PlayerStates.Idle_Phase);
+                                world.HighLightAttackZone(currMonster);
+                                ChangeState(PlayerStates.Double_Attack_1_Phase);
                                 break;
                             }
-                            else if(currMonster is Jolleen_Knight)//TODO:Implement
+                            else if(currMonster is Jolleen_Knight)//AOE
                             {
+                                InstructionUI.text = "Choose Skill Target";
                                 numOfMonsterCouldUse--;
                                 currMonster.isIdle = true;
                                 ContentUIManager.HideActionBtn();
-                                ChangeState(PlayerStates.Idle_Phase);
+                                world.HighLightAttackZone(currMonster);
+                                ChangeState(PlayerStates.AOE_Phase);
                                 break;
                             }
                             // InstructionUI.text = "Choose Skill Target";

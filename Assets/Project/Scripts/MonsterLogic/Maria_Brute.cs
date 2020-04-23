@@ -49,9 +49,9 @@ namespace Monsters
         /// this function will transmit all states of the monster to its respective GameObject (with visualization)
         /// </summary>
         /// <param name="StateField">
-        /// "Damage", HP-=newState
-        /// "Move", newState=next HexIndex Index
-        /// "Exile", All state=0 and @isExile=true, @isAlive=false
+        /// "Damage", If in defense state, the damage is decreased by 3
+        /// "Defense", active defense state
+        /// "UnDefense" unactive defense state
         /// </param>
         public override void StateUpdate(string StateField, int newState)
         {

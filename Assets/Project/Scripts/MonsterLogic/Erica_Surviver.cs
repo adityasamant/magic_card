@@ -16,6 +16,25 @@ namespace Monsters
             ActionParam.AttackSubject = subjectMonster;
             WaitForAnimation = MonsterAction.Attack;
         }
+
+        /// <summary>
+        /// "DoubleAttack" to attack twice
+        /// </summary>
+        public override void StateUpdate(string StateField, int newState)
+        {
+            if (StateField == "DoubleAttack")
+            {
+                if(SkillCoolDownMax<=0)
+                {
+                    SkillCoolDownCounter = SkillCoolDownMax;
+                    canSkill = false;
+                }
+            }
+            else
+            {
+                base.StateUpdate(StateField, newState);
+            }
+        }
     }
 }
 

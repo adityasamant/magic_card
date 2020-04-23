@@ -119,7 +119,7 @@ namespace TerrainScanning
                     }
                     else
                     {
-                        HexTypeIndex = 3;
+                        HexTypeIndex = Random.Range(3, 5);
                     }
                     addHex(x, 0.0f, z, coordx, coordy, coordz, cellID++, HexStatus.Normal, (HexType)HexTypeIndex);
                 }

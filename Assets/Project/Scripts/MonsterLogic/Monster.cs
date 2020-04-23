@@ -5,6 +5,7 @@ using UnityEngine.Events;
 using GameLogic;
 using TerrainScanning;
 using GameWorld;
+using UI;
 
 namespace Monsters
 {
@@ -176,6 +177,11 @@ namespace Monsters
         /// If isIdle, then the monster cannot move or attack
         /// </summary>
         public bool isIdle;
+        /// <summary>
+        /// The healthBar inside this monster
+        /// </summary>
+        [Tooltip("The healthBar inside this monster")]
+        public HealthBar healthBar;
         #endregion
 
         #region Public Function
@@ -271,6 +277,7 @@ namespace Monsters
                 MonsterStateUpdate = new StateUpdateEvent();
             MonsterStartTurn.AddListener(MoveMent);
             MonsterStateUpdate.AddListener(StateUpdate);
+            healthBar.SetMaxHealth(this.HP);
         }
 
         /// <summary>
@@ -467,6 +474,7 @@ namespace Monsters
             if (StateField == "Damage")
             {
                 HP -= newState;
+                healthBar.SetHealth(this.HP);
                 Debug.LogFormat("Monster {0} get hitted. Current HP is: {1}", this.uid, this.HP);
                 if (HP <= 0)
                 {

@@ -40,7 +40,7 @@ namespace Monsters
                //monster_erica.Move(179);
                 //monster_erica.DoubleShot(monster_brute, 9);
                 
-                monster_jolleen.Spell(monster_brute);
+                monster_jolleen.Attack(monster_brute,3);
             }
             if (button == MLInputControllerButton.HomeTap)
             {

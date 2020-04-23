@@ -111,11 +111,11 @@ namespace TerrainScanning
                     }
                     else if (CampSet1.Contains(cellID))
                     {
-                        HexTypeIndex = 3;
+                        HexTypeIndex = 2;
                     }
                     else
                     {
-                        HexTypeIndex = 2;
+                        HexTypeIndex = Random.Range(3, 5);
                     }
                     addHex(x, 0.0f, z, coordx, coordy, coordz, cellID++, HexStatus.Normal, (HexType)HexTypeIndex);
                 }

@@ -5,6 +5,7 @@ using UnityEngine.Events;
 using GameLogic;
 using TerrainScanning;
 using GameWorld;
+using UI;
 
 namespace Monsters
 {
@@ -130,6 +131,9 @@ namespace Monsters
         /// </summary>
         [Tooltip("A link to the game world.")]
         public World world;
+
+        public HealthBar healthBar;
+
         #endregion
 
         #region Delegate and Event Handler
@@ -175,8 +179,6 @@ namespace Monsters
             origin_monsterOwner = monsterOwner;
             origin_HexIndex = HexIndex;
             MonsterReset();
-
-
         }
 
         /// <summary>
@@ -244,6 +246,7 @@ namespace Monsters
                 MonsterStateUpdate = new StateUpdateEvent();
             MonsterStartTurn.AddListener(MoveMent);
             MonsterStateUpdate.AddListener(StateUpdate);
+            healthBar.SetMaxHealth(this.HP);
         }
 
         /// <summary>
@@ -380,6 +383,7 @@ namespace Monsters
             if (StateField == "Damage")
             {
                 HP -= newState;
+                healthBar.SetHealth(this.HP);
                 Debug.LogFormat("Monster {0} get hitted. Current HP is: {1}", this.uid, this.HP);
                 if (HP <= 0)
                 {

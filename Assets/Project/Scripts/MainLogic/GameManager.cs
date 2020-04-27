@@ -528,8 +528,8 @@ namespace GameLogic
                 }
                 else
                 {
-                    int CentralIndex = 10;
-                    Affective.Add(CentralIndex);
+                     int CentralIndex = 91;
+                     Affective.Add(CentralIndex);
                 }
                 newTerrain.GetComponent<InteractiveTerrain>().TerrainCardInit(thisCard.CardName,Affective);
                 world.uploadTerrainInWorld(newTerrain.GetComponent<InteractiveTerrain>());
@@ -544,6 +544,7 @@ namespace GameLogic
         /// </summary>
         private void WinningCheck()
         {
+            if(TurnCounter <= 6) return;
             int Player0Count = 0;
             int Player1Count = 0;
             foreach (var itr in world.monsters)

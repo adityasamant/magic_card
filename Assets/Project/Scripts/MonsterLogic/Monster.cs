@@ -344,7 +344,8 @@ namespace Monsters
                             break;
                         }
                     }
-                    if (TargetHex != -1) moving_path.Add(TargetHex);
+                    // if (TargetHex != -1) moving_path.Add(TargetHex);
+                    if (TargetHex == 91) moving_path.Add(TargetHex);
                     break;
                 case (TerrainEffect.Tornado):
                     this.StateUpdate("Damage", 3);

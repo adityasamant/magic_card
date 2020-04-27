@@ -666,7 +666,9 @@ namespace GameLogic
         /// <param name="destination">The HexTile Id of destination.</param>
         private void MoveInvoked(int destination)
         {
-            currMonster.Move(destination);
+            List<int> path = new List<int>();
+            path = world.tileMap.getShortestPath(currMonster.HexIndex,destination);
+            currMonster.Move(path);
             return;
         }
         #endregion

@@ -398,7 +398,9 @@ namespace GameLogic
         private void MoveInvoked(int destination)
         {
             Debug.LogFormat("RemotePlayer0 in Delegate: Move Current Monster{0}", currMonster.GetUId());
-            currMonster.Move(destination);
+            List<int> path = new List<int>();
+            path = world.tileMap.getShortestPath(currMonster.HexIndex,destination);
+            currMonster.Move(path);
             return;
         }
         #endregion

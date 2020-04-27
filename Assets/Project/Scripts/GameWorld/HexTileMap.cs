@@ -100,7 +100,7 @@ namespace GameWorld
 
                 if(curr == endId) break;
 
-                foreach(int neighborId in getEdgeByVertexId(curr,endId)){
+                foreach(int neighborId in GetAccessibleSurroundHexIndex(curr)){
                     int newCost = costSoFar[curr] + getDistance(curr, neighborId);
                     if(!costSoFar.ContainsKey(neighborId) || newCost < costSoFar[neighborId]){
                         if(costSoFar.ContainsKey(neighborId)){
@@ -280,6 +280,28 @@ namespace GameWorld
 
                 if (!CoordToHexTile.ContainsKey(hexCoord)) continue;
 
+                ans.Add(CoordToHexTile[hexCoord].getID());
+            }
+            return ans;
+        }
+
+        public List<int> GetAccessibleSurroundHexIndex(int HexIndex)
+        {
+            List<int> ans = new List<int>();
+
+            HexTile tile = getHexTileByIndex(HexIndex);
+            if (tile == null) return ans;
+
+            foreach (var dir in directions)
+            {
+                HexCoord hexCoord = new HexCoord();
+                hexCoord.X = tile.getX() + dir[0];
+                hexCoord.Y = tile.getY() + dir[1];
+                hexCoord.Z = tile.getZ() + dir[2];
+
+                if (!CoordToHexTile.ContainsKey(hexCoord)) continue;
+                HexTile target = CoordToHexTile[hexCoord];
+                if(target.isMonsterOn || target.isObstacle) continue;
                 ans.Add(CoordToHexTile[hexCoord].getID());
             }
             return ans;

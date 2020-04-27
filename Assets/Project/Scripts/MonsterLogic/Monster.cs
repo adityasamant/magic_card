@@ -82,6 +82,7 @@ namespace Monsters
         /// </summary>
         protected MonsterActionParam ActionParam = new MonsterActionParam();
 
+        protected List<int> moving_path = new List<int>();
         /// <summary>
         /// The time Animation Stop
         /// </summary>
@@ -270,14 +271,15 @@ namespace Monsters
                     switch (WaitForAnimation)
                     {
                         case MonsterAction.Move:
+                            WaitForAnimation = MonsterAction.Nothing;
                             StateUpdate("Move", ActionParam.MoveDestination);
                             break;
                         case MonsterAction.Attack:
+                            WaitForAnimation = MonsterAction.Nothing;
                             ActionParam.AttackSubject.MonsterStateUpdate.Invoke("Damage", ActionParam.AttackDamage);
                             break;
                     }
                     //MonsterTurnEnd();
-                    WaitForAnimation = MonsterAction.Nothing;
                 }
             }
         }
@@ -347,10 +349,28 @@ namespace Monsters
         /// <param name="animationTime"> Animation time. </param>
         public virtual void Move(int destination)
         {
+            HexTile hexTile = world.tileMap.getHexTileByIndex(destination);
+            gameObject.transform.LookAt(hexTile.transform.position);
             GetComponent<Animator>().SetTrigger("Walk");
             AnimationFinishedTime = Time.time + moving_animation_time;
             ActionParam.MoveDestination = destination;
             WaitForAnimation = MonsterAction.Move;
+        }
+
+        /// <summary>
+        /// Monster's move to another Hex With a Path
+        /// </summary>
+        /// <param name="destination"> the destination Hex</param>
+        /// <param name="animationTime"> Animation time. </param>
+        public virtual void Move(List<int> path)
+        {
+            if (path.Count == 0)
+                return;
+            int startHex = path[0];
+            moving_path.Clear();
+            for (int i = 1; i < path.Count; i++)
+                moving_path.Add(path[i]);
+            Move(path[0]);
         }
 
         /// <summary>
@@ -409,6 +429,12 @@ namespace Monsters
                 //gameObject.transform.localPosition.Set(0.0f, 0.0f, -1.5f);
                 transform.localPosition = new Vector3(0.0f, 0.0f, 0.0f);
                 HexIndex = newState;
+                if(moving_path.Count != 0)
+                {
+                    int nextHex = moving_path[0];
+                    moving_path.RemoveAt(0);
+                    Move(nextHex);
+                }
             }
             if (StateField == "Exile")
             {
@@ -419,12 +445,13 @@ namespace Monsters
                 SPD = 0;
             }
         }
-        
+
         // <summary>
         /// Check the possibility of moving to another Hex
         /// </summary>
         /// <param name="destination"> the destination Hex</param>
-        public bool CanReach(int destination){
+        public bool CanReach(int destination)
+        {
             //TODO
             return true;
         }

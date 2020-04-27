@@ -60,6 +60,7 @@ namespace TerrainScanning
             tile.GetComponent<HexTile>().setID(cellID);
             tile.GetComponent<HexTile>().setAccessible(true);
             tile.name = "HexTile" + tile.GetComponent<HexTile>().getID() + " [" + coordx.ToString() + "," + coordy.ToString() + "," + coordz.ToString() + "]";
+            GameWorld.HexTileMap.GetInstant().RegisterHexTile(tile.GetComponent<HexTile>());
         }
 
         public void createHex(Vector3 hitPosition)

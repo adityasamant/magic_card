@@ -23,7 +23,6 @@ namespace TerrainScanning
     {
         public GameObject mesh;
         public Material[] HexMats;
-
         private int x;
         private int y;
         private int z;

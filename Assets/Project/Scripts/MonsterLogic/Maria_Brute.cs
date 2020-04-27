@@ -13,10 +13,7 @@ namespace Monsters
         override public void Move(int destination)
         {
             is_defensed = false; 
-            GetComponent<Animator>().SetTrigger("Walk");
-            AnimationFinishedTime = Time.time + moving_animation_time;
-            ActionParam.MoveDestination = destination;
-            WaitForAnimation = MonsterAction.Move;
+            base.Move(destination);
         }
 
         public virtual void Defense()

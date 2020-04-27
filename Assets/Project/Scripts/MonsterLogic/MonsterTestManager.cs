@@ -2,12 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.MagicLeap;
+using GameWorld;
 
 namespace Monsters
 {
     public class MonsterTestManager : MonoBehaviour
     {
-
+                /// <summary>
+        /// The link to the game world
+        /// </summary>
+        [Tooltip("A link to the game world.")]
+        public World world;
         public Monster monster0;
         public Maria_Brute monster_brute;
         public Jolleen_Knight monster_jolleen;
@@ -48,7 +53,15 @@ namespace Monsters
                 //monster_jolleen.Attack(monster_erica, 4);
                 //monster0.Attack(monster_jolleen, 4);
                 //monster_erica.Attack(monster_brute, 4);
-                monster_brute.Move(180);
+                // int dest = 92;
+                List<int> path = new List<int>();
+                // List<int> path2 = new List<int>();
+                // path2 = world.tileMap.getShortestPath(182, dest);
+                path.Add(180);
+                path.Add(179);
+                path.Add(178);
+                path.Add(165);
+                monster_erica.Move(path);
             }
         }
     }

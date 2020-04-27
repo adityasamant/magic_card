@@ -54,18 +54,15 @@ namespace GameWorld
         public Dictionary<HexCoord, HexTile> CoordToHexTile { get { return _coordToHexTile; } }
         #endregion
 
-        public Material OriginalMat;
-        public Material NewMat;
-        
         private GameObject HexMap;
         private static int[][] directions = new int[][] { new int[] { 1, -1, 0 }, new int[] { 1, 0, -1 }, new int[] { 0, 1, -1 }, new int[] { -1, 1, 0 }, new int[] { -1, 0, 1 }, new int[] { 0, -1, 1 } };
-        private static Dictionary<Tuple<int, int>, int> coordinatesToId = new Dictionary<Tuple<int,int>, int>();
+        private static Dictionary<Tuple<int, int>, int> coordinatesToId = new Dictionary<Tuple<int, int>, int>();
 
-        
+
 
         void Start()
         {
-            if(_instant==null)
+            if (_instant == null)
             {
                 _instant = this;
             }
@@ -89,7 +86,7 @@ namespace GameWorld
             Dictionary<int, int> cameFrom = new Dictionary<int, int>();
             Dictionary<int, int> costSoFar = new Dictionary<int, int>();
             var frontier = new PriorityQueue<int>();
-            
+
             frontier.Enqueue(startId, 0);
             cameFrom.Add(startId, startId);
             costSoFar.Add(startId, 0);
@@ -98,12 +95,15 @@ namespace GameWorld
             {
                 int curr = frontier.Dequeue();
 
-                if(curr == endId) break;
+                if (curr == endId) break;
 
-                foreach(int neighborId in getEdgeByVertexId(curr,endId)){
+                foreach (int neighborId in GetAllSurroundHexIndex(curr))
+                {
                     int newCost = costSoFar[curr] + getDistance(curr, neighborId);
-                    if(!costSoFar.ContainsKey(neighborId) || newCost < costSoFar[neighborId]){
-                        if(costSoFar.ContainsKey(neighborId)){
+                    if (!costSoFar.ContainsKey(neighborId) || newCost < costSoFar[neighborId])
+                    {
+                        if (costSoFar.ContainsKey(neighborId))
+                        {
                             costSoFar.Remove(neighborId);
                             cameFrom.Remove(neighborId);
                         }
@@ -117,8 +117,10 @@ namespace GameWorld
             }
 
             int currIdInPath = endId;
-            while(currIdInPath != startId){
-                if(!cameFrom.ContainsKey(currIdInPath)){
+            while (currIdInPath != startId)
+            {
+                if (!cameFrom.ContainsKey(currIdInPath))
+                {
                     Debug.Log("No way!");
                     return new List<int>();
                 }
@@ -132,12 +134,55 @@ namespace GameWorld
             return path;
         }
 
+        public List<int> GetAllSurroundHexIndex(int HexIndex)
+        {
+            List<int> ans = new List<int>();
+
+            HexTile tile = getHexTileByIndex(HexIndex);
+            if (tile == null) return ans;
+
+            foreach (var dir in directions)
+            {
+                HexCoord hexCoord = new HexCoord();
+                hexCoord.X = tile.getX() + dir[0];
+                hexCoord.Y = tile.getY() + dir[1];
+                hexCoord.Z = tile.getZ() + dir[2];
+
+                if (!CoordToHexTile.ContainsKey(hexCoord)) continue;
+
+                ans.Add(CoordToHexTile[hexCoord].getID());
+            }
+            return ans;
+        }
+
+        public List<int> GetAccessibleSurroundHexIndex(int HexIndex)
+        {
+            List<int> ans = new List<int>();
+
+            HexTile tile = getHexTileByIndex(HexIndex);
+            if (tile == null) return ans;
+
+            foreach (var dir in directions)
+            {
+                HexCoord hexCoord = new HexCoord();
+                hexCoord.X = tile.getX() + dir[0];
+                hexCoord.Y = tile.getY() + dir[1];
+                hexCoord.Z = tile.getZ() + dir[2];
+
+                if (!CoordToHexTile.ContainsKey(hexCoord)) continue;
+                HexTile target = CoordToHexTile[hexCoord];
+                if(target.isMonsterOn || target.isObstacle) continue;
+                ans.Add(CoordToHexTile[hexCoord].getID());
+            }
+            return ans;
+        }
+        
         /// <summary>
         /// return all vertexs' id it close to.
         /// </summary>
         /// <param name="vertexId"></param>
         /// <returns></returns>
-        public List<int> getEdgeByVertexId(int vertexId,int EndId)
+        public List<int> getEdgeByVertexId(int vertexId, int EndId)
         {
             //init coordinatesToId Dictionary
             int i = 0;
@@ -158,7 +203,7 @@ namespace GameWorld
             {
                 int[] targetCoord = new int[] { currCoord[0] + dirt[0], currCoord[1] + dirt[1], currCoord[2] + dirt[2] };
                 var targetKey = Tuple.Create(targetCoord[0], targetCoord[2]);
-                if (coordinatesToId.ContainsKey(targetKey) && isAccessible(targetCoord) || coordinatesToId.ContainsKey(targetKey) && coordinatesToId[targetKey]==EndId)
+                if (coordinatesToId.ContainsKey(targetKey) && isAccessible(targetCoord) || coordinatesToId.ContainsKey(targetKey) && coordinatesToId[targetKey] == EndId)
                 {
                     edges.Add(coordinatesToId[targetKey]);
                 }
@@ -249,14 +294,14 @@ namespace GameWorld
         /// <returns></returns>
         public int GetARandomAviableIndex()
         {
-            while(true)
+            while (true)
             {
                 int RandomNumber = UnityEngine.Random.Range(0, HexMap.transform.childCount - 1);
                 HexTile RandomHex = getHexTileByIndex(RandomNumber);
                 if (RandomHex.isObstacle) continue;
                 if (RandomHex.isMonsterOn) continue;
                 World world = World.GetInstant();
-                if(world!=null)
+                if (world != null)
                 {
                     if (world.CheckTerrainEffect(RandomHex.getID()) != null) continue;
                 }
@@ -264,26 +309,9 @@ namespace GameWorld
             }
         }
 
-        public List<int> GetAllSurroundHexIndex(int HexIndex)
-        {
-            List<int> ans = new List<int>();
 
-            HexTile tile = getHexTileByIndex(HexIndex);
-            if (tile == null) return ans;
-            
-            foreach(var dir in directions)
-            {
-                HexCoord hexCoord = new HexCoord();
-                hexCoord.X = tile.getX() + dir[0];
-                hexCoord.Y = tile.getY() + dir[1];
-                hexCoord.Z = tile.getZ() + dir[2];
 
-                if (!CoordToHexTile.ContainsKey(hexCoord)) continue;
 
-                ans.Add(CoordToHexTile[hexCoord].getID());
-            }
-            return ans;
-        }
 
         /// <summary>
         /// Let HexTile register itself at the begin of game
@@ -298,7 +326,7 @@ namespace GameWorld
             hexCoord.Y = hexTile.getY();
             hexCoord.Z = hexTile.getZ();
 
-            if(_coordToHexTile.ContainsKey(hexCoord))
+            if (_coordToHexTile.ContainsKey(hexCoord))
             {
                 //This Coordination is already existed
                 Debug.LogErrorFormat("This Coordination {0} is already existed.", hexCoord.ToString());

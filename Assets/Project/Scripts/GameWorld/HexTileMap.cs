@@ -97,7 +97,7 @@ namespace GameWorld
 
                 if (curr == endId) break;
 
-                foreach (int neighborId in GetAllSurroundHexIndex(curr))
+                foreach (int neighborId in GetAccessibleSurroundHexIndex(curr))
                 {
                     int newCost = costSoFar[curr] + getDistance(curr, neighborId);
                     if (!costSoFar.ContainsKey(neighborId) || newCost < costSoFar[neighborId])

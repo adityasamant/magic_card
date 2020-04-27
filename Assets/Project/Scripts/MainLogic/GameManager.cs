@@ -6,6 +6,7 @@ using DicePackage;
 using TerrainScanning;
 using CardInfo;
 using Monsters;
+using UI;
 
 namespace GameLogic
 {
@@ -24,6 +25,10 @@ namespace GameLogic
         Wait_For_Player_Turn,
         Battle_Begin,
         Wait_For_Battle, 
+        Local_Player_Win,
+        Local_Player_Lose,
+        Game_Draw,
+        Stop,
         Battle_End,
         Turn_End,
         Game_End,
@@ -150,6 +155,9 @@ namespace GameLogic
         /// Counter how many turns
         /// </summary>
         public int TurnCounter = 0;
+
+        [SerializeField]
+        private ContentUIManager ContentUIManager;
         #endregion
 
         private void ChangeState(GameStates dstStates)
@@ -233,6 +241,9 @@ namespace GameLogic
                     }
                     break;
                 case GameStates.Turn_Begin:
+                    WinningCheck();
+                    if (currentState != GameStates.Turn_Begin)
+                        break;
                     if (nowTime - stateBeginTime > 0.5)
                     {
                         if(bPlayer0First==true)
@@ -260,6 +271,10 @@ namespace GameLogic
                     }
                     break;
                 case GameStates.Player_Turn_Begin:
+                    WinningCheck();
+                    if (currentState != GameStates.Player_Turn_Begin)
+                        break;
+
                     if (playerTurnList.Count == 0) // all players' turn is over. 
                         //skip auto battle
                         //ChangeState(GameStates.Battle_Begin);
@@ -286,27 +301,68 @@ namespace GameLogic
                         ChangeState(GameStates.Player_Turn_Begin);
                     }
                     break;
-                case GameStates.Battle_Begin:
-                    if (nowTime - stateBeginTime > 2)
+                //case GameStates.Battle_Begin:
+                //    if (nowTime - stateBeginTime > 2)
+                //    {
+                //        world.Event_BattleBegin.Invoke();
+                //        ChangeState(GameStates.Wait_For_Battle);
+                //    }
+                //    break;
+                //case GameStates.Battle_End:
+                //    gameGlobalState.matchCnt++;
+                //    winner = gameGlobalState.lastWinner;
+                //    if (winner == -1)
+                //        Debug.LogFormat("Round {0}: Draw! Current Score: {1}:{2}", gameGlobalState.matchCnt, gameGlobalState.playerWinCnt[0], gameGlobalState.playerWinCnt[1]);
+                //    else
+                //    {
+                //        gameGlobalState.playerWinCnt[winner]++;
+                //        Debug.LogFormat("Round {0}: Player {1} wins! Current Score: {2}:{3}", gameGlobalState.matchCnt, winner, gameGlobalState.playerWinCnt[0], gameGlobalState.playerWinCnt[1]);
+                //    }
+                //    if ((winner >= 0 && gameGlobalState.playerWinCnt[winner] > 2) || gameGlobalState.matchCnt == 5)
+                //        ChangeState(GameStates.Game_End);
+                //    else
+                //        ChangeState(GameStates.UpKeepStep);
+                //    break;
+                case GameStates.Local_Player_Win:
+                    if(AudioManager._instance)
                     {
-                        world.Event_BattleBegin.Invoke();
-                        ChangeState(GameStates.Wait_For_Battle);
+                        AudioManager._instance.StopAll();
+                        AudioManager._instance.Play("Victory");
                     }
+                    if(ContentUIManager)
+                    {
+                        if(ContentUIManager.InstructionUI)
+                            ContentUIManager.InstructionUI.text = "You WIN!!!!";
+                    }
+                    ChangeState(GameStates.Stop);
                     break;
-                case GameStates.Battle_End:
-                    gameGlobalState.matchCnt++;
-                    winner = gameGlobalState.lastWinner;
-                    if (winner == -1)
-                        Debug.LogFormat("Round {0}: Draw! Current Score: {1}:{2}", gameGlobalState.matchCnt, gameGlobalState.playerWinCnt[0], gameGlobalState.playerWinCnt[1]);
-                    else
+                case GameStates.Local_Player_Lose:
+                    if (AudioManager._instance)
                     {
-                        gameGlobalState.playerWinCnt[winner]++;
-                        Debug.LogFormat("Round {0}: Player {1} wins! Current Score: {2}:{3}", gameGlobalState.matchCnt, winner, gameGlobalState.playerWinCnt[0], gameGlobalState.playerWinCnt[1]);
+                        AudioManager._instance.StopAll();
+                        AudioManager._instance.Play("Defeat");
                     }
-                    if ((winner >= 0 && gameGlobalState.playerWinCnt[winner] > 2) || gameGlobalState.matchCnt == 5)
-                        ChangeState(GameStates.Game_End);
-                    else
-                        ChangeState(GameStates.UpKeepStep);
+                    if (ContentUIManager)
+                    {
+                        if (ContentUIManager.InstructionUI)
+                            ContentUIManager.InstructionUI.text = "You LOSE!!!!";
+                    }
+                    ChangeState(GameStates.Stop);
+                    break;
+                case GameStates.Game_Draw:
+                    if (AudioManager._instance)
+                    {
+                        AudioManager._instance.StopAll();
+                        AudioManager._instance.Play("Victory");
+                    }
+                    if (ContentUIManager)
+                    {
+                        if (ContentUIManager.InstructionUI)
+                            ContentUIManager.InstructionUI.text = "DRAW!!!!";
+                    }
+                    ChangeState(GameStates.Stop);
+                    break;
+                case GameStates.Stop:
                     break;
                 case GameStates.Game_End:
                     if (gameGlobalState.playerWinCnt[0] != gameGlobalState.playerWinCnt[1])
@@ -481,6 +537,50 @@ namespace GameLogic
 
             //GameObject monsterClass = Resources.Load<GameObject>(thisCard.PrefabPath);
             
+        }
+
+        /// <summary>
+        /// Check Winning, will change state if one side win
+        /// </summary>
+        private void WinningCheck()
+        {
+            int Player0Count = 0;
+            int Player1Count = 0;
+            foreach (var itr in world.monsters)
+            {
+                if(itr.Value.isAlive)
+                {
+                    if(itr.Value.monsterOwner.PlayerId==Player0.PlayerId)
+                    {
+                        Player0Count++;
+                    }
+                    else
+                    {
+                        Player1Count++;
+                    }
+                }
+            }
+            
+            if(Player0Count>0 && Player1Count>0)
+            {//ON GOING
+                return;
+            }
+            else if(Player0Count<=0 && Player1Count<=0)
+            {//DRAW
+                ChangeState(GameStates.Game_Draw);
+                return;
+            }
+            else if(Player0Count<=0)
+            {
+                ChangeState(GameStates.Local_Player_Lose);
+                return;
+            }
+            else
+            {
+                ChangeState(GameStates.Local_Player_Win);
+                return;
+            }
+            return;
         }
         #endregion
     }

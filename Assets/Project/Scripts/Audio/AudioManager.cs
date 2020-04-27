@@ -86,5 +86,16 @@ public class AudioManager : MonoBehaviour
         }
         s.source.Stop();
     }
+
+    /// <summary>
+    /// Stop playing all audio
+    /// </summary>
+    public void StopAll()
+    {
+        foreach(var itr in sounds)
+        {
+            itr.source.Stop();
+        }
+    }
     #endregion
 }

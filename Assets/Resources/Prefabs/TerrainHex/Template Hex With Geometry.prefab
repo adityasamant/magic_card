@@ -70,7 +70,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HightLightRender: {fileID: 2438888077857328415}
-  HexRadius: 0.05
+  HexRadius: 0.04
 --- !u!120 &2438888077857328415
 LineRenderer:
   m_ObjectHideFlags: 0

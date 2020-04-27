@@ -61,8 +61,8 @@ public class ClickableHex : Clickable
 
         if(HightLightRender)
         {
-            HightLightRender.startWidth = 0.02f;
-            HightLightRender.endWidth = 0.02f;
+            HightLightRender.startWidth = 0.01f;
+            HightLightRender.endWidth = 0.01f;
             for (int vert = 0; vert <= 6; vert++)
                 HightLightRender.SetPosition(vert, Corner(new Vector3(transform.position.x, transform.position.y+0.05f, transform.position.z), HexRadius, vert));
             SetColor();

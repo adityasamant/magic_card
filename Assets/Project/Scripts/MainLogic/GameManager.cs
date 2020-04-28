@@ -417,6 +417,21 @@ namespace GameLogic
             multiplayerGameManager.AllPlayerFinishScanning += MultiplayerGameManager_AllPlayerFinishScanning;
 
         }
+
+        /// <summary>
+        /// Send Tornado Hex to server
+        /// </summary>
+        public void Send_TornadoHex(int MonsterID,int HexID)
+        { 
+            multiplayerGameManager.Send_TornadoHex(MonsterID, HexID);
+        }
+
+        public void Set_TornadoHex(int MonsterID,int HexID)
+        {
+            var itr=world.getMonsterByID(MonsterID);
+            itr.StateUpdate("Move", HexID);
+        }
+
         #endregion
 
         #region Delegate Handler

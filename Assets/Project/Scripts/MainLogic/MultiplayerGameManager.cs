@@ -167,6 +167,17 @@ namespace GameLogic
                 newEvnt.Send();
             }
         }
+
+        /// <summary>
+        /// Send TornadoHex to Server and Client
+        /// </summary>
+        public void Send_TornadoHex(int MonsterId,int HexId)
+        {
+            var newEvnt = TornadoHex.Create(entity);
+            newEvnt.MonsterID = MonsterId;
+            newEvnt.HexID = HexId;
+            newEvnt.Send();
+        }
         #endregion
 
         #region Event Handle
@@ -194,6 +205,12 @@ namespace GameLogic
             {
                 state.NumberOfPlayerFinishedScan++;
             }
+        }
+
+        public override void OnEvent(TornadoHex evnt)
+        {
+            base.OnEvent(evnt);
+            gameManager.Set_TornadoHex(evnt.MonsterID, evnt.HexID);
         }
         #endregion
     }

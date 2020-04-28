@@ -350,8 +350,12 @@ namespace Monsters
                 case (TerrainEffect.Tornado):
                     this.StateUpdate("Damage", 3);
                     moving_path.Clear();
-                    int RandomHex = world.tileMap.GetARandomAviableIndex();
-                    moving_path.Add(RandomHex);
+                    if(monsterOwner==GameObject.Find("GameManager").GetComponent<GameManager>().Player0)
+                    {
+                        int RandomHex = world.tileMap.GetARandomAviableIndex();
+                        //moving_path.Add(RandomHex);
+                        GameObject.Find("GameManager").GetComponent<GameManager>().Send_TornadoHex(this.GetUId(), RandomHex);
+                    }
                     break;
             }
 

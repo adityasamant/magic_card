@@ -32,7 +32,16 @@ namespace Monsters
         // Update is called once per frame
         void Update()
         {
+            CheckTrigger();
+        }
 
+        void CheckTrigger() 
+        {
+            if (_controller.TriggerValue > 0.2f) {
+                monster_jolleen.Attack(monster_brute,4);
+            } else {
+                
+            }
         }
 
         void OnButtonDown(byte controller_id, MLInputControllerButton button)
@@ -45,8 +54,9 @@ namespace Monsters
                //monster_erica.Move(179);
                 //monster_erica.DoubleShot(monster_brute, 9);
                 
-                monster_jolleen.Attack(monster_brute,3);
+                monster_jolleen.Attack(monster_erica,2);
             }
+
             if (button == MLInputControllerButton.HomeTap)
             {
                 //monster_jolleen.Attack(monster0, 4);
@@ -57,11 +67,13 @@ namespace Monsters
                 List<int> path = new List<int>();
                 // List<int> path2 = new List<int>();
                 // path2 = world.tileMap.getShortestPath(182, dest);
-                path.Add(180);
-                path.Add(179);
-                path.Add(178);
-                path.Add(165);
-                monster_erica.Move(path);
+
+                monster_brute.Attack(monster_jolleen,2);
+                // path.Add(180);
+                // path.Add(179);
+                // path.Add(178);
+                // path.Add(165);
+                // monster_erica.Move(path);
             }
         }
     }

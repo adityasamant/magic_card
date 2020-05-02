@@ -953,20 +953,6 @@
     },
     {
       "$type": "Bolt.Compiler.EventDefinition, bolt.compiler",
-      "Properties": [],
-      "Name": "DissonanceToClient",
-      "Guid": "233c0ff5-af65-4949-be7e-c0b340fa94f6",
-      "Groups": []
-    },
-    {
-      "$type": "Bolt.Compiler.EventDefinition, bolt.compiler",
-      "Properties": [],
-      "Name": "DissonanceToServer",
-      "Guid": "a349dbef-fa3e-4879-b338-6a581439bf5f",
-      "Groups": []
-    },
-    {
-      "$type": "Bolt.Compiler.EventDefinition, bolt.compiler",
       "Properties": [
         {
           "Name": "MonsterID",
